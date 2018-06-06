@@ -51,16 +51,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      
-      
-      
-      
-      
-      
-      <el-form-item label="身份">
-        <el-radio v-model="form.status" label="staff" border>我是员工</el-radio>
-        <el-radio v-model="form.status" label="boss" border>我是老板</el-radio>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">注册</el-button>
       </el-form-item>
@@ -70,7 +60,7 @@
 
 <script>
     import router from "../router";
-    import Qs from 'qs'; 
+    import Qs from 'qs';
 
     export default {
         data() {
@@ -89,7 +79,7 @@
                 }
             }
         },
-        methods:{  
+        methods:{
             setCookie: function (cname, cvalue, exdays) {
                 var d = new Date();
                 d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -126,7 +116,7 @@
                     email:this.form.email,
                     status:this.form.status
                   }).then((res)=>{
-                    
+
                       localStorage.status = this.form.status;
                       if(this.form.status == "staff"){
                         localStorage.staffc = "no";
@@ -141,11 +131,11 @@
                           path:'/main/Company_add'
                         })
                       }
-                    
+
                   })
                 })
               })
-               
+
             }
         }
     }
