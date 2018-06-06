@@ -70,6 +70,7 @@
     },
     methods: {
           update_menu(){
+              console.log(this.total_menu)
               let show_menu =this.total_menu.filter((item)=>{
                 // if(!item.permission){
                 //   return item;//权限为空说明可以显示该菜单
@@ -85,7 +86,7 @@
             this.menutype = e.menutype
             this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;
             this.update_menu();
-
+            
           } 
     }
 
