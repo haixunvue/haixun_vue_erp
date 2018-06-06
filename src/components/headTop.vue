@@ -19,7 +19,10 @@
         <el-select v-if="!isFromBack" v-model="roleValue" @change="changeValue()" placeholder="请选择">
           <el-option
             v-for="(item,index) in roleList"
-            :value="index" :label="item.showName" >
+            :value="index"
+            :label="item.showName"
+            :key="index"
+          >
           </el-option>
         </el-select>
         <!-- <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
@@ -138,7 +141,7 @@
             this.user_id = localStorage.getItem("user_id");
             this.getName();
             this.get_account_role();
-            
+
         }
     }
 </script>
