@@ -53,7 +53,10 @@
     },
     created(){
       this.user_info = JSON.parse( localStorage.getItem("user_info"))
-      
+      eventBus.$on('updateMenu', this.onUpdateMenu)
+    },
+    beforeDestroy:function () {
+    eventBus.$off('updateMenu', this.onUpdateMenu)
     },
     mounted(){
       if(localStorage.getItem("login_type")=='back'){
@@ -78,6 +81,10 @@
               })
               this.menuList = show_menu;
               console.log('show_menu', show_menu)
+          },
+          onUpdateMenu(e){
+            console.log('onUpdateMenu',e)
+
           } 
     }
 
