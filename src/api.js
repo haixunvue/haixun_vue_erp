@@ -22,6 +22,7 @@ const api={
     // 新接口 v1807g
     'register':'/apis/v1807g/account/add',//注册用户
     'login':'/apis/v1807g/account/login',
+    'account_role':'/apis/v1807g/account_role/list',
 
 };
 export default api;

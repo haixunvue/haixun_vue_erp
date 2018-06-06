@@ -67,28 +67,40 @@
         data() {
             return {
                 name:'',
-                status:''
+                role_list:[],
             }
         },
         methods:{
-            getName(){
-                var tk = localStorage.getItem("token");
-                var uid = localStorage.getItem("uid");
-                if(localStorage.getItem("status") == "boss"){
-                  this.status = "老板";
-                }else if(localStorage.getItem("status") == "staff"){
-                  this.status = "员工";
-                }else if(localStorage.getItem("status") == "admin"){
-                  this.status = "管理员";
-                }
 
-                this.$http.post(this.api.user_infor+'('+uid+')',{
-                  user_token:tk
+             get_account_role(){
+                this.$http.post(this.api.account_role,{
+                  user_token:this.user_token,
+                  target_user_id:this.user_id,
+                  user_id:this.user_id
                 }).then((res)=>{
-                  // console.log(res);
-                  this.name = res.value.name;
-                  localStorage.userinfor_name = res.value.name;
-                }) 
+                   console.log("get_account_role",res);
+                   if(!res.is_success){
+                     return;
+                   }
+
+                   let role_list = []
+                    res.value.companys.map((item)=>{
+                            item.showName=item.company_short_name;
+                            item.isBoss = true;
+                            role_list.push(item)
+                    })
+                    res.value.staffs.map((item)=>{
+                            item.showName=item.name;
+                            item.isBoss = false;
+                            role_list.push(item)
+                    })
+                    this.role_list = role_list;
+
+               }) 
+            },
+            getName(){
+              this.name = this.user_info.nickname;
+                
             },
             goOut(){
               localStorage.clear();
@@ -102,7 +114,14 @@
               })
             }
         },
+        created(){
+           this.user_info = JSON.parse( localStorage.getItem("user_info"))
+        },
         mounted() {
+            this.isFromBack = localStorage.getItem("login_type")=='back'//是否来自后台
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            this.get_account_role();
             this.getName();
         }
     }
