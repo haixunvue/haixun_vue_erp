@@ -8,14 +8,20 @@
 <template>
     <div>
       <el-menu
-        
+
         class="el-menu-demo"
         mode="horizontal"
-        
+
         background-color="#222"
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-menu-item index="1">海逊ERP</el-menu-item>
+        <el-select v-model="roleValue" @change="changeIValue()" placeholder="请选择">
+          <el-option
+            v-for="item in roleList"
+            :value="item.showName">
+          </el-option>
+        </el-select>
         <!-- <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
            <el-dropdown trigger="click">
              <span class="el-dropdown-link" style="color:white">
@@ -28,7 +34,7 @@
            </el-dropdown>
        </span> -->
        <!-- <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
-         
+
         <el-dropdown class="user" trigger="click">
           <template slot="title" class="el-dropdown-link">{{name}} - {{status}}</template>
           <el-dropdown-menu slot="dropdown">
@@ -44,7 +50,7 @@
         </el-submenu>
 
         <!-- <el-submenu index="2">
-          
+
           <template slot="title">{{name}} - {{status}}</template>
             <span class="el-dropdown-link">
               {{name}} - {{status}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -61,13 +67,14 @@
 </template>
 <script>
     import router from "../router";
-    import Qs from 'qs';  
+    import Qs from 'qs';
 
     export default {
         data() {
             return {
                 name:'',
-                role_list:[],
+              roleList:[],
+              roleValue:''
             }
         },
         methods:{
@@ -94,13 +101,13 @@
                             item.isBoss = false;
                             role_list.push(item)
                     })
-                    this.role_list = role_list;
-
-               }) 
+                    this.roleList = role_list;
+                   this.roleValue=this.roleList[0].showName
+                })
             },
             getName(){
               this.name = this.user_info.nickname;
-                
+
             },
             goOut(){
               localStorage.clear();
