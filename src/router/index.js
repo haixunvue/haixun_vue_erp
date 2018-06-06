@@ -25,7 +25,7 @@ const G_order_edit = r => require.ensure([], () => r(require('../pages/Global/Or
 const G_warehouse = r => require.ensure([], () => r(require('../pages/Global/Warehouse')), 'G_warehouse');
 
 //company
-const C_right_Amazon = r => require.ensure([], () => r(require('../pages/power_management/Right_Amazon')), 'C_right_Amazon');
+const amazon_auth = r => require.ensure([], () => r(require('../pages/power_management/amazon_auth')), 'amazon_auth');
 const C_rechange = r => require.ensure([], () => r(require('../pages/company/Rechange')), 'C_rechange');
 const C_Finance = r => require.ensure([], () => r(require('../pages/company/Finance')), 'C_Finance');
 const C_staff = r => require.ensure([], () => r(require('../pages/company/Staff')), 'C_staff');
@@ -119,7 +119,7 @@ export default new Router({
                    component: G_warehouse,
                 },{
                    path: 'amazon_auth',
-                   component: C_right_Amazon,
+                   component: amazon_auth,
                 },{
                    path: 'C_rechange',
                    component: C_rechange,
