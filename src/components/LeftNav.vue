@@ -48,7 +48,8 @@
   export default {
     data() {
       return {
-        menuList:[]
+        menuList:[],
+        menutype:''
       }
     },
     created(){
@@ -62,9 +63,7 @@
       if(localStorage.getItem("login_type")=='back'){
         this.total_menu=menu_admin//后台登录，显示后台菜单
       }else{
-        let role='boss1'
-        this.total_menu = role=='boss'?menu_boss:menu_staff;
-      
+        this.total_menu = this.menutype=='boss'?menu_boss:menu_staff;
       }
        this.update_menu();
        
@@ -83,7 +82,9 @@
               console.log('show_menu', show_menu)
           },
           onUpdateMenu(e){
-            console.log('onUpdateMenu',e)
+            this.menutype = e.menutype
+            this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;
+            this.update_menu();
 
           } 
     }
