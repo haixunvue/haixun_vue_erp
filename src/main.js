@@ -8,7 +8,7 @@ import api from './api';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import qs from 'qs'; 
-
+window.eventBus = new Vue();
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;

@@ -102,6 +102,9 @@
               this.name = this.user_info.nickname;
                 
             },
+            updateMenu(menutype){
+              eventBus.$emit('updateMenu', {menutype:'boss'})
+            },
             goOut(){
               localStorage.clear();
               router.push({

@@ -17,6 +17,7 @@
           <el-form-item>
             <el-button type="primary" @click="onSubmit">登录</el-button>
             <el-button class="right" type="text" @click="zhuce">注册</el-button>
+            <el-button class="right" type="text" @click="login_back">登录后台</el-button>
           </el-form-item>
         </el-form>
     </div>
@@ -69,6 +70,12 @@
           zhuce(){
             router.push({
               path:'/registered'
+            })
+          
+          },
+          login_back(){
+            router.push({
+              path:'/login_back'
             })
           }
         }

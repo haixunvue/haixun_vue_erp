@@ -49,6 +49,12 @@
               username:this.form.username,
               password:this.form.password
             }).then((res)=>{
+
+                if(res.value.permission_backstage!='true'){
+                  this.$message.success('对不起，您没有权限登录');
+                      
+                  return;
+                }
                
                 localStorage.setItem('user_token',res.token)
                 localStorage.setItem('user_id',res.value.id)
