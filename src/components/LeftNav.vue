@@ -37,6 +37,11 @@
   import menuList_boss_u from '@/json/menu_boss_uncompany';
   import menuList_admin from '@/json/menu_admin';
 
+  import menu_register from '@/json/role_menu/menu_register';
+  import menu_staff from '@/json/role_menu/menu_staff';
+  import menu_boss from '@/json/role_menu/menu_boss';
+  import menu_admin from '@/json/role_menu/menu_admin';
+
   export default {
     data() {
       return {
@@ -44,6 +49,8 @@
       }
     },
     mounted(){
+      console.log('menu1',localStorage.getItem("status") )
+      console.log('menu2',localStorage.getItem("bossc"))
       if(localStorage.getItem("status") == 'boss'){
         
         if(localStorage.getItem("bossc") == 'ok'){
@@ -61,7 +68,10 @@
         }
       }else if(localStorage.getItem("status") == 'admin'){
         this.menuList = menuList_admin;
+      }else{
+        this.menuList = menu_register
       }
+
     }
   }
 </script>

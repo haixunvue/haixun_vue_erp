@@ -9,7 +9,7 @@ Vue.prototype.$echarts = echarts
 //require路由按需加载 
 const main = r => require.ensure([], () => r(require('../pages/Main')), 'main');
 const login = r => require.ensure([], () => r(require('../pages/Login')), 'login');
-const registered = r => require.ensure([], () => r(require('../pages/Zhuce')), 'registered');
+const registered = r => require.ensure([], () => r(require('../pages/Register')), 'registered');
 
 
 //global

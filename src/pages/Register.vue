@@ -78,14 +78,11 @@
                 form:{
                   username:"",
                   password:"",
-                  name:'',
-                  idcardnum:'',
-                  username:'',
+                  nickname:'',
+                  phone_number:'',
+                  idcardnum:'', 
                   qq:'',
                   email:'',
-                  tel:'',
-                  uid:'',
-                  status:'staff'
                 }
             }
         },
@@ -100,52 +97,30 @@
             },
             onSubmit(){
               //注册
-              this.$http.post(this.api.user_add,{
-                username:this.form.username,
-                password:this.form.password
-              }).then((res)=>{
+              this.$http.post(this.api.register,this.form).then((res)=>{
+                if(!res.is_success){
+                  throw 'error';
+                }
                 //登录
-                this.$http.post(this.api.login,{
+               return this.$http.post(this.api.login,{
                   username:this.form.username,
                   password:this.form.password
-                }).then((res)=>{
-                  // console.log(res);
-                  localStorage.token = res.token;
-                  localStorage.uid = res.user.id;
-                  this.setCookie("token",res.token,1/24);
-                  this.setCookie("uid",res.user.id,1/24);
-
-                  this.uid = res.user.id;
-                  //添加用户信息
-                  this.$http.post(this.api.user_infor_set+'('+this.uid+')',{
-                    user_token:res.token,
-                    name:this.form.name,
-                    tel:this.form.tel,
-                    idcardnum:this.form.idcardnum,
-                    qq:this.form.qq,
-                    email:this.form.email,
-                    status:this.form.status
-                  }).then((res)=>{
-                    
-                      localStorage.status = this.form.status;
-                      if(this.form.status == "staff"){
-                        localStorage.staffc = "no";
-                        this.$message.success('注册成功,正在为您跳转');
-                        router.push({
-                          path:'/main/Message'
-                        })
-                      }else{
-                        localStorage.bossc = "no";
-                        this.$message.success('注册成功,正在为您跳转');
-                        router.push({
-                          path:'/main/Company_add'
-                        })
-                      }
-                    
-                  })
                 })
+
+              }).then((res)=>{
+                 console.log('login',res)
+                 if(!res.is_success){
+                  return;
+                }
+                localStorage.user_token = res.token;
+                localStorage.user_id = res.value.id;
+                this.setCookie("token",res.token,1/24);
+                this.setCookie("user_id ",res.value.id,1/24);
+                this.$message.success('注册成功,正在为您跳转');
+                        router.push({
+                        path:'/main'
+                 })
               })
-               
             }
         }
     }
