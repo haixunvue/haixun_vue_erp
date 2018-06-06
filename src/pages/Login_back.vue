@@ -16,7 +16,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">登录</el-button>
-            <el-button class="right" type="text" @click="zhuce">注册</el-button>
+          
           </el-form-item>
         </el-form>
     </div>
@@ -49,10 +49,10 @@
               username:this.form.username,
               password:this.form.password
             }).then((res)=>{
-                console.log(res);
+               
                 localStorage.setItem('user_token',res.token)
                 localStorage.setItem('user_id',res.value.id)
-                localStorage.setItem('login_type','front')//前台登录
+                localStorage.setItem('login_type','back')//后台登录
                 localStorage.setItem('user_info',JSON.stringify(res.value))
       
                 this.setCookie("token",res.token,1/24);

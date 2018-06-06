@@ -2,6 +2,7 @@ export default  [
   {
     "routerName": "company_management",
     "name": "公司管理",
+    "permission":"permission_company_manager",
     "icon": "",
     "list1": [
       {
@@ -25,6 +26,7 @@ export default  [
   {
     "routerName": "financial_management",
     "name": "财务管理",
+    "permission":"permission_company_finance_manager",
     "icon": "",
     "list1": [
       {

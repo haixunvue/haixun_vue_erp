@@ -2,6 +2,7 @@ export default  [
   {
     "routerName": "product_management",
     "name": "商品管理",
+    "permission":"permission_product_manager",
     "icon": "",
     "list1": [
       {
@@ -58,6 +59,7 @@ export default  [
   {
     "routerName": "order_management",
     "name": "订单管理",
+    "permission":"permission_order_manager",
     "icon": "",
     "list1": [
       {
@@ -73,6 +75,7 @@ export default  [
   {
     "routerName": "financial_management",
     "name": "财务管理",
+    "permission":"permission_company_finance_manager",
     "icon": "",
     "list1": [
       {
@@ -89,6 +92,7 @@ export default  [
   {
     "routerName": "power_management",
     "name": "权限管理",
+    "permission":"",
     "icon": "",
     "list1": [
       {
@@ -105,6 +109,7 @@ export default  [
   {
     "routerName": "user_center",
     "name": "用户中心",
+    "permission":"",
     "icon": "",
     "list1": [
       {
@@ -123,6 +128,7 @@ export default  [
    
   {
     "routerName": "help_center",
+    "permission":"",
     "name": "帮助"
   }
 ];

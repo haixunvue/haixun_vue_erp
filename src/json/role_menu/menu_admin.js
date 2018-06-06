@@ -1,7 +1,10 @@
+//后台权限菜单
+
 export default  [ 
   {
     "routerName": "account_management",
     "name": "账户管理",
+    "permission":"permission_backstage_account",
     "icon": "",
     "list1": [
       {
@@ -20,8 +23,9 @@ export default  [
     ]
   },
   {
-    "routerName": "all_management",
+    "routerName": "global_management",
     "name": "全局管理",
+    "permission":"permission_backstage_global",
     "icon": "",
     "list1": [
       {
@@ -53,6 +57,7 @@ export default  [
   {
     "routerName": "financial_management",
     "name": "财务管理",
+    "permission":"permission_backstage_finance",
     "icon": "",
     "list1": [
       {
@@ -77,6 +82,7 @@ export default  [
   },
   {
     "routerName": "logistics_management",
+    "permission":"permission_backstage_logistics",
     "name": "物流管理",
     "icon": "",
     
@@ -84,6 +90,7 @@ export default  [
   {
     "routerName": "system_management",
     "name": "系统运维",
+    "permission":"permission_backstage_system_maintenance",
     "icon": "",
     "list1": [
       {
@@ -119,12 +126,14 @@ export default  [
   {
     "routerName": "salesman_management",
     "name": "推销商管理",
+    "permission":"",
     "icon": "",
     
   },
    
   {
     "routerName": "help_center",
+    "permission":"",
     "name": "帮助"
   }
 ];

@@ -9,6 +9,7 @@ Vue.prototype.$echarts = echarts
 //require路由按需加载 
 const main = r => require.ensure([], () => r(require('../pages/Main')), 'main');
 const login = r => require.ensure([], () => r(require('../pages/Login')), 'login');
+const login_back = r => require.ensure([], () => r(require('../pages/Login_back')), 'login_back');
 const registered = r => require.ensure([], () => r(require('../pages/Register')), 'registered');
 
 
@@ -76,6 +77,10 @@ export default new Router({
         {
           path: '/',
           component: login, //登陆
+        },
+        {
+          path: '/login_back',
+          component: login_back, //后台登陆
         },
         {
             path: '/registered',

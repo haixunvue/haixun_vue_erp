@@ -37,42 +37,50 @@
   import menuList_boss_u from '@/json/menu_boss_uncompany';
   import menuList_admin from '@/json/menu_admin';
 
-  import menu_register from '@/json/role_menu/menu_register';
+  //以下是新菜单
   import menu_staff from '@/json/role_menu/menu_staff';
   import menu_boss from '@/json/role_menu/menu_boss';
   import menu_admin from '@/json/role_menu/menu_admin';
 
+
+
+
   export default {
     data() {
       return {
-        menuList:menuList_boss
+        menuList:[]
       }
     },
+    created(){
+      this.user_info = JSON.parse( localStorage.getItem("user_info"))
+      
+    },
     mounted(){
-      console.log('menu1',localStorage.getItem("status") )
-      console.log('menu2',localStorage.getItem("bossc"))
-      if(localStorage.getItem("status") == 'boss'){
-        
-        if(localStorage.getItem("bossc") == 'ok'){
-          
-          this.menuList = menuList_boss;
-        }else{
-          this.menuList = menuList_boss_u;
-        }
-        
-      }else if(localStorage.getItem("status") == 'staff'){
-        if(localStorage.getItem("staffc") == 'ok'){
-          this.menuList = menuList_staff;
-        }else{
-          this.menuList = menuList_staff_u;
-        }
-      }else if(localStorage.getItem("status") == 'admin'){
-        this.menuList = menuList_admin;
+      if(localStorage.getItem("login_type")=='back'){
+        this.total_menu=menu_admin//后台登录，显示后台菜单
       }else{
-        this.menuList = menu_register
+        let role='boss1'
+        this.total_menu = role=='boss'?menu_boss:menu_staff;
+      
       }
+       this.update_menu();
+       
+    },
+    methods: {
+          update_menu(){
+              let show_menu =this.total_menu.filter((item)=>{
+                // if(!item.permission){
+                //   return item;//权限为空说明可以显示该菜单
+                // }
+                // return this.user_info[item.permission]=="true";
 
+                return true;
+              })
+              this.menuList = show_menu;
+              console.log('show_menu', show_menu)
+          } 
     }
+
   }
 </script>
 <style scoped>

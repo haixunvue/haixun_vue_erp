@@ -112,8 +112,11 @@
                  if(!res.is_success){
                   return;
                 }
-                localStorage.user_token = res.token;
-                localStorage.user_id = res.value.id;
+                localStorage.setItem('user_token',res.token)
+                localStorage.setItem('user_id',res.value.id)
+                localStorage.setItem('login_type','front')//前台登录
+                localStorage.setItem('user_info',JSON.stringify(res.value))
+      
                 this.setCookie("token",res.token,1/24);
                 this.setCookie("user_id ",res.value.id,1/24);
                 this.$message.success('注册成功,正在为您跳转');
