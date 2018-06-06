@@ -1,4 +1,4 @@
-export default  [ 
+export default  [
   {
     "routerName": "company_management",
     "name": "公司管理",
@@ -33,6 +33,16 @@ export default  [
         "routerName": "corporate_finance",
         "name": "公司财务",
         "icon": "",
+        "list2": [
+          {
+            "routerName": "cost_reconciliation",
+            "name": "费用对账",
+          },
+          {
+            "routerName": "deductions_detail",
+            "name": "扣款明细",
+          }
+        ]
       },
       {
         "routerName": "business_report",
@@ -70,11 +80,8 @@ export default  [
         "name": "资产管理",
         "icon": "",
       },
-    
     ]
   },
-  
-   
   {
     "routerName": "help_center",
     "name": "帮助"

@@ -33,12 +33,12 @@
             <div class="input"><span>Amazon账号:</span><el-input v-model="input" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
             <div>
                 <span>开户站:</span><br />
-                <el-select v-model="value" placeholder="请选择" style="margin-top:5px">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                <el-select v-model="siteIndex" @change="changeSite()" placeholder="请选择" style="margin-top:5px">
+                    <el-option v-for="(item ,index) in site" :key="index" :label="item.name" :value="index">
                     </el-option>
                 </el-select>
             </div>
-            <el-button type="text" v-if="isAdd">去站点</el-button>
+            <el-button type="text" v-if="isAdd" @click="goSite()">去站点</el-button>
             <div class="site-box clear" v-if="isAdd">
                 <div class="input">
                     <span class="input-label">Merchant ID:</span>
@@ -64,6 +64,7 @@
 
 <script>
     import router from "../../router";
+    import site from '@/json/site';
 
     export default {
         data() {
@@ -100,23 +101,8 @@
                  amount3: 15
                }],
                dialogVisible:false,
-                options: [{
-                  value: '选项1',
-                  label: '黄金糕'
-                }, {
-                  value: '选项2',
-                  label: '双皮奶'
-                }, {
-                  value: '选项3',
-                  label: '蚵仔煎'
-                }, {
-                  value: '选项4',
-                  label: '龙须面'
-                }, {
-                  value: '选项5',
-                  label: '北京烤鸭'
-                }],
-                value: '',
+                site: site,
+                siteIndex: '',
                 input:'',
                 title:'',
                 isAdd:true
@@ -148,7 +134,13 @@
                 this.dialogVisible = true;
                 this.title="修改Amazon权限";
                 this.isAdd = false;
-            }
+            },
+          changeSite(){
+
+          },
+          goSite(){
+              window.open(this.site[Number(this.siteIndex)].url)
+          }
         }
     }
 </script>

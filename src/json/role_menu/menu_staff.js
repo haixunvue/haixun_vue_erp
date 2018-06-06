@@ -1,4 +1,4 @@
-export default  [ 
+export default  [
   {
     "routerName": "product_management",
     "name": "商品管理",
@@ -53,7 +53,6 @@ export default  [
         "routerName": "general_setting",
         "name": "通用设置",
       },
-     
     ]
   },
   {
@@ -88,7 +87,7 @@ export default  [
             "name": "费用对账",
           },
           {
-            "routerName": "deductions detail",
+            "routerName": "deductions_detail",
             "name": "扣款明细",
           }
         ]
@@ -96,6 +95,23 @@ export default  [
       {
         "routerName": "business_report",
         "name": "业绩报表",
+      }
+    ]
+  },
+  {
+    "routerName": "staff_report",
+    "name": "业绩报表",
+    "permission":"",
+    "icon": "",
+    "list1": [
+      {
+        "routerName": "add_product",
+        "name": "新增产品",
+        "icon": "",
+      },
+      {
+        "routerName": "store_performance",
+        "name": "店铺业绩",
       }
     ]
   },
@@ -131,11 +147,8 @@ export default  [
         "name": "资产管理",
         "icon": "",
       },
-    
     ]
   },
-  
-   
   {
     "routerName": "help_center",
     "permission":"",
