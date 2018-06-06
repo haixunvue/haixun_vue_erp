@@ -16,7 +16,7 @@
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-menu-item index="1">海逊ERP</el-menu-item>
-        <el-select v-model="roleValue" @change="changeIValue()" placeholder="请选择">
+        <el-select v-if="!isFromBack" v-model="roleValue" @change="changeIValue()" placeholder="请选择">
           <el-option
             v-for="item in roleList"
             :value="item.showName">
@@ -78,7 +78,9 @@
             }
         },
         methods:{
-
+          changeIValue(){
+            console.log('roleValue:',this.roleValue)
+          },
              get_account_role(){
                 this.$http.post(this.api.account_role,{
                   user_token:this.user_token,
