@@ -66,7 +66,7 @@
 
                 this.$message.success('登录成功,正在为您跳转');
                         router.push({
-                        path:'/main'
+                        path:'/main/'
                  }) 
               
               

@@ -121,7 +121,7 @@
                 this.setCookie("user_id ",res.value.id,1/24);
                 this.$message.success('注册成功,正在为您跳转');
                         router.push({
-                        path:'/main'
+                        path:'/main/'
                  })
               })
             }
