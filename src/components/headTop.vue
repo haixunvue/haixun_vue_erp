@@ -16,10 +16,10 @@
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-menu-item index="1">海逊ERP</el-menu-item>
-        <el-select v-if="!isFromBack" v-model="roleValue" @change="changeIValue()" placeholder="请选择">
+        <el-select v-if="!isFromBack" v-model="roleValue" @change="changeValue()" placeholder="请选择">
           <el-option
-            v-for="item in roleList"
-            :value="item.showName">
+            v-for="(item,index) in roleList"
+            :value="index" :label="item.showName" >
           </el-option>
         </el-select>
         <!-- <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
@@ -78,8 +78,9 @@
             }
         },
         methods:{
-          changeIValue(){
-            console.log('roleValue:',this.roleValue)
+          changeValue(){
+            console.log(this.roleList[Number(this.roleValue)].menutype)
+            this.updateMenu(this.roleList[Number(this.roleValue)].menutype)
           },
              get_account_role(){
                 this.$http.post(this.api.account_role,{
@@ -94,17 +95,19 @@
 
                    let role_list = []
                     res.value.companys.map((item)=>{
-                            item.showName=item.company_short_name;
+                            item.showName='老板-'+item.company_short_name;
                             item.isBoss = true;
+                            item.menutype = 'boss';
                             role_list.push(item)
                     })
                     res.value.staffs.map((item)=>{
-                            item.showName=item.name;
+                            item.showName='员工-'+item.name;
                             item.isBoss = false;
+                            item.menutype = 'staff';
                             role_list.push(item)
                     })
                     this.roleList = role_list;
-                   this.roleValue=this.roleList[0].showName
+                   this.roleValue=0;
                 })
             },
             getName(){
@@ -112,7 +115,7 @@
 
             },
             updateMenu(menutype){
-              eventBus.$emit('updateMenu', {menutype:'boss'})
+              eventBus.$emit('updateMenu', {menutype:menutype})
             },
             goOut(){
               localStorage.clear();
@@ -133,8 +136,9 @@
             this.isFromBack = localStorage.getItem("login_type")=='back'//是否来自后台
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
-            this.get_account_role();
             this.getName();
+            this.get_account_role();
+            
         }
     }
 </script>
