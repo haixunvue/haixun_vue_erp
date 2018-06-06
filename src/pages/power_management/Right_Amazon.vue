@@ -13,7 +13,7 @@
               <el-table-column prop="amount3" label="操作">
                   <template slot-scope="scope">
                       <el-button type="text" @click="editAuthorization">重新授权</el-button>
-                      <el-button type="text">删除</el-button>       
+                      <el-button type="text">删除</el-button>
                   </template>
               </el-table-column>
             </el-table>
@@ -52,11 +52,11 @@
                     <span class="input-label">Secret Key:</span>
                     <el-input v-model="input" placeholder="密钥" style="margin-top:5px;width:400px"></el-input>
                 </div>
-                <el-button type="text" class="right">如何获取上述信息？</el-button> 
+                <el-button type="text" class="right">如何获取上述信息？</el-button>
             </div>
             <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">授 权</el-button>
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -160,7 +160,7 @@
     .bottom{
         margin-top:30px;
     }
-    
+
     .bottom-left{
         padding:2px 4px 2px 15px;
         background-color: #009997;

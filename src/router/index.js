@@ -4,9 +4,9 @@ import App from '../App'
 import echarts from 'echarts';
 
 Vue.use(Router);
-Vue.prototype.$echarts = echarts 
+Vue.prototype.$echarts = echarts
 
-//require路由按需加载 
+//require路由按需加载
 const main = r => require.ensure([], () => r(require('../pages/Main')), 'main');
 const login = r => require.ensure([], () => r(require('../pages/Login')), 'login');
 const login_back = r => require.ensure([], () => r(require('../pages/Login_back')), 'login_back');
@@ -25,7 +25,7 @@ const G_order_edit = r => require.ensure([], () => r(require('../pages/Global/Or
 const G_warehouse = r => require.ensure([], () => r(require('../pages/Global/Warehouse')), 'G_warehouse');
 
 //company
-const C_right_Amazon = r => require.ensure([], () => r(require('../pages/company/Right_Amazon')), 'C_right_Amazon');
+const C_right_Amazon = r => require.ensure([], () => r(require('../pages/power_management/Right_Amazon')), 'C_right_Amazon');
 const C_rechange = r => require.ensure([], () => r(require('../pages/company/Rechange')), 'C_rechange');
 const C_Finance = r => require.ensure([], () => r(require('../pages/company/Finance')), 'C_Finance');
 const C_staff = r => require.ensure([], () => r(require('../pages/company/Staff')), 'C_staff');
@@ -91,149 +91,149 @@ export default new Router({
             component: main, //
             children: [
                 {
-                   path: 'G_user_list', 
-                   component: G_user_list, 
+                   path: 'G_user_list',
+                   component: G_user_list,
                 },{
-                   path: 'G_user_edit', 
-                   component: G_user_edit, 
+                   path: 'G_user_edit',
+                   component: G_user_edit,
                 },{
-                   path: 'G_company_list', 
-                   component: G_company_list, 
+                   path: 'G_company_list',
+                   component: G_company_list,
                 },{
-                   path: 'G_company_edit', 
-                   component: G_company_edit, 
+                   path: 'G_company_edit',
+                   component: G_company_edit,
                 },{
-                   path: 'G_company_add', 
-                   component: G_company_add, 
+                   path: 'G_company_add',
+                   component: G_company_add,
                 },{
-                   path: 'G_Rechange_list', 
-                   component: G_Rechange_list, 
+                   path: 'G_Rechange_list',
+                   component: G_Rechange_list,
                 },{
-                   path: 'G_order_list', 
-                   component: G_order_list, 
+                   path: 'G_order_list',
+                   component: G_order_list,
                 },{
-                   path: 'G_order_edit', 
-                   component: G_order_edit, 
+                   path: 'G_order_edit',
+                   component: G_order_edit,
                 },{
-                   path: 'G_warehouse', 
-                   component: G_warehouse, 
+                   path: 'G_warehouse',
+                   component: G_warehouse,
                 },{
-                   path: 'C_right_Amazon', 
-                   component: C_right_Amazon, 
+                   path: 'amazon_auth',
+                   component: C_right_Amazon,
                 },{
-                   path: 'C_rechange', 
-                   component: C_rechange, 
+                   path: 'C_rechange',
+                   component: C_rechange,
                 },{
-                   path: 'C_Finance', 
-                   component: C_Finance, 
+                   path: 'C_Finance',
+                   component: C_Finance,
                 },{
-                   path: 'C_staff', 
-                   component: C_staff, 
+                   path: 'C_staff',
+                   component: C_staff,
                 },{
-                   path: 'C_Creport', 
-                   component: C_Creport, 
+                   path: 'C_Creport',
+                   component: C_Creport,
                 },{
-                   path: 'C_Preport', 
-                   component: C_Preport, 
+                   path: 'C_Preport',
+                   component: C_Preport,
                 },{
-                   path: 'Cd_product_list', 
-                   component: Cd_product_list, 
+                   path: 'Cd_product_list',
+                   component: Cd_product_list,
                 },{
-                   path: 'Cd_product_list1', 
-                   component: Cd_product_list1, 
+                   path: 'Cd_product_list1',
+                   component: Cd_product_list1,
                 },{
-                   path: 'Cd_product_list2', 
-                   component: Cd_product_list2, 
+                   path: 'Cd_product_list2',
+                   component: Cd_product_list2,
                 },{
-                   path: 'Cd_product_list3', 
-                   component: Cd_product_list3, 
+                   path: 'Cd_product_list3',
+                   component: Cd_product_list3,
                 },{
-                   path: 'Cd_product_list4', 
-                   component: Cd_product_list4, 
+                   path: 'Cd_product_list4',
+                   component: Cd_product_list4,
                 },{
-                   path: 'Cd_product_list5', 
-                   component: Cd_product_list5, 
+                   path: 'Cd_product_list5',
+                   component: Cd_product_list5,
                 },{
-                   path: 'Cd_product_edit', 
-                   component: Cd_product_edit, 
+                   path: 'Cd_product_edit',
+                   component: Cd_product_edit,
                 },{
-                   path: 'Cd_product_add', 
-                   component: Cd_product_add, 
+                   path: 'Cd_product_add',
+                   component: Cd_product_add,
                 },{
-                   path: 'Cd_order_list', 
-                   component: Cd_order_list, 
+                   path: 'Cd_order_list',
+                   component: Cd_order_list,
                 },{
-                   path: 'Cd_order_list2', 
-                   component: Cd_order_list2, 
+                   path: 'Cd_order_list2',
+                   component: Cd_order_list2,
                 },{
-                   path: 'Cd_order_list_boss', 
-                   component: Cd_order_list_boss, 
+                   path: 'Cd_order_list_boss',
+                   component: Cd_order_list_boss,
                 },{
-                   path: 'Cd_order_list2_boss', 
-                   component: Cd_order_list2_boss, 
+                   path: 'Cd_order_list2_boss',
+                   component: Cd_order_list2_boss,
                 },{
-                   path: 'Cd_order_edit', 
-                   component: Cd_order_edit, 
+                   path: 'Cd_order_edit',
+                   component: Cd_order_edit,
                 },{
-                   path: 'Cd_order_add', 
-                   component: Cd_order_add, 
+                   path: 'Cd_order_add',
+                   component: Cd_order_add,
                 },{
-                   path: 'Cd_Creport', 
-                   component: Cd_Creport, 
+                   path: 'Cd_Creport',
+                   component: Cd_Creport,
                 },{
-                   path: 'Cd_Creport2', 
-                   component: Cd_Creport2, 
+                   path: 'Cd_Creport2',
+                   component: Cd_Creport2,
                 },{
-                   path: 'Cd_Preport', 
-                   component: Cd_Preport, 
+                   path: 'Cd_Preport',
+                   component: Cd_Preport,
                 },{
-                   path: 'Cd_Preport2', 
-                   component: Cd_Preport2, 
+                   path: 'Cd_Preport2',
+                   component: Cd_Preport2,
                 },{
-                   path: 'Cd_Preport_boss', 
-                   component: Cd_Preport_boss, 
+                   path: 'Cd_Preport_boss',
+                   component: Cd_Preport_boss,
                 },{
-                   path: 'Cd_Preport2_boss', 
-                   component: Cd_Preport2_boss, 
+                   path: 'Cd_Preport2_boss',
+                   component: Cd_Preport2_boss,
                 },{
-                   path: 'Cd_User_edit', 
-                   component: Cd_User_edit, 
+                   path: 'Cd_User_edit',
+                   component: Cd_User_edit,
                 },{
-                   path: 'Cd_User_edit2', 
-                   component: Cd_User_edit2, 
+                   path: 'Cd_User_edit2',
+                   component: Cd_User_edit2,
                 },{
-                   path: 'Cd_User_edit3', 
-                   component: Cd_User_edit3, 
+                   path: 'Cd_User_edit3',
+                   component: Cd_User_edit3,
                 },{
-                   path: 'Warehouse', 
-                   component: Warehouse, 
+                   path: 'Warehouse',
+                   component: Warehouse,
                 },{
-                   path: 'Company_add', 
-                   component: Company_add, 
+                   path: 'Company_add',
+                   component: Company_add,
                 },{
-                   path: 'Message', 
-                   component: Message, 
+                   path: 'Message',
+                   component: Message,
                 },{
-                   path: 'Cd_Logistics', 
-                   component: Cd_Logistics, 
+                   path: 'Cd_Logistics',
+                   component: Cd_Logistics,
                 },{
-                   path: 'Cd_product_list6', 
-                   component: Cd_product_list6, 
+                   path: 'Cd_product_list6',
+                   component: Cd_product_list6,
                 },{
-                   path: 'G_user_list1', 
-                   component: G_user_list1, 
+                   path: 'G_user_list1',
+                   component: G_user_list1,
                 },{
-                   path: 'G_user_list2', 
-                   component: G_user_list2, 
+                   path: 'G_user_list2',
+                   component: G_user_list2,
                 },{
-                   path: 'G_company_list2', 
-                   component: G_company_list2, 
+                   path: 'G_company_list2',
+                   component: G_company_list2,
                 },{
-                   path: 'G_Rechange_list2', 
-                   component: G_Rechange_list2, 
+                   path: 'G_Rechange_list2',
+                   component: G_Rechange_list2,
                 },{
-                   path: 'Cd_Preport3', 
-                   component: Cd_Preport3, 
+                   path: 'Cd_Preport3',
+                   component: Cd_Preport3,
                 }
 
             ]
