@@ -87,17 +87,20 @@
     export default {
         data() {
             return {
-                name:'',
+              name:'',
+              status:'',
               roleList:[],
               roleValue:'',
-              status:'',
-              isFromBack:true
+              isFromBack:false,
             }
         },
         methods:{
           changeValue(){
             console.log(this.roleList[Number(this.roleValue)].menutype)
-            this.updateMenu(this.roleList[Number(this.roleValue)].menutype)
+            let role_item = this.roleList[Number(this.roleValue)]
+            localStorage.setItem('owner_user_id',role_item.owner_user_id||'')
+            localStorage.setItem('owner_company_id',role_item.owner_company_id||'')
+            this.updateMenu(role_item.menutype)
           },
              get_account_role(){
                 this.$http.post(this.api.account_role,{
@@ -123,9 +126,14 @@
                             item.menutype = 'staff';
                             role_list.push(item)
                     })
-                    this.roleList = role_list;
-                   this.roleValue=0;
+                   this.roleList = role_list;
+                   if(role_list.length>0){
+                    this.roleValue=0;
+                   localStorage.setItem('owner_user_id',role_list[0].owner_user_id||'')
+                   localStorage.setItem('owner_company_id',role_list[0].owner_company_id||'')
                    this.updateMenu(role_list[0].menutype);
+                   }
+
                 })
             },
             getName(){

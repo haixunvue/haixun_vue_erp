@@ -49,6 +49,7 @@
     data() {
       return {
         menuList:[],
+        total_menu:[],
         menutype:''
       }
     },

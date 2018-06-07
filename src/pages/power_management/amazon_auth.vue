@@ -28,9 +28,9 @@
         </div>
 
         <!--弹框-->
-        <el-dialog :title="title" :visible.sync="dialogVisible" width="40%">
-            <div class="input"><span>店铺别名:</span><el-input v-model="input" placeholder="请输入店铺别名" style="margin-top:5px"></el-input></div>
-            <div class="input"><span>Amazon账号:</span><el-input v-model="input" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
+      <el-dialog :title="title" :visible.sync="dialogVisible" width="40%">
+            <div class="input"><span>店铺别名:</span><el-input v-model="shop_name" placeholder="请输入店铺别名" style="margin-top:5px"></el-input></div>
+            <div class="input"><span>Amazon账号:</span><el-input v-model="account_id" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
             <div>
                 <span>开户站:</span><br />
                 <el-select v-model="siteIndex" @change="changeSite()" placeholder="请选择" style="margin-top:5px">
@@ -42,15 +42,15 @@
             <div class="site-box clear" v-if="isAdd">
                 <div class="input">
                     <span class="input-label">Merchant ID:</span>
-                    <el-input v-model="input" placeholder="卖家编号" style="margin-top:5px;width:400px"></el-input>
+                    <el-input v-model="merchant_ID" placeholder="卖家编号" style="margin-top:5px;width:400px"></el-input>
                 </div>
                 <div class="input">
                     <span class="input-label">AWS Access Key ID:</span>
-                    <el-input v-model="input" placeholder="AWS访问键编号" style="margin-top:5px;width:400px"></el-input>
+                    <el-input v-model="access_key" placeholder="AWS访问键编号" style="margin-top:5px;width:400px"></el-input>
                 </div>
                 <div>
                     <span class="input-label">Secret Key:</span>
-                    <el-input v-model="input" placeholder="密钥" style="margin-top:5px;width:400px"></el-input>
+                    <el-input v-model="secret_key" placeholder="密钥" style="margin-top:5px;width:400px"></el-input>
                 </div>
                 <el-button type="text" class="right">如何获取上述信息？</el-button>
             </div>
@@ -69,6 +69,12 @@
     export default {
         data() {
             return {
+                shop_name:'',
+                account_id:'',
+                access_key:'',
+                secret_key:'',
+                region:'',
+                merchant_ID:'',
                tableData: [{
                  id: 'jianggu',
                  name: '英国',
@@ -137,6 +143,29 @@
             },
           changeSite(){
 
+          },
+          save_amazon_auth(){
+
+          this.$http.post(this.api.amazon_auth,{
+              username:this.form.username,
+              password:this.form.password
+            }).then((res)=>{
+                console.log(res);
+                localStorage.setItem('user_token',res.token)
+                localStorage.setItem('user_id',res.value.id)
+                localStorage.setItem('login_type','front')//前台登录
+                localStorage.setItem('user_info',JSON.stringify(res.value))
+
+                this.setCookie("token",res.token,1/24);
+                this.setCookie("user_id ",res.value.id,1/24);
+
+                this.$message.success('登录成功,正在为您跳转');
+                        router.push({
+                        path:'/main/'
+                 })
+
+
+            })
           },
           goSite(){
               window.open(this.site[Number(this.siteIndex)].url)
