@@ -23,7 +23,10 @@ const api={
     'register':'/apis/v1807g/account/add',//注册用户
     'login':'/apis/v1807g/account/login',
     'account_role':'/apis/v1807g/account_role/list',
-    'amazon_auth':'/apis/v1807g/company_shop/add'	//公司店铺添加，亚马逊授权
+    'amazon_auth':'/apis/v1807g/company_shop/add',	//公司店铺添加，亚马逊授权
+    'amazon_re_authorize':'/apis/v1807g/company_shop/re_authorize',	//公司店铺添加，亚马逊授权
+    'company_shop_list':'/apis/v1807g/company_shop/list',	//公司
+    'company_shop_delete':'/apis/v1807g/company_shop/delete',	//公司店铺
 
 
 };
