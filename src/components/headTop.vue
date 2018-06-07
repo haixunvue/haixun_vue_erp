@@ -111,6 +111,7 @@
                     })
                     this.roleList = role_list;
                    this.roleValue=0;
+                   this.updateMenu(role_list[0].menutype);
                 })
             },
             getName(){
@@ -118,6 +119,7 @@
 
             },
             updateMenu(menutype){
+              console.log(menutype)
               eventBus.$emit('updateMenu', {menutype:menutype})
             },
             goOut(){

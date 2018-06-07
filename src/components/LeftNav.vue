@@ -62,7 +62,7 @@
     mounted(){
       if(localStorage.getItem("login_type")=='back'){
         this.total_menu=menu_admin//后台登录，显示后台菜单
-      }else{
+      }else if(this.menutype){
         this.total_menu = this.menutype=='boss'?menu_boss:menu_staff;
       }
        this.update_menu();
@@ -84,7 +84,12 @@
           },
           onUpdateMenu(e){
             this.menutype = e.menutype
-            this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;
+            if(e.menutype){
+                this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;           
+            }else{
+                this.total_menu=[]
+            }
+            
             this.update_menu();
             
           } 
