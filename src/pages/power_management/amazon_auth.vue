@@ -78,7 +78,8 @@
                 siteIndex: '', 
                 dialogVisible:false,
                 site: site,  
-                isAdd:true,          
+                isAdd:true,
+                shop_list:[],          
                 tableData: [{
                  id: 'jianggu',
                  name: '英国',
@@ -188,6 +189,12 @@
             user_id:this.user_id, 
             }).then((res)=>{
                 console.log('company_shop_list',res);
+                if(res.is_success){
+                    this.shop_list = res.value;
+                }else{
+                     this.shop_list=[];
+                }
+              
    
             })
           },
