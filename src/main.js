@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import moment from 'moment';
 import App from './App';
 import router from './router';
 import axios from './http';
@@ -9,6 +10,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import qs from 'qs'; 
 window.eventBus = new Vue();
+window.moment = moment;
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
