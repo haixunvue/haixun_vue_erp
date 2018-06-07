@@ -7,13 +7,13 @@
         <div class="table">
             <el-table :data="shop_list" :span-method="objectSpanMethod" border style="width: 100%; margin-top: 20px">
               <el-table-column prop="shop_name" label="店铺名称"></el-table-column>
-              <el-table-column prop="region" label="授权国家"></el-table-column>
+              <el-table-column prop="region_name" label="授权国家"></el-table-column>
               <el-table-column prop="amazion_account" label="代理邮箱"></el-table-column>
               <el-table-column prop="account_id" label="授权时间"></el-table-column>
               <el-table-column prop="amount3" label="操作">
                   <template slot-scope="scope">
-                      <el-button type="text" @click="editAuthorization">重新授权</el-button>
-                      <el-button type="text"  @click="company_shop_delete">删除</el-button>
+                      <el-button type="text" @click="editAuthorization(scope.$index, scope.row)">重新授权</el-button>
+                      <el-button type="text"  @click="company_shop_delete(scope.$index, scope.row)">删除</el-button>
                   </template>
               </el-table-column>
             </el-table>
@@ -74,6 +74,7 @@
                 access_key:'',
                 secret_key:'',
                 region:'',
+              region_name:'',
                 amazion_account:'',
                 siteIndex: '',
                 dialogVisible:false,
@@ -121,7 +122,7 @@
                 this.title="添加Amazon权限";
                 this.isAdd = true;
             },
-            editAuthorization(){
+            editAuthorization(index,row){
                 this.dialogVisible = true;
                 this.title="修改Amazon权限";
                 this.isAdd = false;
@@ -166,7 +167,8 @@
 
             })
           },
-          company_shop_delete(){
+          company_shop_delete(index, row){
+            console.log(index+"===="+row);
             this.$http.post(this.api.company_shop_delete,{
             user_token:this.user_token,
             user_id:this.user_id,
