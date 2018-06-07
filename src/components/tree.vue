@@ -1,86 +1,136 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="12">
+      <el-col :span="6">
           <div class="expand">
             <div>
                 <!-- <el-button @click="handleAddTop">添加顶级节点</el-button> -->
                 <el-tree ref="expandMenuList" class="expand-tree"
                 v-if="isLoadingTree"
-                :data="setTree"
+                :data="setTree1"
                 node-key="id"
                 highlight-current
                 :props="defaultProps"
                 :expand-on-click-node="false"
                 :render-content="renderContent"
                 :default-expanded-keys="defaultExpandKeys"
-                @node-click="handleNodeClick"></el-tree>
+                @node-click="handleNodeClick">
+<span class="custom-tree-node" slot-scope="{ node, data }">
+        <span>{{ node.name }}</span>
+        <span>
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => append(data)">
+            Append
+          </el-button>
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => remove(node, data)">
+            Delete
+          </el-button>
+        </span>
+      </span>
+
+                </el-tree>
               </div>
           </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="18">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-              <span>权限管理</span>
-
-              <!-- <el-button style="float: right; padding: 3px 0" type="text">取消关联</el-button> -->
-              <!-- <el-button style="float: right; padding: 3px 0;margin-right:20px" type="text">关联账户</el-button> -->
-            </div>
-            <div  class="text item" v-show="ifclick">
-              <el-form v-show="!ifns" ref="form" :model="form" label-width="80px"  size="mini">
-                <el-form-item label="账户:">
-                  {{this.sf_name}}({{this.sf_username}})
-                </el-form-item>
-                <!-- <el-form-item label="状态:">
-                  等待账户确认
-                </el-form-item> -->
-                <div class="line"></div>
-                <el-form-item label="店铺:">
-                  <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
-                  <!-- <div style="margin: 15px 0;"></div> -->
-                  <el-checkbox-group v-model="checked1" @change="handleCheckedCitiesChange">
-                    <el-checkbox v-for="city in Option1" :label="city" :key="city">{{city}}</el-checkbox>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="产品:">
-                  <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                  <div style="margin: 15px 0;"></div> -->
-                  <el-checkbox-group v-model="checked2" @change="handleCheckedCitiesChange">
-                    <el-checkbox v-for="city in Option2" :label="city" :key="city">{{city}}</el-checkbox>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="订单:">
-                  <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                  <div style="margin: 15px 0;"></div> -->
-                  <el-checkbox-group v-model="checked3" @change="handleCheckedCitiesChange">
-                    <el-checkbox v-for="city in Option3" :label="city" :key="city">{{city}}</el-checkbox>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="财务:">
-                  <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                  <div style="margin: 15px 0;"></div> -->
-                  <el-checkbox-group v-model="checked4" @change="handleCheckedCitiesChange">
-                    <el-checkbox v-for="city in Option4" :label="city" :key="city">{{city}}</el-checkbox>
-                  </el-checkbox-group>
-                </el-form-item>
-              </el-form>
-                <!-- <div class="search-result-text">
-                    状态: <span>等待账户确认</span>
-                </div> -->
-                <!-- <div class="line"></div> -->
-              <div v-show="ifns">
-                <!-- <div class="line"></div> -->
-                <el-form ref="form" :model="form" label-width="110px">
-                  <el-form-item label="绑定用户名">
-                    <el-input v-model="form.name"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="onSubmit">提交</el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-
-            </div>
+            <span>关联账号:</span>
+            <el-button style="padding: 3px 0;margin-right:20px" type="text">关联新账户</el-button>
+          </div>
+          <el-table
+            :data="tableData"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              prop="id"
+              label="id"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="账号"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="nikename"
+              label="昵称"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="mobile"
+              label="联系方式"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="状态"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              width="100"
+              label="操作">
+              <template slot-scope="scope">
+                <el-button @click="handleClick(scope.row)" type="text" size="small">取消关联</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>员工属性</span>
+          </div>
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="名称">
+              <el-input name="staff" v-model="form.name" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="部门">
+              <el-input name="staff" v-model="form.department" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+              <el-input name="staff" type="textarea" v-model="form.remarks" disabled></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="editStaff">编辑</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>员工权限</span>
+          </div>
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item>
+              <el-checkbox-group v-model="form.type">
+                <el-checkbox
+                  v-for ="(item,index) in menuList"
+                  v-if ="item.permission"
+                  :name="index"
+                  :label="item.name">{{item.name}}
+                </el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>员工店铺分配</span>
+          </div>
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item>
+              <el-checkbox-group v-model="form.type">
+                <el-checkbox label="美食/餐厅线上活动" name="type">1</el-checkbox>
+                <el-checkbox label="地推活动" name="type">2</el-checkbox>
+                <el-checkbox label="线下主题活动" name="type">3</el-checkbox>
+                <el-checkbox label="单纯品牌曝光" name="type">4</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-form>
         </el-card>
       </el-col>
     </el-row>
@@ -91,12 +141,14 @@
 import TreeRender from '@/components/tree_render'
 import api from '@/resource/api'
 import Qs from 'qs';
-
+import ElRow from "element-ui/packages/row/src/row";
+import menu_staff from '@/json/role_menu/menu_staff';
   const Option1 = ['店铺1', '店铺2', '店铺3', '店铺4'];
   const Option2 = ['产品采集', '产品编辑', '产品跟卖', '产品上传','产品同步','产品分享'];
   const Option3 = ['接收订单', '处理订单'];
   const Option4 = ['财务管理'];
   export default{
+    components: {ElRow},
     name: 'tree',
     data(){
       return{
@@ -121,13 +173,35 @@ import Qs from 'qs';
           children: 'children',
           label: 'name'
         },
+        menuList:[],
+        setTree1:[{
+          name: '总部',
+          children: [{
+            id: 5,
+            name: '二级 2-1',
+            children: [{
+              id: 55,
+              name: '三级 2-1'
+            }, {
+              id: 66,
+              name: '三级 2-2'
+            }]
+          }, {
+            id: 6,
+            name: '二级 2-2'
+          }]
+        }],
         defaultExpandKeys: [],//默认展开节点列表
         sf_name:'',
         sf_username:'',
         staff_id:'',
         suid:'',
         ifns:false,
-        ifclick:false
+        ifclick:false,
+        tableData: [{
+          status: '状态',
+          name: '账号'
+        }]
       }
     },
     props:{
@@ -151,7 +225,7 @@ import Qs from 'qs';
     mounted(){
       // console.log(api)
       this.initExpand()
-    },    
+    },
 
     methods: {
       // handleCheckAllChange(val) {
@@ -169,7 +243,7 @@ import Qs from 'qs';
         var uid = localStorage.getItem("uid");
         var tk = localStorage.getItem("token");
 
-         
+
         this.$http.post(this.api.user_list,{
           user_token:tk,
           user_query:"username=='"+this.form.name+"'"
@@ -187,7 +261,7 @@ import Qs from 'qs';
                 if(res.values.length > 0){
                   this.$message.error("该用户已被其他公司绑定")
                 }else{
-                  
+
                   if(this.staff_id){
                     //往link表里加信息
                     this.$http.post(this.api.link_company_staff_to_user,{
@@ -212,11 +286,11 @@ import Qs from 'qs';
                   }
                 }
               })
-              
+
             }else{
                 this.$message.error("该用户不是员工")
             }
-            
+
           }else{
             this.$message.error("该用户不存在");
           }
@@ -224,7 +298,7 @@ import Qs from 'qs';
         })
       },
       initExpand(){
-
+        this.menuList=menu_staff;
         this.setTree.map((a) => {
           this.defaultExpandKeys.push(a.id)
         });
@@ -241,28 +315,31 @@ import Qs from 'qs';
         }else{
           this.ifns = true;
         }
-          
+
         this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
           ctree:JSON.stringify(this.setTree)
         }).then((res)=>{
         })
       },
-      renderContent(h,{node,data,store}){//加载节点
-        let that = this;
-        return h(TreeRender,{
-          props: {
-            DATA: data,
-            NODE: node,
-            STORE: store,
-            maxexpandId: that.non_maxexpandId
-          },
-          on: {
-            nodeAdd: ((s,d,n) => that.handleAdd(s,d,n)),
-            nodeEdit: ((s,d,n) => that.handleEdit(s,d,n)),
-            nodeDel: ((s,d,n) => that.handleDelete(s,d,n)),
-            nodeEditPass: ((s,d,n) => that.handleEditPass(s,d,n))
-          }
-        });
+      renderContent(h, { node, data, store }) {
+        console.log('node:', node);
+        console.log('data:', data);
+        console.log('store:', store);
+        let btnData = null;
+        let btnTitle = '';
+        if(data.name=='总部'){
+          btnTitle = "添加新员工"
+        }else{
+           btnData = data;
+           btnTitle = '删除';
+        }
+        return (<span class="custom-tree-node">
+          <span>{data.name}</span>
+        <span>
+        <el-button size="mini" type="text" on-click={ () => this.treeBtnClick(btnData)}>{btnTitle}</el-button>
+        </span>
+        </span>);
+
       },
       // handleAddTop(){
       //   this.setTree.push({
@@ -276,13 +353,13 @@ import Qs from 'qs';
       handleAdd(s,d,n){//增加节点
         var tk = localStorage.getItem("token");
         var uid = localStorage.getItem("uid");
-        
+
         // console.log(this.setTree);
         if(n.level >=2){
           this.$message.error("目前只支持两级！")
           return false;
         }
-        
+
         this.$http.post('http://39.106.9.139/apis/restful/add/company_'+this.cid+'/staff',{
           staff_name:"",
           staff_info:"1"
@@ -297,7 +374,7 @@ import Qs from 'qs';
             children: []
           });
           //展开节点
-          if(!n.expanded){ 
+          if(!n.expanded){
             n.expanded = true;
           }
           //修改公司树
@@ -305,11 +382,11 @@ import Qs from 'qs';
             ctree:JSON.stringify(this.setTree)
           }).then((res)=>{
           })
-        }) 
+        })
       },
       handleEdit(s,d,n){//编辑节点
         var tk = localStorage.getItem("token");
-              
+
         //修改公司树
         this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
           ctree:JSON.stringify(this.setTree)
@@ -352,8 +429,8 @@ import Qs from 'qs';
             })
           }
           //判断是否新增
-          d.id > this.non_maxexpandId ? delNode() : isDel() 
-        }              
+          d.id > this.non_maxexpandId ? delNode() : isDel()
+        }
         //修改公司树
         this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
           ctree:JSON.stringify(this.setTree)
@@ -363,9 +440,12 @@ import Qs from 'qs';
       handleEditPass(s,d,n){//编辑完成
         console.log(1)
         d.isEdit = false;
+      },
+      editStaff(){
+        $(input[name='editStaff']).attr('disable',true)
       }
     }
-    
+
   }
 </script>
 
