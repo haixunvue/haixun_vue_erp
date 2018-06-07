@@ -9,10 +9,10 @@ export default  [
         "routerName": "company_home",
         "name": "公司主页",
       },
-      {
-        "routerName": "company_shop",
-        "name": "公司店铺",
-      },
+      // {
+      //   "routerName": "company_shop",
+      //   "name": "公司店铺",
+      // },
       {
         "routerName": "company_product",
         "name": "公司产品",

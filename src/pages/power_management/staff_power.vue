@@ -24,6 +24,20 @@
             }
         },
         methods:{
+            company_staff_list(){
+            this.$http.post(this.api.company_staff_list,{
+            user_query: `owner_company_id=='${this.owner_company_id}'`,
+            user_token:this.user_token,
+            user_id:this.user_id, 
+            }).then((res)=>{
+                console.log('company_staff_list',res);
+                if(res.is_success){
+                   
+                }
+              
+              
+            })
+            },
             getcompanylist(){
                 var tk = localStorage.getItem("token");
                 var uid = localStorage.getItem("uid");
@@ -87,9 +101,13 @@
                 })
             }
         },
-        mounted(){
-          this.getcompanylist();
-        }
+        mounted() {
+            this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.owner_user_id = localStorage.getItem("owner_user_id")
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            this.company_staff_list();
+        },
 
     }
 </script>

@@ -312,6 +312,9 @@
   export default {
     data() {
       return {
+        datetime_start:'',
+        datetime_end:'',
+        list_data:[],
         value:'',
         activeName:'first',
         options: [
@@ -357,6 +360,7 @@
       }
     },
     methods: {
+      
       openWeb: function(){
 
       },
@@ -404,11 +408,47 @@
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
+      company_money_recharge_list(){
+        
+        let user_query =''
+        if(this.datetime_start&&this.datetime_end){
+            user_query = ``;
+        }else if(this.datetime_start){
+            user_query = ``;
+        }else if(this.datetime_end){
+            user_query = ``;
+        }else{
+            user_query = ``;
+        }
+
+        this.$http.post(this.api.company_money_recharge,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            //user_query: user_query,   		//目标公司    
+            target_company_id: this.owner_company_id,   		//目标公司    
+            page:this.currentPage-1,  //页码
+            page_count:this.pagesize,
+            }).then((res)=>{
+                console.log('list_data',res);
+                if(res.is_success){
+                    this.list_data = res.value;
+                }else{
+                     this.list_data=[];
+                }
+
+
+            })
+      }
 
     },
-    mounted() {
-
-    }
+     mounted() {
+            this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.owner_user_id = localStorage.getItem("owner_user_id")
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            this.company_money_recharge_list();
+            console.log(moment().format('YYYYMMDDhhmmssSSS'))
+     },
   }
 </script>
 <style scoped>

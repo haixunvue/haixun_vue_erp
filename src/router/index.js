@@ -32,6 +32,10 @@ const staff_power = r => require.ensure([], () => r(require('../pages/power_mana
 const C_Creport = r => require.ensure([], () => r(require('../pages/company/Creport')), 'C_Creport');
 const C_Preport = r => require.ensure([], () => r(require('../pages/company/Preport')), 'C_Preport');
 
+const company_home = r => require.ensure([], () => r(require('../pages/company/company_home')), 'company_home');
+const company_product = r => require.ensure([], () => r(require('../pages/company/company_product')), 'company_product');
+const company_order = r => require.ensure([], () => r(require('../pages/company/company_order')), 'company_order');
+
 //commodity
 const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
 const Cd_product_list1 = r => require.ensure([], () => r(require('../pages/commodity/Product_list1')), 'Cd_product_list1');
@@ -135,7 +139,23 @@ export default new Router({
                 },{
                    path: 'C_Preport',
                    component: C_Preport,
-                },{
+                },
+                //公司主页
+                {
+                  path: 'company_home',
+                  component: company_home,
+                },
+                //公司产品
+                {
+                  path: 'company_product',
+                  component: company_product,
+                },
+                //公司订单
+                {
+                  path: 'company_order',
+                  component: company_order,
+                },
+                {
                    path: 'Cd_product_list',
                    component: Cd_product_list,
                 },{

@@ -5,15 +5,15 @@
             <el-button type="text">查看授权帮助</el-button>
         </div>
         <div class="table">
-            <el-table :data="shop_list" :span-method="objectSpanMethod" border style="width: 100%; margin-top: 20px">
+            <el-table :data="shop_list" border style="width: 100%; margin-top: 20px">
               <el-table-column prop="shop_name" label="店铺名称"></el-table-column>
-              <el-table-column prop="region" label="授权国家"></el-table-column>
+              <el-table-column prop="region_name" label="授权国家"></el-table-column>
               <el-table-column prop="amazion_account" label="代理邮箱"></el-table-column>
-              <el-table-column prop="account_id" label="授权时间"></el-table-column>
+              <el-table-column prop="_createTime" label="授权时间"></el-table-column>
               <el-table-column prop="amount3" label="操作">
                   <template slot-scope="scope">
-                      <el-button type="text" @click="editAuthorization">重新授权</el-button>
-                      <el-button type="text"  @click="company_shop_delete">删除</el-button>
+                      <el-button type="text" @click="editAuthorization(scope.row, scope.$index)">重新授权</el-button>
+                      <el-button type="text"  @click="company_shop_delete(scope.row, scope.$index)">删除</el-button>
                   </template>
               </el-table-column>
             </el-table>
@@ -74,6 +74,7 @@
                 access_key:'',
                 secret_key:'',
                 region:'',
+                region_name:'',
                 amazion_account:'',
                 siteIndex: '',
                 dialogVisible:false,
@@ -82,7 +83,7 @@
                 shop_list:[],
                 input:'',
                 title:'',
-
+                re_auth_data:''
             }
         },
           mounted() {
@@ -93,22 +94,7 @@
             this.company_shop_list();
         },
         methods:{
-            //row横行 column竖行
-//            objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-//                if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4) {
-//                    if (rowIndex % 5 === 0) {
-//                        return {
-//                            rowspan: 5,
-//                            colspan: 1
-//                        };
-//                    } else {
-//                        return {
-//                            rowspan: 0,
-//                            colspan: 0
-//                        };
-//                   }
-//                }
-//            },
+           
             addAuthorization(){
                 this.shop_name='';
                 this.account_id='';
@@ -121,32 +107,47 @@
                 this.title="添加Amazon权限";
                 this.isAdd = true;
             },
-            editAuthorization(){
+            editAuthorization(item,index){
+                console.log(item)
+                this.re_auth_data = item;
+                this.shop_name=item.shop_name;
+                this.amazion_account=item.amazion_account;
+                this.region=this.findSiteIdx(item.region);
                 this.dialogVisible = true;
                 this.title="修改Amazon权限";
                 this.isAdd = false;
+            },
+             findSiteIdx(value){
+                for(let i=0;i<site.length;i++){
+                    if(site.value==value){return i;}
+                }
+                return '';
             },
           changeSite(){
 
           },
           amazon_re_authorize(){
+              if(!this.re_auth_data){
+                  return;
+              }
           this.$http.post(this.api.amazon_re_authorize,{
             owner_company_id: this.owner_company_id,
             owner_user_id:this.owner_user_id,
             user_token:this.user_token,
-            target_id:'',
             user_id:this.user_id,
+            target_id:this.re_auth_data.id,
             shop_name:this.shop_name,
             amazion_account:this.amazion_account,
-            account_id:this.account_id,
-            access_key:this.access_key,
-            secret_key:this.secret_key,
+            account_id:this.re_auth_data.account_id,
+            access_key:this.re_auth_data.access_key,
+            secret_key:this.re_auth_data.secret_key,
             region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',
             region_name:this.siteIndex?this.site[Number(this.siteIndex)].name:'',
             }).then((res)=>{
                 console.log('amazon_auth',res);
                 if(res.is_success){
                     this.dialogVisible = false;
+                    this.company_shop_list();
                 }
 
             })
@@ -166,12 +167,15 @@
 
             })
           },
-          company_shop_delete(){
+          company_shop_delete(item,index){
             this.$http.post(this.api.company_shop_delete,{
             user_token:this.user_token,
             user_id:this.user_id,
-            target_id:'this.target_id',
+            target_id:item.id,
             }).then((res)=>{
+                if(res.is_success){
+                    this.company_shop_list();
+                }
                 console.log('company_shop_list',res);
 
             })
@@ -194,6 +198,7 @@
                 console.log('amazon_auth',res);
                 if(res.is_success){
                     this.dialogVisible = false;
+                    this.company_shop_list();
                 }
 
 
