@@ -5,11 +5,11 @@
             <el-button type="text">查看授权帮助</el-button>
         </div>
         <div class="table">
-            <el-table :data="tableData" :span-method="objectSpanMethod" border style="width: 100%; margin-top: 20px">
-              <el-table-column prop="id" label="店铺名称"></el-table-column>
-              <el-table-column prop="name" label="授权国家"></el-table-column>
-              <el-table-column prop="amount1" label="代理邮箱"></el-table-column>
-              <el-table-column prop="amount2" label="授权时间"></el-table-column>
+            <el-table :data="shop_list" :span-method="objectSpanMethod" border style="width: 100%; margin-top: 20px">
+              <el-table-column prop="shop_name" label="店铺名称"></el-table-column>
+              <el-table-column prop="region" label="授权国家"></el-table-column>
+              <el-table-column prop="amazion_account" label="代理邮箱"></el-table-column>
+              <el-table-column prop="account_id" label="授权时间"></el-table-column>
               <el-table-column prop="amount3" label="操作">
                   <template slot-scope="scope">
                       <el-button type="text" @click="editAuthorization">重新授权</el-button>
@@ -73,49 +73,16 @@
                 account_id:'',
                 access_key:'',
                 secret_key:'',
-                region:'',              
+                region:'',
                 amazion_account:'',
-                siteIndex: '', 
+                siteIndex: '',
                 dialogVisible:false,
-                site: site,  
+                site: site,
                 isAdd:true,
-                shop_list:[],          
-                tableData: [{
-                 id: 'jianggu',
-                 name: '英国',
-                 amount1: '249463571@qq.com',
-                 amount2: '2017-06-06 19:40:01',
-                 amount3: 10
-               }, {
-                 id: '12987123',
-                 name: '德国',
-                 amount1: '',
-                 amount2: '',
-                 amount3: 12
-               }, {
-                 id: '12987124',
-                 name: '法国',
-                 amount1: '',
-                 amount2: '',
-                 amount3: 9
-               }, {
-                 id: '12987125',
-                 name: '意大利',
-                 amount1: '',
-                 amount2: '',
-                 amount3: 17
-               }, {
-                 id: '12987126',
-                 name: '西班牙',
-                 amount1: '',
-                 amount2: '',
-                 amount3: 15
-               }],
-              
-               
+                shop_list:[],
                 input:'',
                 title:'',
-                
+
             }
         },
           mounted() {
@@ -127,27 +94,27 @@
         },
         methods:{
             //row横行 column竖行
-            objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-                if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4) {
-                    if (rowIndex % 5 === 0) {
-                        return {
-                            rowspan: 5,
-                            colspan: 1
-                        };
-                    } else {
-                        return {
-                            rowspan: 0,
-                            colspan: 0
-                        };
-                   }
-                }
-            },
+//            objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+//                if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4) {
+//                    if (rowIndex % 5 === 0) {
+//                        return {
+//                            rowspan: 5,
+//                            colspan: 1
+//                        };
+//                    } else {
+//                        return {
+//                            rowspan: 0,
+//                            colspan: 0
+//                        };
+//                   }
+//                }
+//            },
             addAuthorization(){
                 this.shop_name='';
                 this.account_id='';
                 this.access_key='';
                 this.secret_key='';
-                this.region='';              
+                this.region='';
                 this.amazion_account='';
                 this.siteIndex='';
                 this.dialogVisible = true;
@@ -167,26 +134,26 @@
             owner_company_id: this.owner_company_id,
             owner_user_id:this.owner_user_id,
             user_token:this.user_token,
-            target_id:'', 
-            user_id:this.user_id, 
+            target_id:'',
+            user_id:this.user_id,
             shop_name:this.shop_name,
-            amazion_account:this.amazion_account, 
+            amazion_account:this.amazion_account,
             account_id:this.account_id,
             access_key:this.access_key,
             secret_key:this.secret_key,
-            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',                        
+            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',
             }).then((res)=>{
                 console.log('amazon_auth',res);
                 if(res.is_success){
                     this.dialogVisible = false;
                 }
-    
+
             })
           },
           company_shop_list(){
             this.$http.post(this.api.company_shop_list,{
             user_token:this.user_token,
-            user_id:this.user_id, 
+            user_id:this.user_id,
             }).then((res)=>{
                 console.log('company_shop_list',res);
                 if(res.is_success){
@@ -194,18 +161,18 @@
                 }else{
                      this.shop_list=[];
                 }
-              
-   
+
+
             })
           },
           company_shop_delete(){
             this.$http.post(this.api.company_shop_delete,{
             user_token:this.user_token,
-            user_id:this.user_id, 
-            target_id:'this.target_id', 
+            user_id:this.user_id,
+            target_id:'this.target_id',
             }).then((res)=>{
                 console.log('company_shop_list',res);
-   
+
             })
           },
           add_amazon_auth(){
@@ -214,20 +181,20 @@
             owner_company_id: this.owner_company_id,
             owner_user_id:this.owner_user_id,
             user_token:this.user_token,
-            user_id:this.user_id, 
+            user_id:this.user_id,
             shop_name:this.shop_name,
             account_id:this.account_id,
             access_key:this.access_key,
             secret_key:this.secret_key,
-            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',              
-            amazion_account:this.amazion_account, 
+            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',
+            amazion_account:this.amazion_account,
             }).then((res)=>{
                 console.log('amazon_auth',res);
                 if(res.is_success){
                     this.dialogVisible = false;
                 }
-              
-              
+
+
             })
           },
           goSite(){

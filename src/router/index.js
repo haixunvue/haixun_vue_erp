@@ -51,7 +51,7 @@ const cost_reconciliation = r => require.ensure([], () => r(require('../pages/fi
 const Cd_Creport2 = r => require.ensure([], () => r(require('../pages/commodity/Creport2')), 'Cd_Creport2');
 const Cd_Preport = r => require.ensure([], () => r(require('../pages/commodity/Preport')), 'Cd_Preport');
 const Cd_Preport2 = r => require.ensure([], () => r(require('../pages/commodity/Preport2')), 'Cd_Preport2');
-const Cd_Preport_boss = r => require.ensure([], () => r(require('../pages/commodity/Preport_boss')), 'Cd_Preport_boss');
+const business_report = r => require.ensure([], () => r(require('../pages/financial_management/business_report')), 'business_report');
 const deductions_detail = r => require.ensure([], () => r(require('../pages/financial_management/deductions_detail')), 'deductions_detail');
 const Cd_User_edit = r => require.ensure([], () => r(require('../pages/commodity/User_edit')), 'Cd_User_edit');
 const Cd_User_edit2 = r => require.ensure([], () => r(require('../pages/commodity/User_edit2')), 'Cd_User_edit2');
@@ -190,8 +190,8 @@ export default new Router({
                    path: 'Cd_Preport2',
                    component: Cd_Preport2,
                 },{
-                   path: 'Cd_Preport_boss',
-                   component: Cd_Preport_boss,
+                   path: 'business_report',
+                   component: business_report,
                 },{
                    path: 'deductions_detail',
                    component: deductions_detail,

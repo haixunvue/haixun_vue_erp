@@ -1,237 +1,393 @@
 <template>
-  <div>
-    <h1>新增产品</h1>
-    <div class="line"></div>
-    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="明细" name="0"></el-tab-pane>
-      <el-tab-pane label="折线图" name="1"></el-tab-pane>
+  <div class="content">
+    <el-tabs v-model="activeName" type="card">
+      <el-tab-pane label="费用统计" name="first">
+        <div style="margin-bottom:5px">
+          <el-select v-model="value1" placeholder="选择员工" size="mini">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="value1" placeholder="选择店铺" size="mini">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini" style="margin-right:0px"></el-date-picker>
+          <el-button type="primary" size="mini" style="margin-left:20px">查询</el-button>
+          <el-button type="primary" size="mini" style="margin-left:5px">重置</el-button>
+        </div>
+
+        <!-- <div class="header" style="margin-bottom:10px">
+
+        </div> -->
+        <div class="middle">
+          <div class="middle-top oh">
+            <span class="left search-result-text">店铺账号：</span>
+            <!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>-->
+            <el-checkbox-group v-model="Optioned1" @change="handleCheckedCitiesChange" class="left">
+              <el-checkbox v-for="city in Option1" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+          <div class="middle-top oh" style="clear:both">
+            <span class="left search-result-text">仓库位置：</span>
+            <!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>-->
+            <el-checkbox-group v-model="Optioned2" @change="handleCheckedCitiesChange" class="left">
+              <el-checkbox v-for="city in Option2" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+        </div>
+        <div class="line"></div>
+        <div class="bottom">
+          <el-table
+            :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+            border
+            style="width: 100%;margin-bottom:20px"
+            :default-sort = "{prop: 'right', order: 'descending'}"
+            fit
+          >
+            <el-table-column
+              prop="name"
+              label="日期"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="username"
+              label="订单量"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="password"
+              label="订单总金额"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="tel"
+              label="退款总费用"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="idcardnum"
+              label="平台总费用"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="物流总费用"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="people"
+              label="总计"
+            >
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 20, 50, 100]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalItems"
+            style="clear:both;text-align:center"
+          >
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="物流费用明细" name="second">
+        <div style="margin-bottom:5px">
+          <el-select v-model="value1" placeholder="选择员工" size="mini">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="value1" placeholder="选择店铺" size="mini">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
+          <el-button type="primary" size="mini" style="margin-left:20px">查询</el-button>
+          <el-button type="primary" size="mini" style="margin-left:5px">重置</el-button>
+        </div>
+        <!-- <div class="header" style="margin-bottom:10px">
+
+        </div> -->
+        <div class="middle">
+          <div class="middle-top">
+            <span class="left search-result-text">店铺账号：</span>
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>
+            <el-checkbox-group v-model="Optioned1" @change="handleCheckedCitiesChange" class="left">
+              <el-checkbox v-for="city in Option1" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+          <div class="middle-top">
+            <span class="left search-result-text">仓库位置：</span>
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>
+            <el-checkbox-group v-model="Optioned2" @change="handleCheckedCitiesChange" class="left">
+              <el-checkbox v-for="city in Option2" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+        </div>
+        <div class="line"></div>
+        <div class="bottom">
+          <el-table
+            :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+            border
+            style="width: 100%;margin-bottom:20px"
+            :default-sort = "{prop: 'right', order: 'descending'}"
+            fit
+          >
+            <el-table-column
+              prop="name"
+              label="订单ID"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="username"
+              label="物流方式"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="password"
+              label="发货数量"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="tel"
+              label="称重重量"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="idcardnum"
+              label="材积"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="结算重"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="people"
+              label="物流费用"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="people"
+              label="日期"
+            >
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 20, 50, 100]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalItems"
+            style="clear:both;text-align:center">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="平台费用明细" name="third">
+        <div style="margin-bottom:5px">
+          <el-select v-model="value1" placeholder="选择员工" size="mini">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="value1" placeholder="选择店铺" size="mini">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
+          <el-button type="primary" size="mini" style="margin-left:20px">查询</el-button>
+          <el-button type="primary" size="mini" style="margin-left:5px">重置</el-button>
+        </div>
+        <!-- <div class="header" style="margin-bottom:10px">
+
+        </div> -->
+        <div class="middle">
+          <div class="middle-top">
+            <span class="left search-result-text">店铺账号：</span>
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>
+            <el-checkbox-group v-model="Optioned1" @change="handleCheckedCitiesChange" class="left">
+              <el-checkbox v-for="city in Option1" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+          <div class="middle-top">
+            <span class="left search-result-text">仓库位置：</span>
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>
+            <el-checkbox-group v-model="Optioned2" @change="handleCheckedCitiesChange" class="left">
+              <el-checkbox v-for="city in Option2" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+        </div>
+        <div class="line"></div>
+        <div class="bottom">
+          <el-table
+            :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+            border
+            style="width: 100%;margin-bottom:20px"
+            :default-sort = "{prop: 'right', order: 'descending'}"
+            fit
+          >
+            <el-table-column
+              prop="name"
+              label="日期"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="username"
+              label="订单ID"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="password"
+              label="订单金额"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="tel"
+              label="退款费用"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="idcardnum"
+              label="平台费用"
+            >
+            </el-table-column>
+            <!-- <el-table-column
+              prop="status"
+              label="物流总费用"
+              >
+            </el-table-column>
+            <el-table-column
+              prop="people"
+              label="总计"
+              >
+            </el-table-column> -->
+          </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 20, 50, 100]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalItems"
+            style="clear:both;text-align:center">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
     </el-tabs>
-    <div class="demo-input-size" >
-      <el-select v-model="value" placeholder="选择员工" size="mini">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <!-- <el-select v-model="value" placeholder="选择店铺" size="mini">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select> -->
-      <el-date-picker
-        v-model="input6"
-        type="date"
-        placeholder="选择开始日期"
-        v-show="status"
-        size="mini">
-      </el-date-picker>
-      <el-date-picker
-        v-model="input7"
-        type="date"
-        placeholder="选择结束日期"
-        v-show="status"
-        size="mini">
-      </el-date-picker>
-    </div>
-    <el-table
-      :data="tableData"
-      border
-      style="width: 100%;margin-top:10px"
-      v-if="status"
-      size="mini"
-    >
-      <el-table-column
-        prop="name"
-        label="操作员"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="collection"
-        label="采集上传主体/变体">
-      </el-table-column>
-      <el-table-column
-        prop="claim"
-        label="认领上传主体/变体">
-      </el-table-column>
-      <el-table-column
-        prop="newlybuild"
-        label="新建上传主体/变体">
-      </el-table-column>
-      <el-table-column
-        prop="total"
-        label="合计主体/变体">
-      </el-table-column>
-    </el-table>
-    <div id="chart" ref="chart" style="width: 100% ; height: 500px;margin: 20px 0">
-    </div>
-    <div class="block" style="text-align: right;padding: 10px" >
-      <span class="demonstration"></span>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="currentPage3"
-        :page-size="100"
-        :total="1000"
-        layout="total, sizes, prev, pager, next, jumper"
-        style="clear:both;text-align:center"
-        v-show="status">
-      </el-pagination> 
-    </div>
+    <el-button type="primary" class="export-btn" size="mini">导出报表</el-button>
   </div>
-
 </template>
-<script>
-  import echarts from 'echarts';
 
+<script>
+  import router from "../../router";
+
+  const Option1 = ['全部', '店铺1', '店铺2', '店铺3'];
+  const Option2 = ['默认仓库', 'FBA'];
   export default {
     data() {
       return {
-        activeName: '0',
-        status:true,
-        input6: new Date().setTime(new Date().getTime() - 3600 * 1000 * 24),
-        input7: '',
-        input8: '',
-        input9: '',
-        currentPage3: 0,
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          collection: '王小虎',
-          claim: '王小虎',
-          newlybuild: '王小虎',
-          total: '王小虎',
-        }],
-        chartArr:[
+        activeName:'first',
+        value:'',
+        checkAll: false,
+        Optioned1: ['全部'],
+        Optioned2: ['默认仓库'],
+        Option1: Option1,
+        Option2: Option2,
+        isIndeterminate: true,
+        data: [
           {
-            name: '商品添加数目',
-            type: 'line',
-            stack: '总量',
-            data: [120, 132, 101, 134, 90, 230, 210]
+            name:'货款',
+            username:'通过审核',
+            password:'FXE201805120004',
+            tel:'交通银行（深圳）',
+            idcardnum:'1200.00',
+            status:'人民币',
+            people:'KH041006'
           },
-          {
-            name: '商品销售数目',
-            type: 'line',
-            stack: '总量',
-            data: [220, 182, 191, 234, 290, 330, 310]
-          }
-        ]
-      };
+        ],
+        totalItems:0,
+        currentPage:1,
+        pagesize:5,
+      }
     },
     methods: {
-      handleClick(tab, event) {
-        if(this.activeName === '0')
-        {
-          this.$nextTick(()=>{
-            this.$refs.chart.style.display = 'none';
-          });
-          this.status = true;
-        }else{
-          this.$nextTick(()=>{
-            this.$refs.chart.style.display = 'block';
-          });
-          this.status = false;
-        }
+      handleCheckAllChange(val) {
+        this.checkedCities = val ? cityOptions : [];
+        this.isIndeterminate = false;
       },
-      handleCurrentChange(data) {
-        console.log(data);
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.cities.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
       },
-      handleSizeChange(data) {
-        console.log(data);
-      }
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+      },
     },
     mounted() {
-      this.$nextTick(()=>{
-        this.$refs.chart.style.display = 'none';
-      });
-      let myChart = document.getElementById('chart');
-      let mainChart = echarts.init(myChart);
-      let option = {
-        title: {
-          text: '销售统计',
-          left:'2%'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          }
-        },
-        legend: {
-          data: ['商品添加数目', '商品销售数目']
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        grid: {
-          left: '1%',
-          right: '1%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        dataZoom: [
-          {
-            show: true,
-            realtime: true,
-            start: 65,
-            end: 85
-          },
-          {
-            type: 'inside',
-            realtime: true,
-            start: 65,
-            end: 85
-          }
-        ],
-        series:this.chartArr
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      if (option && typeof option === "object") {
-        mainChart.setOption(option, true)
-      }
+
     }
   }
 </script>
+<style scoped>
+  .search-result-text{
+    font-size: 14px;
+    color: #606266;
+    padding: 0;
+  }
+  .content{
+    position: relative;
+  }
+
+  .export-btn{
+    position:absolute;
+    right: 20px;
+    top: 0;
+  }
+
+  .header{
+    /*margin-bottom: 150px;*/
+  }
+
+  .middle{
+    /*margin-bottom: 50px;*/
+  }
+
+  .middle-top{
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 10px;
+  }
+</style>

@@ -35,28 +35,42 @@
               >
               </el-table-column>
               <el-table-column
-                prop="password"
+                prop="amountCollected"
                 label="收款金额/¥"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="tel"
+                prop="receivables"
+                label="收款币别"
+                sortable
+
+              >
+              </el-table-column>
+              <el-table-column
+                prop="account"
                 label="收款帐户"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="idcardnum"
+                prop="amountCancellation"
                 label="核销金额/¥"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="status"
+                prop="verificationCurrency"
+                label="核销币别"
+                sortable
+
+              >
+              </el-table-column>
+              <el-table-column
+                prop="balance"
                 label="核销差额"
                 sortable
 
@@ -225,11 +239,11 @@
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-col>
-        <!-- <el-col :span="12">
+        <el-col :span="12">
             <span class="dialog-left">报账类型</span>
-            <el-radio v-model="radio" label="1">贷款</el-radio>
-            <el-radio v-model="radio" label="2">押金</el-radio>
-        </el-col> -->
+            <el-radio v-model="reimbursementType" label="1">贷款</el-radio>
+            <!--<el-radio v-model="radio" label="2">押金</el-radio>-->
+        </el-col>
       </el-row>
       <el-row class="dialog-item">
         <el-col :span="12">
@@ -286,7 +300,7 @@
       <el-row class="dialog-item">
         <el-col :span="24">
           <span class="dialog-left left" style="margin-right:55px">备注</span>
-          <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="textarea"></el-input>
+          <el-input type="textarea" :rows="4" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
     </el-dialog>
@@ -338,7 +352,8 @@
         radio:'1',
         input:'',
         fileList:[],
-        dialogTitle:''
+        dialogTitle:'',
+        reimbursementType:''
       }
     },
     methods: {
