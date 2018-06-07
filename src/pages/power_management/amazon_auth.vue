@@ -174,7 +174,8 @@
             account_id:this.account_id,
             access_key:this.access_key,
             secret_key:this.secret_key,
-            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',                        
+            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'', 
+            region_name:this.siteIndex?this.site[Number(this.siteIndex)].name:'',                        
             }).then((res)=>{
                 console.log('amazon_auth',res);
                 if(res.is_success){
@@ -220,6 +221,7 @@
             access_key:this.access_key,
             secret_key:this.secret_key,
             region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',              
+            region_name:this.siteIndex?this.site[Number(this.siteIndex)].name:'',              
             amazion_account:this.amazion_account, 
             }).then((res)=>{
                 console.log('amazon_auth',res);
