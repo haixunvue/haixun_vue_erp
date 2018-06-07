@@ -86,8 +86,7 @@
           changeValue(){
             console.log(this.roleList[Number(this.roleValue)].menutype)
             let role_item = this.roleList[Number(this.roleValue)]
-            localStorage.setItem('owner_user_id',role_item.owner_user_id||'')
-            localStorage.setItem('owner_company_id',role_item.owner_company_id||'')           
+             this.updataIdInfo(role_item)         
             this.updateMenu(role_item.menutype)
           },
              get_account_role(){
@@ -117,12 +116,15 @@
                    this.roleList = role_list;
                    if(role_list.length>0){
                     this.roleValue=0;
-                   localStorage.setItem('owner_user_id',role_list[0].owner_user_id||'')
-                   localStorage.setItem('owner_company_id',role_list[0].owner_company_id||'')
+                    this.updataIdInfo(role_list[0])
                    this.updateMenu(role_list[0].menutype);
                    }
                   
                 })
+            },
+            updataIdInfo(role){
+              localStorage.setItem('owner_user_id',role.isBoss?role.owner_user_id:role.user_id)
+              localStorage.setItem('owner_company_id',role.isBoss?role.id:role.owner_company_id)   
             },
             getName(){
               this.name = this.user_info.nickname;

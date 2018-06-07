@@ -30,7 +30,7 @@
         <!--弹框-->
         <el-dialog :title="title" :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
             <div class="input"><span>店铺别名:</span><el-input v-model="shop_name" placeholder="请输入店铺别名" style="margin-top:5px"></el-input></div>
-            <div class="input"><span>Amazon账号:</span><el-input v-model="account_id" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
+            <div class="input"><span>Amazon账号:</span><el-input v-model="amazion_account" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
             <div>
                 <span>开户站:</span><br />
                 <el-select v-model="siteIndex" @change="changeSite()" placeholder="请选择" style="margin-top:5px">
@@ -42,7 +42,7 @@
             <div class="site-box clear" v-if="isAdd">
                 <div class="input">
                     <span class="input-label">Merchant ID:</span>
-                    <el-input v-model="merchant_ID" placeholder="卖家编号" style="margin-top:5px;width:400px"></el-input>
+                    <el-input v-model="account_id" placeholder="卖家编号" style="margin-top:5px;width:400px"></el-input>
                 </div>
                 <div class="input">
                     <span class="input-label">AWS Access Key ID:</span>
@@ -55,7 +55,7 @@
                 <el-button type="text" class="right">如何获取上述信息？</el-button>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogVisible = false">授 权</el-button>
+                <el-button type="primary" @click="save_amazon_auth()">授 权</el-button>
                 <el-button @click="dialogVisible = false">取 消</el-button>
             </span>
         </el-dialog>
@@ -74,7 +74,7 @@
                 access_key:'',
                 secret_key:'',
                 region:'',              
-                merchant_ID:'',              
+                amazion_account:'',              
                tableData: [{
                  id: 'jianggu',
                  name: '英国',
@@ -114,6 +114,12 @@
                 isAdd:true
             }
         },
+          mounted() {
+            this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.owner_user_id = localStorage.getItem("owner_user_id")
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+        },
         methods:{
             //row横行 column竖行
             objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -147,22 +153,21 @@
           save_amazon_auth(){
 
           this.$http.post(this.api.amazon_auth,{
-              username:this.form.username,
-              password:this.form.password
+            owner_company_id: this.owner_company_id,
+            owner_user_id:this.owner_user_id,
+            user_token:this.user_token,
+            user_id:this.user_id, 
+            shop_name:this.shop_name,
+            account_id:this.account_id,
+            access_key:this.access_key,
+            secret_key:this.secret_key,
+            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',              
+            amazion_account:this.amazion_account, 
             }).then((res)=>{
-                console.log(res);
-                localStorage.setItem('user_token',res.token)
-                localStorage.setItem('user_id',res.value.id)
-                localStorage.setItem('login_type','front')//前台登录
-                localStorage.setItem('user_info',JSON.stringify(res.value))
-      
-                this.setCookie("token",res.token,1/24);
-                this.setCookie("user_id ",res.value.id,1/24);
-
-                this.$message.success('登录成功,正在为您跳转');
-                        router.push({
-                        path:'/main/'
-                 }) 
+                console.log('amazon_auth',res);
+                if(res.is_success){
+                    this.dialogVisible = false;
+                }
               
               
             })
