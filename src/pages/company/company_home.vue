@@ -2,7 +2,9 @@
     <div>
       <el-tabs :tab-position="tabPosition" style="height: 200px;">
         <el-tab-pane label="公司主页">
-          <div>公司主页</div>
+          <div class="company-home">
+
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
