@@ -28,7 +28,7 @@
         </div>
 
         <!--弹框-->
-        <el-dialog :title="title" :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
+        <el-dialog :title="title" :visible.sync="dialogVisible" width="40%">
             <div class="input"><span>店铺别名:</span><el-input v-model="input" placeholder="请输入店铺别名" style="margin-top:5px"></el-input></div>
             <div class="input"><span>Amazon账号:</span><el-input v-model="input" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
             <div>

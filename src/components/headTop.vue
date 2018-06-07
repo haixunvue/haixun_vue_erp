@@ -16,15 +16,17 @@
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-menu-item index="1">海逊ERP</el-menu-item>
-        <el-select v-if="!isFromBack" v-model="roleValue" @change="changeValue()" placeholder="请选择">
-          <el-option
-            v-for="(item,index) in roleList"
-            :value="index"
-            :label="item.showName"
-            :key="index"
-          >
-          </el-option>
-        </el-select>
+        <el-menu-item index="2">
+          <el-select v-if="!isFromBack" v-model="roleValue" @change="changeValue()" placeholder="请选择">
+            <el-option
+              v-for="(item,index) in roleList"
+              :value="index"
+              :label="item.showName"
+              :key="index"
+            >
+            </el-option>
+          </el-select>
+        </el-menu-item>
         <!-- <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
            <el-dropdown trigger="click">
              <span class="el-dropdown-link" style="color:white">
@@ -46,10 +48,20 @@
           </el-dropdown-menu>
         </el-dropdown>
        </span> -->
-        <el-submenu  class="user" index="2">
+        <div class="message" index="3">
+          <div>
+            <i class="el-icon-warning"></i>
+            <span>11</span>
+          </div>
+          <div>
+            <i class="el-icon-message"></i>
+            <span>4</span>
+          </div>
+        </div>
+        <el-submenu  class="user" index="4">
           <template slot="title">{{name}} - {{status}}</template>
-          <el-menu-item index="2-1"  @click="Cd_User_edit3">修改密码</el-menu-item>
-          <el-menu-item index="2-2" @click="goOut">安全退出</el-menu-item>
+          <el-menu-item index="4-1"  @click="Cd_User_edit3">修改密码</el-menu-item>
+          <el-menu-item index="4-2" @click="goOut">安全退出</el-menu-item>
         </el-submenu>
 
         <!-- <el-submenu index="2">
@@ -77,7 +89,9 @@
             return {
                 name:'',
               roleList:[],
-              roleValue:''
+              roleValue:'',
+              status:'',
+              isFromBack:true
             }
         },
         methods:{
@@ -148,6 +162,41 @@
     }
 </script>
 <style scoped>
+    .message{
+      position: absolute;
+      right: 90px;
+    }
+    .message > div{
+      height: 60px;
+      display: inline-block;
+      color: #fff;
+      vertical-align: middle;
+      line-height: 70px;
+      position: relative;
+      margin-right: 20px;
+    }
+    .message > div >i{
+      border: 1px #666 solid;
+      padding: 6px;
+    }
+    .message > div >span{
+      position: absolute;
+      top: 6px;
+      right: -14px;
+      background: red;
+      height: 20px;
+      line-height: 20px;
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 0 2px;
+      min-width: 15px;
+      text-align: center;
+    }
+    .el-menu-item i {
+      color: #fff;
+      padding: 5px;
+      border: 1px #eee solid;
+     }
     .user{
         float: right;
     }
