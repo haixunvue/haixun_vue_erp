@@ -69,7 +69,7 @@
               width="100"
               label="操作">
               <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">取消关联</el-button>
+                <el-button @click="company_staff_linker_delete(scope.row.id)" type="text" size="small">取消关联</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -178,7 +178,7 @@
         required:true
       },
     },
-  
+
     mounted(){
       this.owner_company_id = localStorage.getItem("owner_company_id")
       this.owner_user_id = localStorage.getItem("owner_user_id")
@@ -192,7 +192,7 @@
     methods: {
       showAddFormDialog(){
         this.addStaffLinker.name= '';
-          this.dialogAddFormVisible = true 
+          this.dialogAddFormVisible = true
       },
       company_staff_list(){
         //员工列表
@@ -333,7 +333,7 @@
             this.dialogAddFormVisible = false;
             this.company_staff_linker_list()
           }
-          
+
         })
       },
       company_staff_linker_delete(target_id){
@@ -346,7 +346,7 @@
           if(res.is_success){
             this.company_staff_linker_list()
           }
-          
+
         })
       },
       company_staff_linker_list(){
@@ -404,7 +404,7 @@
         this.is_edit=false
         this.input_disable='input-disable'
         this.staffEdit='编辑'
-    
+
       }
     }
 
