@@ -23,10 +23,10 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>关联账号:</span>
-            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="dialogAddVisible = true">关联新账户</el-button>
+            <el-button style="padding: 3px 0;margin-right:20px" type="text">关联新账户</el-button>
           </div>
           <el-table
-            :data="tableData"
+            :data="link_staff_list"
             stripe
             style="width: 100%">
             <el-table-column
@@ -117,23 +117,6 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-dialog title="收货地址" :visible.sync="dialogAddVisible">
-      <el-form :model="form">
-        <el-form-item label="活动名称">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogAddVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogAddVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <!-- VUE饿了么树形控件添加增删改功能按钮 -->
@@ -143,60 +126,36 @@
   import Qs from 'qs';
   import ElRow from "element-ui/packages/row/src/row";
   import menu_staff from '@/json/role_menu/menu_staff';
-  const Option1 = ['店铺1', '店铺2', '店铺3', '店铺4'];
-  const Option2 = ['产品采集', '产品编辑', '产品跟卖', '产品上传','产品同步','产品分享'];
-  const Option3 = ['接收订单', '处理订单'];
-  const Option4 = ['财务管理'];
   export default{
     components: {ElRow},
     name: 'tree',
     data(){
       return{
         menuList:[],
-        staff_list:[{staff_name: '总部',
-          children:[]}],
+        staff_list:[{staff_name: '总部',children:[]}],
         staff_selected:null,
-        checkAll: false,
-        checked1: ['店铺1', '店铺2', '店铺3', '店铺4'],
-        checked2: ['产品采集', '产品编辑', '产品跟卖', '产品上传','产品同步','产品分享'],
-        checked3: ['接收订单', '处理订单'],
-        checked4: ['财务管理'],
-        Option1: Option1,
-        Option2: Option2,
-        Option3: Option3,
-        Option4: Option4,
-        isIndeterminate: true,
+        defaultProps: {
+          children: 'children',
+          label: 'staff_name'
+        },
+        target_user_name:'',
+        link_staff_list: [],
+
         form: {
           name:''
         },
-        maxexpandId: api.maxexpandId,//新增节点开始id
-        non_maxexpandId: api.maxexpandId,//新增节点开始id(不更改)
         isLoadingTree: false,//是否加载节点树
-        //setTree: api.treelist,//节点树数据
-        defaultProps: {
-          children: 'children',
-          label: 'name'
-        },
 
-        defaultExpandKeys: [],//默认展开节点列表
-        sf_name:'',
-        sf_username:'',
+        defaultExpandKeys: [],//默认展开节点列表      
         staff_id:'',
         suid:'',
         ifns:false,
         ifclick:false,
-        tableData: [{
-          status: '状态',
-          name: '账号'
-        }],
-        dialogAddVisible: false,
+        
       }
     },
     props:{
-      companyname:{
-        type:String,
-        required:true
-      },
+      
       setTree:{
         type:Array,
         required:true
@@ -304,6 +263,8 @@
         if(data.id){
           this.staff_selected = data;
           this.company_staff_get_infos();
+          this.company_staff_linker_list();
+          
         }else{
           this.staff_selected = null;
         }
@@ -319,7 +280,7 @@
         return (<span class="custom-tree-node">
           <span>{data.staff_name}</span>
         <span>
-        <el-button class="btn-staff" size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
+        <el-button size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
         </span>
         </span>);
 
@@ -373,11 +334,11 @@
 
         })
       },
-      company_staff_get_infos(){//编辑节点
+      company_staff_get_infos(){
         if(!this.staff_selected){
           return;
         }
-        //修改公司树
+        
         this.$http.post(this.api.company_staff_get_infos,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -386,6 +347,44 @@
           console.log(res)
         })
       },
+      company_staff_linker_add(){
+        if(!this.staff_selected){
+          return;
+        }
+        
+        this.$http.post(this.api.company_staff_linker_add,{
+          user_token:this.user_token,
+          user_id:this.user_id,
+           owner_company_id:this.owner_company_id,
+          owner_user_id:this.owner_user_id,
+          owner_staff_id:this.staff_selected.id,
+          target_user_name:this.target_user_name,
+          
+        }).then((res)=>{
+          console.log(res)
+          this.company_staff_linker_list()
+        })
+      },
+      company_staff_linker_list(){
+        if(!this.staff_selected){
+          return;
+        }
+        
+        this.$http.post(this.api.company_staff_linker_list,{
+          user_token:this.user_token,
+          user_id:this.user_id,
+          user_query:`owner_staff_id=="${this.staff_selected.id}"`,
+        }).then((res)=>{
+          if(res.is_success){
+            this.link_staff_list=res.value
+          }else{
+            this.link_staff_list=[]
+          }
+          
+          console.log(res)
+        })
+      },
+      
 
       editStaff(){
         $(input[name='editStaff']).attr('disable',true)
@@ -438,9 +437,6 @@
   .expand-tree .el-tree-node:hover{
     overflow:hidden;
   }
-  .el-tree-node__content{
-    height: 30px;
-  }
   .expand-tree .is-current>.el-tree-node__content .tree-btn,
   .expand-tree .el-tree-node__content:hover .tree-btn{
     display:inline-block;
@@ -448,8 +444,5 @@
   .expand-tree .is-current>.el-tree-node__content .tree-label{
     font-weight:600;
     white-space:normal;
-  }
-  .btn-staff{
-    margin-left: 10px;
   }
 </style>

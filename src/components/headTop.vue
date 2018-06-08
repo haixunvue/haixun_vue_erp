@@ -171,7 +171,10 @@
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.getName();
-            this.get_account_role();
+            if(!this.isFromBack){
+                this.get_account_role();
+            }
+            
 
         }
     }
