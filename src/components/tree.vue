@@ -7,7 +7,7 @@
                 <!-- <el-button @click="handleAddTop">添加顶级节点</el-button> -->
                 <el-tree ref="expandMenuList" class="expand-tree"
                 v-if="isLoadingTree"
-                :data="setTree1"
+                :data="staff_list"
                 node-key="id"
                 highlight-current
                 :props="defaultProps"
@@ -15,29 +15,11 @@
                 :render-content="renderContent"
                 :default-expanded-keys="defaultExpandKeys"
                 @node-click="handleNodeClick">
-<span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.name }}</span>
-        <span>
-          <el-button
-            type="text"
-            size="mini"
-            @click="() => append(data)">
-            Append
-          </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="() => remove(node, data)">
-            Delete
-          </el-button>
-        </span>
-      </span>
-
                 </el-tree>
               </div>
           </div>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="18"  v-if ="staff_selected">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>关联账号:</span>
@@ -108,7 +90,7 @@
             <el-form-item>
               <el-checkbox-group v-model="form.type">
                 <el-checkbox
-                  v-for ="(item,index) in staffList"
+                  v-for ="(item,index) in menuList"
                   v-if ="item.permission"
                   :name="index"
                   key="index",
@@ -153,6 +135,10 @@ import menu_staff from '@/json/role_menu/menu_staff';
     name: 'tree',
     data(){
       return{
+        menuList:[],
+        staff_list:[{staff_name: '总部',
+                  children:[]}],
+        staff_selected:null,
         checkAll: false,
         checked1: ['店铺1', '店铺2', '店铺3', '店铺4'],
         checked2: ['产品采集', '产品编辑', '产品跟卖', '产品上传','产品同步','产品分享'],
@@ -174,7 +160,7 @@ import menu_staff from '@/json/role_menu/menu_staff';
           children: 'children',
           label: 'name'
         },
-        staffList:[],
+        menuList:[],
         setTree1:[{
           name: '总部',
           children: [{
@@ -224,21 +210,28 @@ import menu_staff from '@/json/role_menu/menu_staff';
       }
     },
     mounted(){
-      // console.log(api)
+     this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.owner_user_id = localStorage.getItem("owner_user_id")
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+
       this.initExpand()
+      this.company_staff_list();
     },
 
     methods: {
-      // handleCheckAllChange(val) {
-      //   this.checkedCities = val ? cityOptions : [];
-      //   this.isIndeterminate = false;
-      // },
-      handleCheckedCitiesChange(value) {
-        this.$message.error("权限接口尚未完善")
-        return
-        // let checkedCount = value.length;
-        // this.checkAll = checkedCount === this.cities.length;
-        // this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      company_staff_list(){
+            this.$http.post(this.api.company_staff_list,{
+            user_query: `owner_company_id=='${this.owner_company_id}'`,
+            user_token:this.user_token,
+            user_id:this.user_id,
+            }).then((res)=>{
+                console.log('company_staff_list',res);
+                if(res.is_success){
+                  this.$set(this.staff_list[0], 'children', res.value)
+                  // this.staff_list.children=res.value
+                }
+            })
       },
       onSubmit() {
         var uid = localStorage.getItem("uid");
@@ -299,28 +292,19 @@ import menu_staff from '@/json/role_menu/menu_staff';
         })
       },
       initExpand(){
-        this.staffList=menu_staff;
+        this.menuList=menu_staff;
         this.setTree.map((a) => {
           this.defaultExpandKeys.push(a.id)
         });
         this.isLoadingTree = true;
       },
-      handleNodeClick(d,n,s){//点击节点
-        // console.log(d)
-        this.ifclick = true;
-        d.isEdit = false;//放弃编辑状态
-        this.sf_name = d.name;
-        this.staff_id = d.id;
-        if(this.ifnsary.indexOf(this.staff_id.toString()) >= 0){
-          this.ifns = false;
-        }else{
-          this.ifns = true;
-        }
-
-        this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
-          ctree:JSON.stringify(this.setTree)
-        }).then((res)=>{
-        })
+      handleNodeClick(data,n,s){//点击节点
+      if(data.id){
+        this.staff_selected = data;
+      }else{
+         this.staff_selected = null;
+      }
+       console.log("handleNodeClick",data)
       },
       renderContent(h, { node, data, store }) {
         console.log('node:', node);
@@ -328,120 +312,82 @@ import menu_staff from '@/json/role_menu/menu_staff';
         console.log('store:', store);
         let btnData = null;
         let btnTitle = '';
-        if(data.name=='总部'){
+        if(data.staff_name=='总部'){
           btnTitle = "添加新员工"
         }else{
-           btnData = data;
            btnTitle = '删除';
         }
         return (<span class="custom-tree-node">
-          <span>{data.name}</span>
+          <span>{data.staff_name}</span>
         <span>
-        <el-button size="mini" type="text" on-click={ () => this.treeBtnClick(btnData)}>{btnTitle}</el-button>
+        <el-button size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
         </span>
         </span>);
 
       },
-      // handleAddTop(){
-      //   this.setTree.push({
-      //     id: 0,
-      //     name: '领导',
-      //     pid: '',
-      //     isEdit: false,
-      //     children: []
-      //   })
-      // },
-      handleAdd(s,d,n){//增加节点
-        var tk = localStorage.getItem("token");
-        var uid = localStorage.getItem("uid");
+      treeBtnClick(node, data, store){
+          if(data.staff_name=='总部'){
+             this.company_staff_add(node, data, store)
 
-        // console.log(this.setTree);
-        if(n.level >=2){
-          this.$message.error("目前只支持两级！")
-          return false;
-        }
-
-        this.$http.post('http://39.106.9.139/apis/restful/add/company_'+this.cid+'/staff',{
-          staff_name:"",
-          staff_info:"1"
-        }).then((res)=>{
-          console.log(res);
-          //添加数据
-          d.children.push({
-            id: res.value.id,
-            name: '员工',
-            pid: d.id,
-            isEdit: false,
-            children: []
-          });
-          //展开节点
-          if(!n.expanded){
-            n.expanded = true;
+          }else{
+           this.company_staff_delete(node, data, store)
           }
-          //修改公司树
-          this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
-            ctree:JSON.stringify(this.setTree)
-          }).then((res)=>{
-          })
-        })
       },
-      handleEdit(s,d,n){//编辑节点
-        var tk = localStorage.getItem("token");
+      company_staff_add(node, data, store){
+             this.$http.post(this.api.company_staff_add,{
+            owner_company_id:this.owner_company_id,
+            owner_user_id:this.owner_user_id,
+            user_token:this.user_token,
+            user_id:this.user_id,
+            staff_name:'新员工',//   			员工名称
+            staff_department:'',// 		员工部门
+            staff_notes:'',// 			员工备注
 
-        //修改公司树
-        this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
-          ctree:JSON.stringify(this.setTree)
-        }).then((res)=>{
-        })
+            }).then((res)=>{
+                console.log('company_staff_list',res);
+                if(res.is_success){
+                  data.children.push(res.value)
+                  this.$set(data, 'children', data.children)
+                   if(!node.expanded){
+                      node.expanded = true;
+                    }
+                   //this.company_staff_list()
+                }
+
+
+            })
       },
-      handleDelete(s,d,n){//删除节点
-        // console.log(s,d,n)
-        let that = this;
-        //有子级不删除
-        if(d.children && d.children.length !== 0){
-          this.$message.error("此节点有子级，不可删除！")
-          return false;
-        }else{
-          //新增节点直接删除，否则要询问是否删除
-          let delNode = () => {
-            let list = n.parent.data.children || n.parent.data,//节点同级数据
-              _index = 99999;//要删除的index
-            /*if(!n.parent.data.children){//删除顶级节点，无children
-              list = n.parent.data
-            }*/
-            list.map((c,i) => {
-              if(d.id == c.id){
-                _index = i;
-              }
+
+      company_staff_delete(node, data, store){
+             this.$http.post(this.api.company_staff_delete,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            target_id:data.id,
+            }).then((res)=>{
+                console.log('company_staff_delete',res);
+                if(res.is_success){
+                   if(!node.expanded){
+                      node.expanded = true;
+                    }
+                   this.company_staff_list()
+                }
+
             })
-            let k = list.splice(_index,1);
-            //console.log(_index,k)
-            this.$message.success("删除成功！")
-          }
-          let isDel = () => {
-            that.$confirm("是否删除此节点？","提示",{
-              confirmButtonText: "确认",
-              cancelButtonText: "取消",
-              type: "warning"
-            }).then(() => {
-              delNode()
-            }).catch(() => {
-              return false;
-            })
-          }
-          //判断是否新增
-          d.id > this.non_maxexpandId ? delNode() : isDel()
+      },
+      handleEdit(){//编辑节点
+        if(!this.staff_selected){
+          return;
         }
         //修改公司树
-        this.$http.post(this.api.company_set_infor+'('+this.cid+')',{
-          ctree:JSON.stringify(this.setTree)
-        }).then((res)=>{
+        this.$http.post(this.api.company_staff_get_infos,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            target_id:this.staff_selected.id,
+            }).then((res)=>{
+              console.log(res)
         })
       },
-      handleEditPass(s,d,n){//编辑完成
-        console.log(1)
-        d.isEdit = false;
-      },
+
       editStaff(){
         $(input[name='editStaff']).attr('disable',true)
       }

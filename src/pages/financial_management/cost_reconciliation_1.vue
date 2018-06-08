@@ -207,7 +207,7 @@
             user_id:this.user_id,  
             target_company_id: this.owner_company_id,   		//目标公司    
             page:this.currentPage-1,  //页码
-            page_count:this.pagesize,
+            pageSize:this.pagesize,
         }
         if(this.datetime_start){
             params.datetime_start=this.datetime_start;

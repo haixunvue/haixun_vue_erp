@@ -114,16 +114,21 @@
 
                    let role_list = []
                     res.value.companys.map((item)=>{
+                          if(item){
                             item.showName='老板-'+item.company_short_name;
                             item.isBoss = true;
                             item.menutype = 'boss';
                             role_list.push(item)
+                          }
+                            
                     })
                     res.value.staffs.map((item)=>{
+                      if(item){
                             item.showName='员工-'+item.name;
                             item.isBoss = false;
                             item.menutype = 'staff';
                             role_list.push(item)
+                      }
                     })
                    this.roleList = role_list;
                    if(role_list.length>0){
