@@ -23,8 +23,19 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>关联账号:</span>
-            <el-button style="padding: 3px 0;margin-right:20px" type="text">关联新账户</el-button>
+            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="dialogAddFormVisible = true">关联新账户</el-button>
           </div>
+          <el-dialog width="30%" title="添加用户关联" :visible.sync="dialogAddFormVisible">
+            <el-form ref="formStaff" :model="formStaff">
+              <el-form-item label="用户名">
+                <el-input class="formLabelWidth" v-model="formStaff.name" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogAddFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogAddFormVisible = false">添 加</el-button>
+            </div>
+          </el-dialog>
           <el-table
             :data="link_staff_list"
             stripe
@@ -141,21 +152,25 @@
         target_user_name:'',
         link_staff_list: [],
 
+        formStaff: {
+          name:''
+        },
         form: {
           name:''
         },
         isLoadingTree: false,//是否加载节点树
 
-        defaultExpandKeys: [],//默认展开节点列表      
+        defaultExpandKeys: [],//默认展开节点列表
         staff_id:'',
         suid:'',
         ifns:false,
         ifclick:false,
-        
+        dialogAddFormVisible: false,
+
       }
     },
     props:{
-      
+
       setTree:{
         type:Array,
         required:true
@@ -264,7 +279,7 @@
           this.staff_selected = data;
           this.company_staff_get_infos();
           this.company_staff_linker_list();
-          
+
         }else{
           this.staff_selected = null;
         }
@@ -338,7 +353,7 @@
         if(!this.staff_selected){
           return;
         }
-        
+
         this.$http.post(this.api.company_staff_get_infos,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -351,7 +366,7 @@
         if(!this.staff_selected){
           return;
         }
-        
+
         this.$http.post(this.api.company_staff_linker_add,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -359,7 +374,7 @@
           owner_user_id:this.owner_user_id,
           owner_staff_id:this.staff_selected.id,
           target_user_name:this.target_user_name,
-          
+
         }).then((res)=>{
           console.log(res)
           this.company_staff_linker_list()
@@ -369,7 +384,7 @@
         if(!this.staff_selected){
           return;
         }
-        
+
         this.$http.post(this.api.company_staff_linker_list,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -380,11 +395,11 @@
           }else{
             this.link_staff_list=[]
           }
-          
+
           console.log(res)
         })
       },
-      
+
 
       editStaff(){
         $(input[name='editStaff']).attr('disable',true)
@@ -444,5 +459,8 @@
   .expand-tree .is-current>.el-tree-node__content .tree-label{
     font-weight:600;
     white-space:normal;
+  }
+  .formLabelWidth{
+    width: 50%;
   }
 </style>
