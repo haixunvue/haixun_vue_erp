@@ -2,22 +2,22 @@
   <div>
     <el-row>
       <el-col :span="6">
-          <div class="expand">
-            <div>
-                <!-- <el-button @click="handleAddTop">添加顶级节点</el-button> -->
-                <el-tree ref="expandMenuList" class="expand-tree"
-                v-if="isLoadingTree"
-                :data="staff_list"
-                node-key="id"
-                highlight-current
-                :props="defaultProps"
-                :expand-on-click-node="false"
-                :render-content="renderContent"
-                :default-expanded-keys="defaultExpandKeys"
-                @node-click="handleNodeClick">
-                </el-tree>
-              </div>
+        <div class="expand">
+          <div>
+            <!-- <el-button @click="handleAddTop">添加顶级节点</el-button> -->
+            <el-tree ref="expandMenuList" class="expand-tree"
+                     v-if="isLoadingTree"
+                     :data="staff_list"
+                     node-key="id"
+                     highlight-current
+                     :props="defaultProps"
+                     :expand-on-click-node="false"
+                     :render-content="renderContent"
+                     :default-expanded-keys="defaultExpandKeys"
+                     @node-click="handleNodeClick">
+            </el-tree>
           </div>
+        </div>
       </el-col>
       <el-col :span="18"  v-if ="staff_selected">
         <el-card class="box-card">
@@ -93,7 +93,7 @@
                   v-for ="(item,index) in menuList"
                   v-if ="item.permission"
                   :name="index"
-                  key="index",
+                  :key="index"
                   :label="item.name">{{item.name}}
                 </el-checkbox>
               </el-checkbox-group>
@@ -121,11 +121,11 @@
 </template>
 <!-- VUE饿了么树形控件添加增删改功能按钮 -->
 <script>
-import TreeRender from '@/components/tree_render'
-import api from '@/resource/api'
-import Qs from 'qs';
-import ElRow from "element-ui/packages/row/src/row";
-import menu_staff from '@/json/role_menu/menu_staff';
+  import TreeRender from '@/components/tree_render'
+  import api from '@/resource/api'
+  import Qs from 'qs';
+  import ElRow from "element-ui/packages/row/src/row";
+  import menu_staff from '@/json/role_menu/menu_staff';
   const Option1 = ['店铺1', '店铺2', '店铺3', '店铺4'];
   const Option2 = ['产品采集', '产品编辑', '产品跟卖', '产品上传','产品同步','产品分享'];
   const Option3 = ['接收订单', '处理订单'];
@@ -137,7 +137,7 @@ import menu_staff from '@/json/role_menu/menu_staff';
       return{
         menuList:[],
         staff_list:[{staff_name: '总部',
-                  children:[]}],
+          children:[]}],
         staff_selected:null,
         checkAll: false,
         checked1: ['店铺1', '店铺2', '店铺3', '店铺4'],
@@ -160,24 +160,7 @@ import menu_staff from '@/json/role_menu/menu_staff';
           children: 'children',
           label: 'name'
         },
-        menuList:[],
-        setTree1:[{
-          name: '总部',
-          children: [{
-            id: 5,
-            name: '二级 2-1',
-            children: [{
-              id: 55,
-              name: '三级 2-1'
-            }, {
-              id: 66,
-              name: '三级 2-2'
-            }]
-          }, {
-            id: 6,
-            name: '二级 2-2'
-          }]
-        }],
+
         defaultExpandKeys: [],//默认展开节点列表
         sf_name:'',
         sf_username:'',
@@ -210,10 +193,10 @@ import menu_staff from '@/json/role_menu/menu_staff';
       }
     },
     mounted(){
-     this.owner_company_id = localStorage.getItem("owner_company_id")
-            this.owner_user_id = localStorage.getItem("owner_user_id")
-            this.user_token = localStorage.getItem("user_token");
-            this.user_id = localStorage.getItem("user_id");
+      this.owner_company_id = localStorage.getItem("owner_company_id")
+      this.owner_user_id = localStorage.getItem("owner_user_id")
+      this.user_token = localStorage.getItem("user_token");
+      this.user_id = localStorage.getItem("user_id");
 
       this.initExpand()
       this.company_staff_list();
@@ -221,18 +204,19 @@ import menu_staff from '@/json/role_menu/menu_staff';
 
     methods: {
       company_staff_list(){
-            this.$http.post(this.api.company_staff_list,{
-            user_query: `owner_company_id=='${this.owner_company_id}'`,
-            user_token:this.user_token,
-            user_id:this.user_id,
-            }).then((res)=>{
-                console.log('company_staff_list',res);
-                if(res.is_success){
-                  this.$set(this.staff_list[0], 'children', res.value)
-                  // this.staff_list.children=res.value
-                }
-            })
+        this.$http.post(this.api.company_staff_list,{
+          user_query: `owner_company_id=='${this.owner_company_id}'`,
+          user_token:this.user_token,
+          user_id:this.user_id,
+        }).then((res)=>{
+          console.log('company_staff_list',res);
+          if(res.is_success){
+            this.$set(this.staff_list[0], 'children', res.value)
+            // this.staff_list.children=res.value
+          }
+        })
       },
+
       onSubmit() {
         var uid = localStorage.getItem("uid");
         var tk = localStorage.getItem("token");
@@ -282,7 +266,7 @@ import menu_staff from '@/json/role_menu/menu_staff';
               })
 
             }else{
-                this.$message.error("该用户不是员工")
+              this.$message.error("该用户不是员工")
             }
 
           }else{
@@ -299,23 +283,20 @@ import menu_staff from '@/json/role_menu/menu_staff';
         this.isLoadingTree = true;
       },
       handleNodeClick(data,n,s){//点击节点
-      if(data.id){
-        this.staff_selected = data;
-      }else{
-         this.staff_selected = null;
-      }
-       console.log("handleNodeClick",data)
+        if(data.id){
+          this.staff_selected = data;
+          this.company_staff_get_infos();
+        }else{
+          this.staff_selected = null;
+        }
+        console.log("handleNodeClick",data)
       },
       renderContent(h, { node, data, store }) {
-        console.log('node:', node);
-        console.log('data:', data);
-        console.log('store:', store);
-        let btnData = null;
         let btnTitle = '';
         if(data.staff_name=='总部'){
           btnTitle = "添加新员工"
         }else{
-           btnTitle = '删除';
+          btnTitle = '删除';
         }
         return (<span class="custom-tree-node">
           <span>{data.staff_name}</span>
@@ -326,65 +307,65 @@ import menu_staff from '@/json/role_menu/menu_staff';
 
       },
       treeBtnClick(node, data, store){
-          if(data.staff_name=='总部'){
-             this.company_staff_add(node, data, store)
+        if(data.staff_name=='总部'){
+          this.company_staff_add(node, data, store)
 
-          }else{
-           this.company_staff_delete(node, data, store)
-          }
+        }else{
+          this.company_staff_delete(node, data, store)
+        }
       },
       company_staff_add(node, data, store){
-             this.$http.post(this.api.company_staff_add,{
-            owner_company_id:this.owner_company_id,
-            owner_user_id:this.owner_user_id,
-            user_token:this.user_token,
-            user_id:this.user_id,
-            staff_name:'新员工',//   			员工名称
-            staff_department:'',// 		员工部门
-            staff_notes:'',// 			员工备注
+        this.$http.post(this.api.company_staff_add,{
+          owner_company_id:this.owner_company_id,
+          owner_user_id:this.owner_user_id,
+          user_token:this.user_token,
+          user_id:this.user_id,
+          staff_name:'新员工',//   			员工名称
+          staff_department:'',// 		员工部门
+          staff_notes:'',// 			员工备注
 
-            }).then((res)=>{
-                console.log('company_staff_list',res);
-                if(res.is_success){
-                  data.children.push(res.value)
-                  this.$set(data, 'children', data.children)
-                   if(!node.expanded){
-                      node.expanded = true;
-                    }
-                   //this.company_staff_list()
-                }
+        }).then((res)=>{
+          console.log('company_staff_list',res);
+          if(res.is_success){
+            data.children.push(res.value)
+            this.$set(data, 'children', data.children)
+            if(!node.expanded){
+              node.expanded = true;
+            }
+            //this.company_staff_list()
+          }
 
 
-            })
+        })
       },
 
       company_staff_delete(node, data, store){
-             this.$http.post(this.api.company_staff_delete,{
-            user_token:this.user_token,
-            user_id:this.user_id,
-            target_id:data.id,
-            }).then((res)=>{
-                console.log('company_staff_delete',res);
-                if(res.is_success){
-                   if(!node.expanded){
-                      node.expanded = true;
-                    }
-                   this.company_staff_list()
-                }
+        this.$http.post(this.api.company_staff_delete,{
+          user_token:this.user_token,
+          user_id:this.user_id,
+          target_id:data.id,
+        }).then((res)=>{
+          console.log('company_staff_delete',res);
+          if(res.is_success){
+            if(!node.expanded){
+              node.expanded = true;
+            }
+            this.company_staff_list()
+          }
 
-            })
+        })
       },
-      handleEdit(){//编辑节点
+      company_staff_get_infos(){//编辑节点
         if(!this.staff_selected){
           return;
         }
         //修改公司树
         this.$http.post(this.api.company_staff_get_infos,{
-            user_token:this.user_token,
-            user_id:this.user_id,
-            target_id:this.staff_selected.id,
-            }).then((res)=>{
-              console.log(res)
+          user_token:this.user_token,
+          user_id:this.user_id,
+          target_id:this.staff_selected.id,
+        }).then((res)=>{
+          console.log(res)
         })
       },
 
@@ -397,54 +378,54 @@ import menu_staff from '@/json/role_menu/menu_staff';
 </script>
 
 <style>
-.search-result-text{
+  .search-result-text{
     font-size: 14px;
     color: #333;
     margin-bottom: 10px;
-}
-.line{
-  margin: 20px 0;
-  border-top: 1px solid #dcdfe6;
-}
-.expand{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-}
-.expand>div{
-  height:85%;
-  /*padding-top:20px;*/
-  /*width:50%;*/
-  /*margin:20px auto;*/
-  max-width:400px;
-  overflow-y:auto;
-}
-.expand>div::-webkit-scrollbar-track{
-  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  border-radius:5px;
-}
-.expand>div::-webkit-scrollbar-thumb{
-  background-color:rgba(50, 65, 87, 0.5);
-  outline:1px solid slategrey;
-  border-radius:5px;
-}
-.expand>div::-webkit-scrollbar{
-  width:10px;
-}
-.expand-tree{
-  border:none;
-  margin-top:10px;
-}
-.expand-tree .el-tree-node.is-current,
-.expand-tree .el-tree-node:hover{
-  overflow:hidden;
-}
-.expand-tree .is-current>.el-tree-node__content .tree-btn,
-.expand-tree .el-tree-node__content:hover .tree-btn{
-  display:inline-block;
-}
-.expand-tree .is-current>.el-tree-node__content .tree-label{
-  font-weight:600;
-  white-space:normal;
-}
+  }
+  .line{
+    margin: 20px 0;
+    border-top: 1px solid #dcdfe6;
+  }
+  .expand{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+  }
+  .expand>div{
+    height:85%;
+    /*padding-top:20px;*/
+    /*width:50%;*/
+    /*margin:20px auto;*/
+    max-width:400px;
+    overflow-y:auto;
+  }
+  .expand>div::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    border-radius:5px;
+  }
+  .expand>div::-webkit-scrollbar-thumb{
+    background-color:rgba(50, 65, 87, 0.5);
+    outline:1px solid slategrey;
+    border-radius:5px;
+  }
+  .expand>div::-webkit-scrollbar{
+    width:10px;
+  }
+  .expand-tree{
+    border:none;
+    margin-top:10px;
+  }
+  .expand-tree .el-tree-node.is-current,
+  .expand-tree .el-tree-node:hover{
+    overflow:hidden;
+  }
+  .expand-tree .is-current>.el-tree-node__content .tree-btn,
+  .expand-tree .el-tree-node__content:hover .tree-btn{
+    display:inline-block;
+  }
+  .expand-tree .is-current>.el-tree-node__content .tree-label{
+    font-weight:600;
+    white-space:normal;
+  }
 </style>
