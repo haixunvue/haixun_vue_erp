@@ -9,7 +9,7 @@
                 <div class="start-date-time">
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
-                    v-model="starTime"
+                    v-model="datetime_start"
                     type="datetime"
                     placeholder="选择开始日期时间"
                     align="right"
@@ -19,7 +19,7 @@
                 <div class="end-date-time">
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
-                    v-model="endTime"
+                    v-model="datetime_end"
                     type="datetime"
                     placeholder="选择结束日期时间"
                     align="right"
@@ -33,7 +33,7 @@
         <div class="table">
           <div class="table-table">
             <el-table
-              :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+              :data="list_data"
               border
               style="width: 100%;margin-bottom:20px"
               :default-sort = "{prop: 'right', order: 'descending'}"
@@ -111,7 +111,7 @@
               :page-sizes="[5, 20, 50, 100]"
               :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="totalItems"
+              :total="totalCount"
               style="clear:both;text-align:center">
             </el-pagination>
           </div>
@@ -125,53 +125,12 @@
   export default {
     data() {
       return {
-        starTime:'',
-        endTime:'',
         datetime_start:'',
         datetime_end:'',
         list_data:[],
-        value:'',
-        activeName:'first',
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }
-        ],
-        data: [
-          {
-            name:'货款',
-            username:'通过审核',
-            password:'FXE201805120004',
-            tel:'交通银行（深圳）',
-            idcardnum:'1200.00',
-            status:'人民币',
-            people:'KH041006',
-            data:'2018-05-12 07:21:48',
-            remarks:'费用预付'
-          },
-        ],
-        totalItems:0,
+        totalCount:0,
         currentPage:1,
         pagesize:5,
-        dialogTableVisible:false,
-        radio:'1',
-        input:'',
-        fileList:[],
-        dialogTitle:'',
-        reimbursementType:'',
         pickerOptions1: {
           shortcuts: [{
             text: '今天',
@@ -202,49 +161,15 @@
 
       },
       handleSizeChange: function (size) {
+        this.currentPage = 1;
         this.pagesize = size;
+        this.company_money_recharge_list()
       },
       handleCurrentChange: function(currentPage){
         this.currentPage = currentPage;
+        this.company_money_recharge_list()
       },
-      add: function(){
-        this.dialogTableVisible = true
-        this.dialogTitle="自助报账"
-      },
-      edit: function(){
-        this.dialogTableVisible = true
-        this.dialogTitle="修改/查看"
-      },
-      del: function(){
-        this.$confirm('是否删除该条, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      },
+   
       company_money_recharge_list(){
         let params = {
             user_token:this.user_token,
@@ -263,7 +188,8 @@
         this.$http.post(this.api.company_money_recharge,params).then((res)=>{
                 console.log('list_data',res);
                 if(res.is_success){
-                    this.list_data = res.value;
+                    this.list_data = res.value.list;
+                    this.totalCount = res.value.totalCount;
                 }else{
                      this.list_data=[];
                 }
