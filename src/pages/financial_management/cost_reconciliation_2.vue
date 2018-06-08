@@ -1,11 +1,31 @@
 <template>
   <div>
-    
+
         <div class="header">
           <el-row>
             <el-col :span="20">
               <div class="header-top">
-                <el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="制单开始日期" end-placeholder="制单结束日期" size="mini"></el-date-picker>
+                <!--<el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="制单开始日期" end-placeholder="制单结束日期" size="mini"></el-date-picker>-->
+                <div class="start-date-time">
+                  <span class="demonstration">开始时间：</span>
+                  <el-date-picker
+                    v-model="starTime"
+                    type="datetime"
+                    placeholder="选择开始日期时间"
+                    align="right"
+                    :picker-options="pickerOptions1">
+                  </el-date-picker>
+                </div>
+                <div class="end-date-time">
+                  <span class="demonstration">结束时间：</span>
+                  <el-date-picker
+                    v-model="endTime"
+                    type="datetime"
+                    placeholder="选择结束日期时间"
+                    align="right"
+                    :picker-options="pickerOptions1">
+                  </el-date-picker>
+                </div>
               </div>
               <div class="header-bottom">
                 <el-select v-model="value" placeholder="账户" size="mini" class="header-bottom-select">
@@ -212,6 +232,8 @@
   export default {
     data() {
       return {
+        starTime:'',
+        endTime:'',
         datetime_start:'',
         datetime_end:'',
         list_data:[],
@@ -260,7 +282,7 @@
       }
     },
     methods: {
-      
+
       openWeb: function(){
 
       },
@@ -309,7 +331,7 @@
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
       company_money_recharge_list(){
-        
+
         let user_query =''
         if(this.datetime_start&&this.datetime_end){
             user_query = ``;
@@ -324,8 +346,8 @@
         this.$http.post(this.api.company_money_recharge,{
             user_token:this.user_token,
             user_id:this.user_id,
-            //user_query: user_query,   		//目标公司    
-            target_company_id: this.owner_company_id,   		//目标公司    
+            //user_query: user_query,   		//目标公司
+            target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
             page_count:this.pagesize,
             }).then((res)=>{
@@ -403,6 +425,15 @@
 
   .el-upload__tip{
     color:red;
+  }
+  .start-date-time{
+    display: inline-block;
+    font-size: 14px;
+  }
+  .end-date-time{
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 14px;
   }
 
 </style>

@@ -4,7 +4,28 @@
           <el-row>
             <el-col :span="20">
               <div class="header-top">
-                <el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="制单开始日期" end-placeholder="制单结束日期" size="mini"></el-date-picker>
+                <!--<el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="制单开始日期" end-placeholder="制单结束日期" size="mini"></el-date-picker>-->
+
+                <div class="start-date-time">
+                  <span class="demonstration">开始时间：</span>
+                  <el-date-picker
+                    v-model="starTime"
+                    type="datetime"
+                    placeholder="选择开始日期时间"
+                    align="right"
+                    :picker-options="pickerOptions1">
+                  </el-date-picker>
+                </div>
+                <div class="end-date-time">
+                  <span class="demonstration">结束时间：</span>
+                  <el-date-picker
+                    v-model="endTime"
+                    type="datetime"
+                    placeholder="选择结束日期时间"
+                    align="right"
+                    :picker-options="pickerOptions1">
+                  </el-date-picker>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -95,8 +116,7 @@
             </el-pagination>
           </div>
         </div>
-      </el-tab-pane>
-     
+
   </div>
 </template>
 
@@ -105,6 +125,8 @@
   export default {
     data() {
       return {
+        starTime:'',
+        endTime:'',
         datetime_start:'',
         datetime_end:'',
         list_data:[],
@@ -149,11 +171,33 @@
         input:'',
         fileList:[],
         dialogTitle:'',
-        reimbursementType:''
+        reimbursementType:'',
+        pickerOptions1: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
       }
     },
     methods: {
-      
+
       openWeb: function(){
 
       },
@@ -204,8 +248,8 @@
       company_money_recharge_list(){
         let params = {
             user_token:this.user_token,
-            user_id:this.user_id,  
-            target_company_id: this.owner_company_id,   		//目标公司    
+            user_id:this.user_id,
+            target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
             pageSize:this.pagesize,
         }
@@ -215,7 +259,7 @@
         if(this.datetime_end){
             params.datetime_end=this.datetime_end;
         }
-        
+
         this.$http.post(this.api.company_money_recharge,params).then((res)=>{
                 console.log('list_data',res);
                 if(res.is_success){
@@ -235,7 +279,7 @@
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.company_money_recharge_list();
-           
+
      },
   }
 </script>
@@ -245,7 +289,6 @@
   }
 
   .header{
-    /*height:90px;*/
     border-bottom: 1px solid #b8d0d6;
   }
 
@@ -253,44 +296,19 @@
     margin-bottom: 20px;
   }
 
-  .header-bottom-select{
-    margin-right: 2%;
-  }
-
-  .header-right{
-    width: 100%;
-    height:80px;
-    border-left: 1px solid #b8d0d6;
-    text-align: center;
-    line-height: 80px;
-  }
-
   .table{
     margin-top: 10px;
   }
-
-  .table-header{
-    height:20px;
-  }
-
   .table-table{
     margin-top: 20px;
   }
-
-  .dialog-item{
-    margin-bottom: 20px;
+  .start-date-time{
+    display: inline-block;
+    font-size: 14px;
   }
-
-  .dialog-left{
-    margin-right: 50px;
+  .end-date-time{
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 14px;
   }
-
-  .dialog-input{
-    width:185px;
-  }
-
-  .el-upload__tip{
-    color:red;
-  }
-
 </style>
