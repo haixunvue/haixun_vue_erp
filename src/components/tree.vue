@@ -23,17 +23,17 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>关联账号:</span>
-            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="dialogAddFormVisible = true">关联新账户</el-button>
+            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="showAddFormDialog">关联新账户</el-button>
           </div>
           <el-dialog width="30%" title="添加用户关联" :visible.sync="dialogAddFormVisible">
-            <el-form ref="formStaff" :model="formStaff">
+            <el-form  :model="addStaffLinker">
               <el-form-item label="用户名">
-                <el-input class="formLabelWidth" v-model="formStaff.name" auto-complete="off"></el-input>
+                <el-input class="formLabelWidth" v-model="addStaffLinker.name" auto-complete="off"></el-input>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogAddFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogAddFormVisible = false">添 加</el-button>
+              <el-button type="primary" @click="company_staff_linker_add">添 加</el-button>
             </div>
           </el-dialog>
           <el-table
@@ -80,13 +80,13 @@
           </div>
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="名称">
-              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.name"></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_name"></el-input>
             </el-form-item>
             <el-form-item label="部门">
-              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.department"></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_department"></el-input>
             </el-form-item>
             <el-form-item label="备注">
-              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.remarks"></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_notes"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="editStaff">{{staffEdit}}</el-button>
@@ -98,7 +98,7 @@
           <div slot="header" class="clearfix">
             <span>员工权限</span>
           </div>
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form :model="form" label-width="80px">
             <el-form-item>
               <el-checkbox-group v-model="form.type">
                 <el-checkbox
@@ -150,12 +150,17 @@
           children: 'children',
           label: 'staff_name'
         },
-        target_user_name:'',
         link_staff_list: [],
 
-        formStaff: {
+        addStaffLinker: {
           name:''
         },
+        staff_Info_form:{
+          staff_department:"",
+          staff_name:"",
+          staff_notes:"",
+        },
+        selected_permission:'',
         form: {
           name:''
         },
@@ -164,29 +169,16 @@
         input_disable:'input-disable',
         staffEdit:'编辑',
         defaultExpandKeys: [],//默认展开节点列表
-        staff_id:'',
-        suid:'',
-        ifns:false,
-        ifclick:false,
         dialogAddFormVisible: false,
-
       }
     },
-    props:{
-
+     props:{
       setTree:{
         type:Array,
         required:true
       },
-      ifnsary:{
-        type:Array,
-        required:true
-      },
-      cid:{
-        type:String,
-        required:true
-      }
     },
+  
     mounted(){
       this.owner_company_id = localStorage.getItem("owner_company_id")
       this.owner_user_id = localStorage.getItem("owner_user_id")
@@ -198,7 +190,12 @@
     },
 
     methods: {
+      showAddFormDialog(){
+        this.addStaffLinker.name= '';
+          this.dialogAddFormVisible = true 
+      },
       company_staff_list(){
+        //员工列表
         this.$http.post(this.api.company_staff_list,{
           user_query: `owner_company_id=='${this.owner_company_id}'`,
           user_token:this.user_token,
@@ -211,65 +208,6 @@
           }
         })
       },
-
-      onSubmit() {
-        var uid = localStorage.getItem("uid");
-        var tk = localStorage.getItem("token");
-
-
-        this.$http.post(this.api.user_list,{
-          user_token:tk,
-          user_query:"username=='"+this.form.name+"'"
-        }).then((res)=>{
-          this.suid = res.values[0].id;
-          //判断是否存在用户
-          if(res.values.length > 0){
-            //判断该账户是不是员工
-            if(res.values[0].status == "staff"){
-              this.$http.post(this.api.link_list_user_to_company_staff,{
-                user_token:tk,
-                user_query:"user_id=='"+res.values[0].id+"'"
-              }).then((res)=>{
-                //判断是否已经被绑定
-                if(res.values.length > 0){
-                  this.$message.error("该用户已被其他公司绑定")
-                }else{
-
-                  if(this.staff_id){
-                    //往link表里加信息
-                    this.$http.post(this.api.link_company_staff_to_user,{
-                      user_id:this.suid,
-                      company_id:this.cid,
-                      staff_id:this.staff_id
-                    }).then((res)=>{
-                      //往信息表里加信息
-                      this.$http.post(this.api.message_company_staff_link,{
-                        user_id:this.suid,
-                        company_id:this.cid,
-                        staff_id:this.staff_id,
-                        status:"wait"
-                      }).then((res)=>{
-                        // this.ifnsary.push(this.staff_id);
-                        this.$message.success('请求已经发出,等待该账户确认');
-                        this.form.name = '';
-                      })
-                    })
-                  }else{
-                    this.$message.error("请点击要绑定的员工")
-                  }
-                }
-              })
-
-            }else{
-              this.$message.error("该用户不是员工")
-            }
-
-          }else{
-            this.$message.error("该用户不存在");
-          }
-
-        })
-      },
       initExpand(){
         this.menuList=menu_staff;
         this.setTree.map((a) => {
@@ -277,10 +215,14 @@
         });
         this.isLoadingTree = true;
       },
-      handleNodeClick(data,n,s){//点击节点
+      handleNodeClick(data,n,s){//点击员工节点
         if(data.id){
           this.staff_selected = data;
-          this.company_staff_get_infos();
+          this.staff_Info_form.staff_department= data.staff_department;
+          this.staff_Info_form.staff_name= data.staff_name;
+          this.staff_Info_form.staff_notes= data.staff_notes;
+
+          //this.company_staff_get_infos();
           this.company_staff_linker_list();
 
         }else{
@@ -312,6 +254,7 @@
         }
       },
       company_staff_add(node, data, store){
+        //增加员工
         this.$http.post(this.api.company_staff_add,{
           owner_company_id:this.owner_company_id,
           owner_user_id:this.owner_user_id,
@@ -337,6 +280,7 @@
       },
 
       company_staff_delete(node, data, store){
+        //删除员工
         this.$http.post(this.api.company_staff_delete,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -353,6 +297,7 @@
         })
       },
       company_staff_get_infos(){
+        //获取员工信息
         if(!this.staff_selected){
           return;
         }
@@ -366,7 +311,11 @@
         })
       },
       company_staff_linker_add(){
+        //关联员工
         if(!this.staff_selected){
+          return;
+        }
+        if(!this.addStaffLinker.name){
           return;
         }
 
@@ -376,14 +325,32 @@
            owner_company_id:this.owner_company_id,
           owner_user_id:this.owner_user_id,
           owner_staff_id:this.staff_selected.id,
-          target_user_name:this.target_user_name,
+          target_user_name:this.addStaffLinker.name,
 
         }).then((res)=>{
           console.log(res)
-          this.company_staff_linker_list()
+          if(res.is_success){
+            this.dialogAddFormVisible = false;
+            this.company_staff_linker_list()
+          }
+          
+        })
+      },
+      company_staff_linker_delete(target_id){
+        this.$http.post(this.api.company_staff_linker_delete,{
+          user_token:this.user_token,
+          user_id:this.user_id,
+          target_id:target_id
+         }).then((res)=>{
+          console.log(res)
+          if(res.is_success){
+            this.company_staff_linker_list()
+          }
+          
         })
       },
       company_staff_linker_list(){
+        //关联列表
         if(!this.staff_selected){
           return;
         }
@@ -402,27 +369,42 @@
           console.log(res)
         })
       },
+      company_staff_set_infos(){
+        let params={
+          user_token:this.user_token,
+          user_id:this.user_id,
+          target_id:this.staff_selected.id,
+        }
+        for (var key in this.staff_selected){
+          params[key] =this.staff_selected[key]
+         }
+        params.staff_department=this.staff_Info_form.staff_department;
+        params.staff_name=this.staff_Info_form.staff_name;
+        params.staff_notes=this.staff_Info_form.staff_notes;
 
 
+        this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
+          if(res.is_success){
+            this.cancelEdit();
+          }else{
+          }
+          console.log('res',res)
+        })
+      },
       editStaff(){
-        this.is_edit=!this.is_edit
-        if( this.is_edit){
-            this.input_disable=''
-          this.staffEdit='保存'
+        if(this.is_edit){
+           this.company_staff_set_infos();
         }else{
-          this.input_disable='input-disable'
-          this.staffEdit='编辑'
+          this.is_edit=true;
+           this.input_disable=''
+          this.staffEdit='保存'
         }
       },
       cancelEdit(){
-        this.is_edit=!this.is_edit
-        if( this.is_edit){
-            this.input_disable=''
-          this.staffEdit='保存'
-        }else{
-          this.input_disable='input-disable'
-          this.staffEdit='编辑'
-        }
+        this.is_edit=false
+        this.input_disable='input-disable'
+        this.staffEdit='编辑'
+    
       }
     }
 
