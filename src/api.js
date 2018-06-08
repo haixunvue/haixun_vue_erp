@@ -29,6 +29,7 @@ const api={
     'company_shop_delete':'/apis/v1807g/company_shop/delete',	//公司店铺
     'company_staff_list':'/apis/v1807g/company_staff/list',	
     'link_list_user_to_company_staff':'/restful/list/_linked/user_to_company_staff',
+    'company_money_recharge':'/apis/v1807g/company_money_recharge/listall/paging',
 
 };
 export default api;
