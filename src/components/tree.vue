@@ -23,7 +23,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>关联账号:</span>
-            <el-button style="padding: 3px 0;margin-right:20px" type="text">关联新账户</el-button>
+            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="dialogAddVisible = true">关联新账户</el-button>
           </div>
           <el-table
             :data="tableData"
@@ -117,6 +117,23 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-dialog title="收货地址" :visible.sync="dialogAddVisible">
+      <el-form :model="form">
+        <el-form-item label="活动名称">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogAddVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <!-- VUE饿了么树形控件添加增删改功能按钮 -->
@@ -171,7 +188,8 @@
         tableData: [{
           status: '状态',
           name: '账号'
-        }]
+        }],
+        dialogAddVisible: false,
       }
     },
     props:{
@@ -301,7 +319,7 @@
         return (<span class="custom-tree-node">
           <span>{data.staff_name}</span>
         <span>
-        <el-button size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
+        <el-button class="btn-staff" size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
         </span>
         </span>);
 
@@ -420,6 +438,9 @@
   .expand-tree .el-tree-node:hover{
     overflow:hidden;
   }
+  .el-tree-node__content{
+    height: 30px;
+  }
   .expand-tree .is-current>.el-tree-node__content .tree-btn,
   .expand-tree .el-tree-node__content:hover .tree-btn{
     display:inline-block;
@@ -427,5 +448,8 @@
   .expand-tree .is-current>.el-tree-node__content .tree-label{
     font-weight:600;
     white-space:normal;
+  }
+  .btn-staff{
+    margin-left: 10px;
   }
 </style>
