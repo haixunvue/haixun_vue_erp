@@ -26,7 +26,7 @@
       sortable
       >
     </el-table-column> -->
-    
+
     <el-table-column
       prop="money"
       label="余额/¥"
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-    import router from "../../router";
+    import router from "../../router/index";
     export default {
         data() {
           return {
@@ -99,10 +99,10 @@
           confirm() {
             console.log("充值确认");
           },
-          showToggle:function(data){  
+          showToggle:function(data){
             data.flag = !data.flag;
             // console.log(data.flag)
-          }  
+          }
         }
       }
 </script>

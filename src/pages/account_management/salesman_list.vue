@@ -5,8 +5,8 @@
   <div class="line" v-show="ifboos"></div>
   <el-form ref="form" :model="form" label-width="80px" size="small">
     <el-form-item label="公司" v-show="ifboos">
-      <el-select 
-        v-model="value" 
+      <el-select
+        v-model="value"
         placeholder="请选择公司"
         v-on:change="change(value)">
         <el-option
@@ -19,8 +19,8 @@
     </el-form-item>
     <div class="line"></div>
     <el-form-item label="店铺" style="margin-bottom:5px">
-      <el-select 
-        v-model="value" 
+      <el-select
+        v-model="value"
         placeholder="选择店铺"
         v-on:change="change(value)">
         <el-option
@@ -65,13 +65,13 @@
         <el-col :span="2"  >
           <el-button type="primary">搜索产品</el-button>
         </el-col>
-        
+
       </el-row>
-      
+
     </el-form-item>
-  </el-form> 
-  
-  
+  </el-form>
+
+
 
   <div class="line" style="margin-bottom:0px"></div>
   <div class="search-result oh" >
@@ -86,11 +86,11 @@
         </el-select>
       </div>
       <div class="right">
-        <el-button type="text" @click="open1">批量编辑</el-button> | 
-        <el-button type="text" @click="infor1">批量删除</el-button> | 
-        <el-button type="text" @click="open2">批量翻译</el-button> | 
-        <el-button type="text" @click="infor2">批量发布</el-button> | 
-        <el-button type="text" @click="infor3">批量检测</el-button> 
+        <el-button type="text" @click="open1">批量编辑</el-button> |
+        <el-button type="text" @click="infor1">批量删除</el-button> |
+        <el-button type="text" @click="open2">批量翻译</el-button> |
+        <el-button type="text" @click="infor2">批量发布</el-button> |
+        <el-button type="text" @click="infor3">批量检测</el-button>
       </div>
   </div>
   <div style="border-bottom:1px solid #ebeef5"></div>
@@ -164,8 +164,8 @@
           <el-button type="primary" icon="el-icon-edit" @click="product_edit" size="small"></el-button>
           <el-button type="success" icon="el-icon-upload2"  size="small"></el-button>
           <el-button type="danger" icon="el-icon-delete" @click="product_del" size="small"></el-button>
-          
-          <!-- <el-button @click="product_edit" type="text" size="small">编辑</el-button> 
+
+          <!-- <el-button @click="product_edit" type="text" size="small">编辑</el-button>
           <el-button @click="product_del" type="text" style="color:#F56C6C" size="small">删除</el-button> -->
         </template>
       </el-table-column>
@@ -173,11 +173,11 @@
   <div class="search-result oh" >
       <p class="search-result-text">已选择<span> 0 </span>件产品</p>
       <div class="right">
-        <el-button type="text" @click="open1">批量编辑</el-button> | 
-        <el-button type="text" @click="infor1">批量删除</el-button> | 
-        <el-button type="text" @click="open2">批量翻译</el-button> | 
-        <el-button type="text" @click="infor2">批量发布</el-button> | 
-        <el-button type="text" @click="infor3">批量检测</el-button> 
+        <el-button type="text" @click="open1">批量编辑</el-button> |
+        <el-button type="text" @click="infor1">批量删除</el-button> |
+        <el-button type="text" @click="open2">批量翻译</el-button> |
+        <el-button type="text" @click="infor2">批量发布</el-button> |
+        <el-button type="text" @click="infor3">批量检测</el-button>
       </div>
   </div>
 
@@ -192,7 +192,7 @@
     :total="totalItems"
     style="clear:both;text-align:center">
   </el-pagination>
- 
+
   <el-dialog title="批量编辑" :visible.sync="dialogTableVisible" width="60%">
     <el-form ref="form" :model="form" label-width="100px">
       <el-row :gutter="20">
@@ -225,7 +225,7 @@
           <el-button type="primary">刷新分类属性</el-button>
         </el-col>
       </el-row>
-      
+
       <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
         <template slot="prepend">分类属性</template>
       </el-input>
@@ -277,12 +277,12 @@
       <el-button type="primary" @click="dialogTableVisible1 = false">确 定</el-button>
     </div>
   </el-dialog>
-  
+
 </div>
 </template>
 
 <script>
-    import router from "../../router";
+    import router from "../../router/index";
     export default {
         data() {
           return {
@@ -586,7 +586,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           },
           infor2(){
@@ -603,7 +603,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消同步'
-              });          
+              });
             });
           },
           infor3(){
@@ -620,7 +620,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消检测'
-              });          
+              });
             });
           },
           infor4(){
@@ -637,7 +637,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           },
           change(val){
@@ -654,7 +654,7 @@
               }).then((res)=>{
                 // console.log(res);
                 this.data = res.values;
-              })             
+              })
           },
           change2(val){
             if(val == 1){
@@ -706,7 +706,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           },
           handleSelectionChange(val) {
@@ -726,7 +726,7 @@
             // console.log("1")
             let from = (this.currentPage - 1) * this.pageSize;
             let to = this.currentPage * this.pageSize;
-                 
+
             for (; from < to; from++) {
               if (list[from]) {
                 this.data2.push(list[from]);
@@ -754,7 +754,7 @@
                 }).then((res)=>{
                   // console.log(res);
                   this.data = res.values;
-                  this.data2 = this.data.concat(); 
+                  this.data2 = this.data.concat();
                   this.totalItems = res.values.length;
                 })
               })
@@ -783,27 +783,27 @@
                   }).then((res)=>{
                     // console.log(res);
                     this.data = res.values;
-                    this.data2 = this.data.concat(); 
+                    this.data2 = this.data.concat();
                     this.totalItems = res.values.length;
                   })
                 }
               })
             }
-            
+
           }
         },
         mounted(){
           this.getinfor();
         },
-        watch: {  
-           schfilter: function(val, oldVal){  
+        watch: {
+           schfilter: function(val, oldVal){
                 // console.log(val)
-                if(val != ""){                       
-                    
+                if(val != ""){
+
                   this.data3 = [];
                   this.data.length=0;
                   for(var demokey of this.data2){
-                    if(demokey.name.indexOf(this.schfilter)>=0){          
+                    if(demokey.name.indexOf(this.schfilter)>=0){
                         this.data.push(demokey);
                     }
                   }
@@ -811,14 +811,14 @@
                   this.totalItems = this.data.length;
                   this.currentChangePage(this.data3)
                 }else{
-        
+
                   this.data.length=0;
                   this.totalItems = this.data2.length;
                   this.data = this.data2.concat();
                 }
-                
-                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));  
-            }   
+
+                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));
+            }
         }
       }
 </script>

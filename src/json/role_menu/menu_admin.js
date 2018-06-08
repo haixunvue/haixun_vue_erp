@@ -1,6 +1,6 @@
 //后台权限菜单
 
-export default  [ 
+export default  [
   {
     "routerName": "account_management",
     "name": "账户管理",
@@ -19,7 +19,7 @@ export default  [
         "routerName": "salesman_list",
         "name": "推销商列表",
       },
-      
+
     ]
   },
   {
@@ -66,16 +66,16 @@ export default  [
         "icon": "",
       },
       {
-        "routerName": "business_report",
+        "routerName": "recordApproval",
         "name": "审批记录",
       },
       {
-        "routerName": "corporate_finance",
+        "routerName": "withdrawing",
         "name": "扣款明细",
         "icon": "",
       },
       {
-        "routerName": "business_report",
+        "routerName": "Salesman_performance",
         "name": "推销商业绩",
       }
     ]
@@ -85,7 +85,7 @@ export default  [
     "permission":"permission_backstage_logistics",
     "name": "物流管理",
     "icon": "",
-    
+
   },
   {
     "routerName": "system_management",
@@ -120,7 +120,7 @@ export default  [
         "name": "服务器信息",
         "icon": "",
       },
-    
+
     ]
   },
   {
@@ -128,9 +128,9 @@ export default  [
     "name": "推销商管理",
     "permission":"",
     "icon": "",
-    
+
   },
-   
+
   {
     "routerName": "help_center",
     "permission":"",

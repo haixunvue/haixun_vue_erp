@@ -108,9 +108,10 @@
             <el-form-item>
               <el-checkbox-group v-model="form.type">
                 <el-checkbox
-                  v-for ="(item,index) in menuList"
+                  v-for ="(item,index) in staffList"
                   v-if ="item.permission"
                   :name="index"
+                  key="index",
                   :label="item.name">{{item.name}}
                 </el-checkbox>
               </el-checkbox-group>
@@ -173,7 +174,7 @@ import menu_staff from '@/json/role_menu/menu_staff';
           children: 'children',
           label: 'name'
         },
-        menuList:[],
+        staffList:[],
         setTree1:[{
           name: '总部',
           children: [{
@@ -298,7 +299,7 @@ import menu_staff from '@/json/role_menu/menu_staff';
         })
       },
       initExpand(){
-        this.menuList=menu_staff;
+        this.staffList=menu_staff;
         this.setTree.map((a) => {
           this.defaultExpandKeys.push(a.id)
         });

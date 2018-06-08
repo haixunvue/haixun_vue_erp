@@ -19,7 +19,7 @@ const G_user_edit = r => require.ensure([], () => r(require('../pages/Global/Use
 const G_company_list = r => require.ensure([], () => r(require('../pages/Global/Company_list')), 'G_company_list');
 const G_company_edit = r => require.ensure([], () => r(require('../pages/Global/Company_edit')), 'G_company_edit');
 const G_company_add = r => require.ensure([], () => r(require('../pages/Global/Company_add')), 'G_company_add');
-const G_Rechange_list = r => require.ensure([], () => r(require('../pages/Global/Rechange_list')), 'G_Rechange_list');
+const corporate_finance = r => require.ensure([], () => r(require('../pages/financial_management/corporate_finance')), 'corporate_finance');
 const G_order_list = r => require.ensure([], () => r(require('../pages/Global/Order_list')), 'G_order_list');
 const G_order_edit = r => require.ensure([], () => r(require('../pages/Global/Order_edit')), 'G_order_edit');
 const G_warehouse = r => require.ensure([], () => r(require('../pages/Global/Warehouse')), 'G_warehouse');
@@ -63,12 +63,12 @@ const Cd_User_edit3 = r => require.ensure([], () => r(require('../pages/commodit
 
 //admin
 const Cd_Logistics = r => require.ensure([], () => r(require('../pages/commodity/Logistics')), 'Cd_Logistics');
-const Cd_product_list6 = r => require.ensure([], () => r(require('../pages/commodity/Product_list6')), 'Cd_product_list6');
+const salesman_list = r => require.ensure([], () => r(require('../pages/account_management/salesman_list')), 'salesman_list');
 const Cd_product_list_admin = r => require.ensure([], () => r(require('../pages/commodity/Product_list_admin')), 'Cd_product_list_admin');
-const G_user_list1 = r => require.ensure([], () => r(require('../pages/Global/User_list1')), 'G_user_list1');
-const G_user_list2 = r => require.ensure([], () => r(require('../pages/Global/User_list2')), 'G_user_list2');
+const outside_user = r => require.ensure([], () => r(require('../pages/account_management/outside_user')), 'outside_user');
+const inside_user = r => require.ensure([], () => r(require('../pages/account_management/inside_user')), 'inside_user');
 const G_company_list2 = r => require.ensure([], () => r(require('../pages/Global/Company_list2')), 'G_company_list2');
-const G_Rechange_list2 = r => require.ensure([], () => r(require('../pages/Global/Rechange_list2')), 'G_Rechange_list2');
+const recordApproval = r => require.ensure([], () => r(require('../pages/financial_management/recordApproval')), 'recordApproval');
 const Cd_Preport3 = r => require.ensure([], () => r(require('../pages/commodity/Preport3')), 'Cd_Preport3');
 
 //out
@@ -110,8 +110,8 @@ export default new Router({
                    path: 'G_company_add',
                    component: G_company_add,
                 },{
-                   path: 'G_Rechange_list',
-                   component: G_Rechange_list,
+                   path: 'corporate_finance',
+                   component: corporate_finance,
                 },{
                    path: 'G_order_list',
                    component: G_order_list,
@@ -237,20 +237,20 @@ export default new Router({
                    path: 'Cd_Logistics',
                    component: Cd_Logistics,
                 },{
-                   path: 'Cd_product_list6',
-                   component: Cd_product_list6,
+                   path: 'salesman_list',
+                   component: salesman_list,
                 },{
-                   path: 'G_user_list1',
-                   component: G_user_list1,
+                   path: 'outside_user',
+                   component: outside_user,
                 },{
-                   path: 'G_user_list2',
-                   component: G_user_list2,
+                   path: 'inside_user',
+                   component: inside_user,
                 },{
                    path: 'G_company_list2',
                    component: G_company_list2,
                 },{
-                   path: 'G_Rechange_list2',
-                   component: G_Rechange_list2,
+                   path: 'recordApproval',
+                   component: recordApproval,
                 },{
                    path: 'Cd_Preport3',
                    component: Cd_Preport3,
