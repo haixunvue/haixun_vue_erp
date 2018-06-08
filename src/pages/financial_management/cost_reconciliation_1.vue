@@ -26,6 +26,8 @@
                     :picker-options="pickerOptions1">
                   </el-date-picker>
                 </div>
+                 <el-button type="primary" size="mini" v-on:click="search" >查询</el-button>
+                <el-button type="primary" size="mini" v-on:click="clearSearch">重置</el-button>
               </div>
             </el-col>
           </el-row>
@@ -157,6 +159,14 @@
     },
     methods: {
 
+      search: function(){
+          this.currentPage = 1;
+          this.company_money_recharge_list()
+      },
+      clearSearch: function(){
+            this.datetime_start=''
+        this.datetime_end=''
+      },
       openWeb: function(){
 
       },
