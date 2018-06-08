@@ -9,7 +9,7 @@
                 <div class="start-date-time">
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
-                    v-model="starTime"
+                    v-model="datetime_start"
                     type="datetime"
                     placeholder="选择开始日期时间"
                     align="right"
@@ -19,7 +19,7 @@
                 <div class="end-date-time">
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
-                    v-model="endTime"
+                    v-model="datetime_end"
                     type="datetime"
                     placeholder="选择结束日期时间"
                     align="right"
@@ -28,14 +28,14 @@
                 </div>
               </div>
               <div class="header-bottom">
-                <el-select v-model="value" placeholder="账户" size="mini" class="header-bottom-select">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select v-model="bank_card_number" placeholder="账户" size="mini" class="header-bottom-select">
+                  <el-option v-for="item in options1" :key="item.account_num" :label="item.account_num" :value="item.account_num"></el-option>
                 </el-select>
-                <el-select v-model="value" placeholder="审核标识" size="mini" class="header-bottom-select">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select v-model="process_status" placeholder="审核标识" size="mini" class="header-bottom-select">
+                  <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
-                <el-button type="primary" size="mini">查询</el-button>
-                <el-button type="primary" size="mini">重置</el-button>
+                <el-button type="primary" size="mini" v-on:click="search">查询</el-button>
+                <el-button type="primary" size="mini"  v-on:click="clearSearch">重置</el-button>
               </div>
             </el-col>
             <el-col :span="4">
@@ -229,34 +229,24 @@
 
 <script>
   import router from "../../router";
+
+  const  options2=[ {value:'none', label:'未审核'},
+  {value:'down_pass', label:'审核通过'},
+  {value:'down_nopass', label:'审核未通过'},]
+
   export default {
     data() {
       return {
-        starTime:'',
-        endTime:'',
         datetime_start:'',
         datetime_end:'',
+        process_status:'',
+        bank_card_number:'',
         list_data:[],
         value:'',
         activeName:'first',
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }
-        ],
+
+        options2:options2,
+        options1: [],
         data: [
           {
             name:'货款',
@@ -278,13 +268,47 @@
         input:'',
         fileList:[],
         dialogTitle:'',
-        reimbursementType:''
+        reimbursementType:'',
+        pickerOptions1: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
       }
     },
     methods: {
 
-      openWeb: function(){
+      company_money_recharge_channel_list: function(){
+            this.$http.post(this.api.company_money_recharge_channel_list,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            }).then((res)=>{
+                console.log('company_money_recharge_channel_list',res);
+                if(res.is_success){
+                    this.options1 = res.value;
+                }else{
+                     this.options1=[];
+                }
 
+
+            })
       },
       handleSizeChange: function (size) {
         this.pagesize = size;
@@ -321,6 +345,14 @@
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
+      search() {
+      },
+      clearSearch: function(){
+        this.datetime_start='';
+        this.datetime_end='';
+        this.process_status='';
+        this.bank_card_number='';
+      },
       handlePreview(file) {
         console.log(file);
       },
@@ -349,7 +381,7 @@
             //user_query: user_query,   		//目标公司
             target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
-            page_count:this.pagesize,
+            pageSize:this.pagesize,
             }).then((res)=>{
                 console.log('list_data',res);
                 if(res.is_success){
@@ -369,6 +401,7 @@
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.company_money_recharge_list();
+            this.company_money_recharge_channel_list();
             console.log(moment().format('YYYYMMDDhhmmssSSS'))
      },
   }

@@ -10,7 +10,9 @@
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
                     v-model="datetime_start"
-                    type="datetime"
+                    @change="(val)=>{this.datetime_start=val}"
+                   type="datetime"
+                    value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择开始日期时间"
                     align="right"
                     :picker-options="pickerOptions1">
@@ -20,7 +22,9 @@
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
                     v-model="datetime_end"
+                     @change="(val)=>{this.datetime_end=val}"
                     type="datetime"
+                    value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择结束日期时间"
                     align="right"
                     :picker-options="pickerOptions1">
@@ -187,6 +191,7 @@
             target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
             pageSize:this.pagesize,
+            process_status:'down_pass'
         }
         if(this.datetime_start){
             params.datetime_start=this.datetime_start;
