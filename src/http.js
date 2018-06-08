@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import {Message, Loading} from 'element-ui'
 
-axios.defaults.baseURL = 'http://39.106.9.139';
+axios.defaults.baseURL = 'http://39.106.9.139:8080';
 
 let loadinginstace;
 axios.interceptors.request.use(config => {
