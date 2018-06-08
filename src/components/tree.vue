@@ -23,8 +23,19 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>关联账号:</span>
-            <el-button style="padding: 3px 0;margin-right:20px" type="text">关联新账户</el-button>
+            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="dialogAddFormVisible = true">关联新账户</el-button>
           </div>
+          <el-dialog width="30%" title="添加用户关联" :visible.sync="dialogAddFormVisible">
+            <el-form ref="formStaff" :model="formStaff">
+              <el-form-item label="用户名">
+                <el-input class="formLabelWidth" v-model="formStaff.name" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogAddFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogAddFormVisible = false">添 加</el-button>
+            </div>
+          </el-dialog>
           <el-table
             :data="link_staff_list"
             stripe
@@ -69,16 +80,17 @@
           </div>
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="名称">
-              <el-input name="staff" v-model="form.name" disabled></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="部门">
-              <el-input name="staff" v-model="form.department" disabled></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.department"></el-input>
             </el-form-item>
             <el-form-item label="备注">
-              <el-input name="staff" type="textarea" v-model="form.remarks" disabled></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.remarks"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="editStaff">编辑</el-button>
+              <el-button type="primary" @click="editStaff">{{staffEdit}}</el-button>
+              <el-button v-if="is_edit" @click="cancelEdit">取消</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -141,21 +153,27 @@
         target_user_name:'',
         link_staff_list: [],
 
+        formStaff: {
+          name:''
+        },
         form: {
           name:''
         },
         isLoadingTree: false,//是否加载节点树
-
-        defaultExpandKeys: [],//默认展开节点列表      
+        is_edit:false,
+        input_disable:'input-disable',
+        staffEdit:'编辑',
+        defaultExpandKeys: [],//默认展开节点列表
         staff_id:'',
         suid:'',
         ifns:false,
         ifclick:false,
-        
+        dialogAddFormVisible: false,
+
       }
     },
     props:{
-      
+
       setTree:{
         type:Array,
         required:true
@@ -264,7 +282,7 @@
           this.staff_selected = data;
           this.company_staff_get_infos();
           this.company_staff_linker_list();
-          
+
         }else{
           this.staff_selected = null;
         }
@@ -338,7 +356,7 @@
         if(!this.staff_selected){
           return;
         }
-        
+
         this.$http.post(this.api.company_staff_get_infos,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -351,7 +369,7 @@
         if(!this.staff_selected){
           return;
         }
-        
+
         this.$http.post(this.api.company_staff_linker_add,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -359,7 +377,7 @@
           owner_user_id:this.owner_user_id,
           owner_staff_id:this.staff_selected.id,
           target_user_name:this.target_user_name,
-          
+
         }).then((res)=>{
           console.log(res)
           this.company_staff_linker_list()
@@ -369,7 +387,7 @@
         if(!this.staff_selected){
           return;
         }
-        
+
         this.$http.post(this.api.company_staff_linker_list,{
           user_token:this.user_token,
           user_id:this.user_id,
@@ -380,14 +398,31 @@
           }else{
             this.link_staff_list=[]
           }
-          
+
           console.log(res)
         })
       },
-      
+
 
       editStaff(){
-        $(input[name='editStaff']).attr('disable',true)
+        this.is_edit=!this.is_edit
+        if( this.is_edit){
+            this.input_disable=''
+          this.staffEdit='保存'
+        }else{
+          this.input_disable='input-disable'
+          this.staffEdit='编辑'
+        }
+      },
+      cancelEdit(){
+        this.is_edit=!this.is_edit
+        if( this.is_edit){
+            this.input_disable=''
+          this.staffEdit='保存'
+        }else{
+          this.input_disable='input-disable'
+          this.staffEdit='编辑'
+        }
       }
     }
 
@@ -444,5 +479,16 @@
   .expand-tree .is-current>.el-tree-node__content .tree-label{
     font-weight:600;
     white-space:normal;
+  }
+  .formLabelWidth{
+    width: 50%;
+  }
+  .input-disable.is-disabled input.el-input__inner{
+    background: #fff;
+    border: 0;
+  }
+  .input-disable.is-disabled textarea.el-textarea__inner{
+    background: #fff;
+    border: 0;
   }
 </style>
