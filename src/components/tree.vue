@@ -80,16 +80,17 @@
           </div>
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="名称">
-              <el-input name="staff" v-model="form.name" disabled></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="部门">
-              <el-input name="staff" v-model="form.department" disabled></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.department"></el-input>
             </el-form-item>
             <el-form-item label="备注">
-              <el-input name="staff" type="textarea" v-model="form.remarks" disabled></el-input>
+              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="form.remarks"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="editStaff">编辑</el-button>
+              <el-button type="primary" @click="editStaff">{{staffEdit}}</el-button>
+              <el-button v-if="is_edit" @click="cancelEdit">取消</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -159,7 +160,9 @@
           name:''
         },
         isLoadingTree: false,//是否加载节点树
-
+        is_edit:false,
+        input_disable:'input-disable',
+        staffEdit:'编辑',
         defaultExpandKeys: [],//默认展开节点列表
         staff_id:'',
         suid:'',
@@ -402,7 +405,24 @@
 
 
       editStaff(){
-        $(input[name='editStaff']).attr('disable',true)
+        this.is_edit=!this.is_edit
+        if( this.is_edit){
+            this.input_disable=''
+          this.staffEdit='保存'
+        }else{
+          this.input_disable='input-disable'
+          this.staffEdit='编辑'
+        }
+      },
+      cancelEdit(){
+        this.is_edit=!this.is_edit
+        if( this.is_edit){
+            this.input_disable=''
+          this.staffEdit='保存'
+        }else{
+          this.input_disable='input-disable'
+          this.staffEdit='编辑'
+        }
       }
     }
 
@@ -462,5 +482,13 @@
   }
   .formLabelWidth{
     width: 50%;
+  }
+  .input-disable.is-disabled input.el-input__inner{
+    background: #fff;
+    border: 0;
+  }
+  .input-disable.is-disabled textarea.el-textarea__inner{
+    background: #fff;
+    border: 0;
   }
 </style>
