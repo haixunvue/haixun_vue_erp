@@ -10,7 +10,9 @@
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
                     v-model="datetime_start"
+                    @change="(val)=>{this.datetime_start=val}"
                     type="datetime"
+                    value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择开始日期时间"
                     align="right"
                     :picker-options="pickerOptions1">
@@ -20,7 +22,9 @@
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
                     v-model="datetime_end"
+                    @change="(val)=>{this.datetime_end=val}"
                     type="datetime"
+                    value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择结束日期时间"
                     align="right"
                     :picker-options="pickerOptions1">
@@ -51,7 +55,7 @@
           </div>
           <div class="table-table">
             <el-table
-              :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+              :data="list_data"
               border
               style="width: 100%;margin-bottom:20px"
               :default-sort = "{prop: 'right', order: 'descending'}"
@@ -137,7 +141,7 @@
               :page-sizes="[5, 20, 50, 100]"
               :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="totalItems"
+              :total="totalCount"
               style="clear:both;text-align:center">
             </el-pagination>
           </div>
@@ -242,27 +246,16 @@
         process_status:'',
         bank_card_number:'',
         list_data:[],
-        value:'',
-        activeName:'first',
-
         options2:options2,
         options1: [],
-        data: [
-          {
-            name:'货款',
-            username:'通过审核',
-            password:'FXE201805120004',
-            tel:'交通银行（深圳）',
-            idcardnum:'1200.00',
-            status:'人民币',
-            people:'KH041006',
-            data:'2018-05-12 07:21:48',
-            remarks:'费用预付'
-          },
-        ],
-        totalItems:0,
+        totalCount:0,
         currentPage:1,
         pagesize:5,
+        
+        value:'',
+
+
+
         dialogTableVisible:false,
         radio:'1',
         input:'',
@@ -311,10 +304,13 @@
             })
       },
       handleSizeChange: function (size) {
+        this.currentPage = 1;
         this.pagesize = size;
+        this.company_money_recharge_list()
       },
       handleCurrentChange: function(currentPage){
-        this.currentPage = currentPage;
+          this.currentPage = currentPage;
+        this.company_money_recharge_list()
       },
       add: function(){
         this.dialogTableVisible = true
@@ -346,6 +342,8 @@
         console.log(file, fileList);
       },
       search() {
+          this.currentPage = 1;
+          this.company_money_recharge_list()
       },
       clearSearch: function(){
         this.datetime_start='';
@@ -363,29 +361,31 @@
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
       company_money_recharge_list(){
-
-        let user_query =''
-        if(this.datetime_start&&this.datetime_end){
-            user_query = ``;
-        }else if(this.datetime_start){
-            user_query = ``;
-        }else if(this.datetime_end){
-            user_query = ``;
-        }else{
-            user_query = ``;
-        }
-
-        this.$http.post(this.api.company_money_recharge,{
+      let params = {
             user_token:this.user_token,
             user_id:this.user_id,
-            //user_query: user_query,   		//目标公司
             target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
             pageSize:this.pagesize,
-            }).then((res)=>{
+        }
+        if(this.datetime_start){
+            params.datetime_start=this.datetime_start;
+        }
+        if(this.datetime_end){
+            params.datetime_end=this.datetime_end;
+        }
+        if(this.bank_card_number){
+            params.bank_card_number=this.bank_card_number;
+        }
+        if(this.process_status){
+            params.process_status=this.process_status;
+        }
+
+        this.$http.post(this.api.company_money_recharge,params).then((res)=>{
                 console.log('list_data',res);
                 if(res.is_success){
-                    this.list_data = res.value;
+                    this.list_data = res.value.list;
+                    this.totalCount = res.value.totalCount;
                 }else{
                      this.list_data=[];
                 }

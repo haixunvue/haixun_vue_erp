@@ -11,7 +11,7 @@
                   <el-date-picker
                     v-model="datetime_start"
                     @change="(val)=>{this.datetime_start=val}"
-                   type="datetime"
+                    type="datetime"
                     value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择开始日期时间"
                     align="right"
