@@ -54,8 +54,8 @@
         </div>
         <div class="line"></div>
         <div class="bottom">
-          <el-table
-            :data="data_list"
+            <el-table
+            :data="list_data"
             border
             style="width: 100%;margin-bottom:20px"
             :default-sort = "{prop: 'right', order: 'descending'}"
@@ -63,42 +63,37 @@
           >
             <el-table-column
               prop="name"
-              label="订单ID"
+              label="日期"
             >
             </el-table-column>
             <el-table-column
               prop="username"
-              label="物流方式"
+              label="订单量"
             >
             </el-table-column>
             <el-table-column
               prop="password"
-              label="发货数量"
+              label="订单总金额"
             >
             </el-table-column>
             <el-table-column
               prop="tel"
-              label="称重重量"
+              label="退款总费用"
             >
             </el-table-column>
             <el-table-column
               prop="idcardnum"
-              label="材积"
+              label="平台总费用"
             >
             </el-table-column>
             <el-table-column
               prop="status"
-              label="结算重"
+              label="物流总费用"
             >
             </el-table-column>
             <el-table-column
               prop="people"
-              label="物流费用"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="people"
-              label="日期"
+              label="总计"
             >
             </el-table-column>
           </el-table>
@@ -217,7 +212,7 @@
        },
        company_shop_list(){
 
-            let params = {
+           let params = {
               user_token:this.user_token,
               user_id:this.user_id,
               user_id:this.user_id,
