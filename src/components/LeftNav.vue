@@ -71,7 +71,7 @@
     },
     methods: {
           update_menu(){
-              console.log(this.total_menu)
+              console.log('total_menu',this.total_menu)
               let show_menu =this.total_menu.filter((item)=>{
                 // if(!item.permission){
                 //   return item;//权限为空说明可以显示该菜单
@@ -84,6 +84,7 @@
               console.log('show_menu', show_menu)
           },
           onUpdateMenu(e){
+            console.log('onUpdateMenu', e)
             this.menutype = e.menutype
             if(e.menutype){
                 this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;           
