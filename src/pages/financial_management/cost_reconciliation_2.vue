@@ -33,7 +33,7 @@
               </div>
               <div class="header-bottom">
                 <el-select v-model="bank_card_number" placeholder="账户" size="mini" class="header-bottom-select">
-                  <el-option v-for="item in options1" :key="item.account_num" :label="item.account_num" :value="item.account_num"></el-option>
+                  <el-option v-for="(item,index) in options1" :key="index" :label="item.account_num" :value="item.account_num"></el-option>
                 </el-select>
                 <el-select v-model="process_status" placeholder="审核标识" size="mini" class="header-bottom-select">
                   <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -151,7 +151,7 @@
         <el-col :span="12">
           <span class="dialog-left">收款帐户</span>
           <el-select v-model="addForm.bank_card_number_receive" placeholder="请选择" size="mini">
-            <el-option v-for="item in options1" :key="item.account_num" :label="item.account_num" :value="item.account_num+','+item.title"></el-option>
+            <el-option v-for="(item,index) in options1" :key="index" :label="item.account_num" :value="item.account_num+','+item.title"></el-option>
           </el-select>
         </el-col>
         <el-col :span="12">
@@ -210,7 +210,7 @@
             :limit="3"
             :on-exceed="handleExceed"
             :file-list="fileList">
-            <el-button size="mini" type="primary">点击上传</el-button>
+            <el-button size="mini" type="primary" >点击上传</el-button>
             <div slot="tip" class="el-upload__tip">温馨提示:除工行，交行必须上传凭证以外，其他银行打款时必须备注客户名</div>
           </el-upload>
 
@@ -221,6 +221,10 @@
           <span class="dialog-left left" style="margin-right:55px">备注</span>
           <el-input v-model="addForm.notes" type="textarea" :rows="4" placeholder="请输入内容"></el-input>
         </el-col>
+      </el-row>
+      <el-row>
+        <el-button type="primary" @click="company_money_recharge_add">保 存</el-button>
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
       </el-row>
     </el-dialog>
   </div>
@@ -261,14 +265,13 @@
               is_notes_name:'',//						备注姓名
         },
 
-
+        companyInfo:null,
 
         dialogTableVisible:false,
         radio:'1',
         input:'',
         fileList:[],
         dialogTitle:'',
-        reimbursementType:'',
         pickerOptions1: {
           shortcuts: [{
             text: '今天',
@@ -294,7 +297,9 @@
       }
     },
     methods: {
+      openWeb: function(){
 
+      },
       company_money_recharge_channel_list: function(){
             this.$http.post(this.api.company_money_recharge_channel_list,{
             user_token:this.user_token,
@@ -417,24 +422,70 @@
             })
       },
       company_money_recharge_add(){
-          this.$http.post(this.api.company_money_recharge_add,{}).then((res)=>{
+        if(!this.companyInfo){
+          this.getCompanyInfo();
+          return;
+        }
+        console.log(this.addForm)
+        if(!this.addForm.bank_card_number_receive){
+          return;
+        }
+
+        let  bank_name_receive_info=this.addForm.bank_card_number_receive.split(',');
+        let params= {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              target_company_id: this.owner_company_id,   		//目标公司
+              target_company_full_name: this.companyInfo.company_full_name,   		//目标公司
+              recharge_num:this.addForm.recharge_num,
+              money_number:this.addForm.money_number,//				金钱
+              notes:this.addForm.notes,//						备注
+              proof_document:this.addForm.proof_document,//			证明文件
+              bank_name_receive:bank_name_receive_info[1],//收款银行名称
+              bank_card_number_receive:bank_name_receive_info[0],//  收款银行卡号
+              bank_name_payment:this.addForm.bank_name_payment,//支付银行名称
+              bank_card_number_payment:this.addForm.bank_card_number_payment,//支付银行卡号
+              bank_card_name_payment:this.addForm.bank_card_name_payment,//支付银行卡户名
+              reimbursement_type:this.addForm.reimbursement_type,//报账 类型
+              money_type:this.addForm.money_type,//				类型
+              is_notes_name:this.addForm.is_notes_name,//						备注姓名
+        }
+
+          console.log(params)
+          this.$http.post(this.api.company_money_recharge_add,params).then((res)=>{
                 console.log('list_data',res);
                 if(res.is_success){
                     this.company_money_recharge_list();
+                    this.dialogTableVisible = false;
                 }else{
                      this.list_data=[];
                 }
             })
       },
+      getCompanyInfo(){
+          this.$http.post(this.api.get_company_info,{
+            user_token:localStorage.getItem('user_token'),
+            user_id:localStorage.getItem('user_id'),
+            target_company_id:localStorage.getItem('owner_company_id')
+          }).then((res)=>{
+            //console.log(res);
+            if(res.is_success){
+              this.companyInfo = res.value;
+              console.log(this.companyInfo);
+            }
+          })
+        },
 
     },
      mounted() {
             this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.target_company_full_name = localStorage.getItem("target_company_full_name")
             this.owner_user_id = localStorage.getItem("owner_user_id")
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.company_money_recharge_list();
             this.company_money_recharge_channel_list();
+            this.getCompanyInfo();
      },
   }
 </script>
