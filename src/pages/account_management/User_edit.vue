@@ -34,7 +34,7 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="用户权限" name="second">
-        <el-form class="user-info" label-position="top" :model="userPermission" label-width="80px">
+        <el-form class="user-permission" label-position="top" :model="userPermission" label-width="80px">
           <el-form-item label="推广:">
             <el-checkbox-group v-model="userPermission.generalize">
               <el-checkbox label="推广信息"></el-checkbox>
@@ -172,11 +172,18 @@
           handleClick(tab, event) {
             console.log(tab, event);
           }
-        }
+        },
+      created(){
+        this.owner_company_id = localStorage.getItem("owner_company_id")
+        this.owner_user_id = localStorage.getItem("owner_user_id")
+        this.user_token = localStorage.getItem("user_token");
+        this.user_id = localStorage.getItem("user_id");
+        this.getuserlist();
+      },
       }
 </script>
 <style scoped>
-  .user-info{
+  .user-info,.user-permission{
     width: 50%;
   }
   h3{
@@ -186,10 +193,10 @@
   .el-form--label-top{
     font-weight: 600;
   }
-  .el-form-item{
+  .user-permission .el-form-item{
     border-bottom: 1px #eee solid;
   }
-  .el-form-item:last-child{
+  .user-permission .el-form-item:last-child{
     border-bottom: 0;
   }
 </style>
