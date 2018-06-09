@@ -97,7 +97,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">已使用/人数上限</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_member}}/{{companyInfo.company_member_max}}</span><a>申请扩容</a>
+                  <span v-if="states.company_member_max">{{companyInfo.company_member}}/{{companyInfo.company_member_max}}</span>
+                  <input v-else v-model="companyInfo.company_member_max" type="text">
+                  <a @click="modification('company_member_max',companyInfo.company_member_max)">
+                    <sub v-if="states.company_member_max">{{companyInfo.company_member_max?'申请扩容':'申请扩容'}}</sub>
+                    <sub v-else>申请扩容</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -139,8 +144,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">人员规模</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>1-50人</span>
-                  <a>修改</a>
+                  <span v-if="states.company_staff_size">1-{{companyInfo.company_staff_size}}人</span>
+                  <input v-else v-model="companyInfo.company_staff_size" type="text">
+                  <a @click="modification('company_staff_size',companyInfo.company_staff_size)">
+                    <sub v-if="states.company_staff_size">{{companyInfo.company_staff_size?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -192,7 +201,8 @@
             "company_invoice_title":"",
             "company_industry_type":"",
             "company_create_time":"",
-            "company_corp_id":""
+            "company_corp_id":"",
+            "company_staff_size":"",
           },
           states:{
             text:'',
@@ -202,6 +212,8 @@
             company_domain_name:true,
             company_invoice_title:true,
             company_industry_type:true,
+            company_staff_size:true,
+            company_member_max:true,
           }
 
         };
