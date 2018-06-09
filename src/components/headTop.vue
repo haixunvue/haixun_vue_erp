@@ -135,6 +135,8 @@
                     this.roleValue=0;
                     this.updataIdInfo(role_list[0])
                    this.updateMenu(role_list[0].menutype);
+                   }else{
+                     this.updateMenu('staff');
                    }
 
                 })
