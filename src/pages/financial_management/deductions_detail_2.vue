@@ -10,6 +10,14 @@
               :value="item.id">
             </el-option>
           </el-select>
+            <el-select v-model="target_shop_id" placeholder="选择店铺" size="mini">
+            <el-option
+              v-for="(item,index) in shop_list"
+              :key="index"
+              :label="item.shop_name"
+              :value="item.id">
+            </el-option>
+          </el-select>
           <el-date-picker
                     v-model="datetime_start"
                     @change="(val)=>{this.datetime_start=val}"
@@ -34,13 +42,6 @@
         
         <div class="middle">
           <div class="middle-top">
-            <span class="left search-result-text">店铺账号：</span>
-            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="left" style="margin-right:30px">全选</el-checkbox>
-            <el-checkbox-group v-model="Optioned1" @change="handleCheckedCitiesChange" class="left">
-              <el-checkbox v-for="city in Option1" :label="city" :key="city">{{city}}</el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div class="middle-top">
             <span class="left search-result-text">仓库位置：</span>
             <el-checkbox :indeterminate="all_warehouse_location_isIndeterminate" v-model="all_warehouse_location" @change="all_warehouse_location_Change" class="left" style="margin-right:30px">全选</el-checkbox>
             <el-checkbox-group v-model="target_warehouse_location" @change="warehouse_location_Change" class="left">
@@ -54,7 +55,7 @@
         <div class="line"></div>
         <div class="bottom">
           <el-table
-            :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+            :data="data_list"
             border
             style="width: 100%;margin-bottom:20px"
             :default-sort = "{prop: 'right', order: 'descending'}"
@@ -119,7 +120,6 @@
 <script>
   import router from "../../router";
 
-  const Option1 = ['全部', '店铺1', '店铺2', '店铺3'];
   const Option2 = [{name:'默认仓库',value:'none'}, {name:'FBA',value:'fba'}];
  
  export default {
@@ -127,8 +127,8 @@
       return {
         datetime_start:'',
         datetime_end:'',
-        target_warehouse_location:[],
-        all_warehouse_location:false,
+        target_warehouse_location:['none','fba'],
+        all_warehouse_location:true,
         all_warehouse_location_isIndeterminate:false,
         list_data:[],
         totalCount:0,
@@ -136,6 +136,8 @@
         pagesize:5,
         staff_list:[],
         target_staff_id:'',
+        shop_list:[],
+        target_shop_id:'',
         pickerOptions1: {
           shortcuts: [{
             text: '今天',
@@ -158,31 +160,16 @@
             }
           }]
         },
-
-        activeName:'first',
-        value:'',
-        checkAll: false,
-        Optioned1: ['全部'],
         Optioned2: [],
-        Option1: Option1,
         Option2: Option2,
-        isIndeterminate: true,
-        data: [
-          {
-            name:'货款',
-            username:'通过审核',
-            password:'FXE201805120004',
-            tel:'交通银行（深圳）',
-            idcardnum:'1200.00',
-            status:'人民币',
-            people:'KH041006'
-          },
-        ],
+        data_list:[],
+        
       }
     },
     methods: {
       target_staff_Change(value){
           console.log(value)
+          this.company_shop_list()
       },
       all_warehouse_location_Change(value) {
         this.target_warehouse_location = value==true?['none','fba']:[];
@@ -194,20 +181,14 @@
         this.all_warehouse_location_isIndeterminate = checkedCount > 0 && checkedCount < Option2.length;
       
       },
-      handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-      },
       handleSizeChange: function (size) {
-        this.pagesize = size;
+                   this.currentPage = 1;
+            this.pagesize = size;
+            this.cost_statistics_logistics_paging();
       },
       handleCurrentChange: function(currentPage){
         this.currentPage = currentPage;
+        this.cost_statistics_logistics_paging();
       },
        company_staff_list(){
         //员工列表
@@ -221,15 +202,62 @@
             this.staff_list=res.value
           }
         })
-       }
+       },
+       company_shop_list(){
+
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+            }
+          
+            this.$http.post(this.api.company_shop_list,params).then((res)=>{
+                console.log('company_shop_list',res);
+                if(res.is_success){
+                    this.shop_list = res.value;
+                }else{
+                     this.shop_list=[];
+                }
+
+
+            })
+          },
+       cost_statistics_logistics_paging(){
+
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              target_company_id:this.owner_company_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+            }
+             if(this.datetime_start){
+                 params.datetime_start=this.datetime_start;
+                   }
+            if(this.datetime_end){
+                params.datetime_end=this.datetime_end;
+            }
+          
+            this.$http.post(this.api.cost_statistics_logistics_paging,params).then((res)=>{
+                console.log('cost_statistics_logistics_paging',res);
+                 if(res.is_success){
+                    this.data_list = res.value.list;
+                  this.totalCount = res.value.totalCount;
+                }else{
+                     this.data_list=[];
+                }
+
+
+            })
+          },
     },
     mounted() {
             this.owner_company_id = localStorage.getItem("owner_company_id")
-            this.target_company_full_name = localStorage.getItem("target_company_full_name")
             this.owner_user_id = localStorage.getItem("owner_user_id")
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.company_staff_list();
+            this.company_shop_list();
+            this.cost_statistics_logistics_paging();
     }
   }
 </script>
