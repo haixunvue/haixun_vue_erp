@@ -12,9 +12,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">企业简称</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_short_name}}</span>
-                  <input type="text">
-                  <a @click="modification('company_short_name','z中国')">修改</a>
+                  <span v-if="states.company_short_name">{{companyInfo.company_short_name}}</span>
+                  <input v-else v-model="companyInfo.company_short_name" type="text">
+                  <a @click="modification('company_short_name',companyInfo.company_short_name)">
+                    <sub v-if="states.company_short_name">{{companyInfo.company_short_name?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -33,8 +36,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">企业地址</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_address}}</span>
-                  <a>添加</a>
+                  <span v-if="states.company_address">{{companyInfo.company_address}}</span>
+                  <input v-else v-model="companyInfo.company_address" type="text">
+                  <a @click="modification('company_address',companyInfo.company_address)">
+                    <sub v-if="states.company_address">{{companyInfo.company_address?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -43,8 +50,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">联系电话</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_contact_number}}</span>
-                  <a>添加</a>
+                  <span v-if="states.company_contact_number">{{companyInfo.company_contact_number}}</span>
+                  <input v-else v-model="companyInfo.company_contact_number" type="text">
+                  <a @click="modification('company_contact_number',companyInfo.company_contact_number)">
+                    <sub v-if="states.company_contact_number">{{companyInfo.company_contact_number?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -53,8 +64,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">企业域名</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_domain_name}}</span>
-                  <a>添加</a>
+                  <span v-if="states.company_domain_name">{{companyInfo.company_domain_name}}</span>
+                  <input v-else v-model="companyInfo.company_domain_name" type="text">
+                  <a @click="modification('company_domain_name',companyInfo.company_domain_name)">
+                    <sub v-if="states.company_domain_name">{{companyInfo.company_domain_name?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -93,8 +108,14 @@
               <el-col :span="3"><div class="grid-content bg-purple">发票抬头</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_invoice_title}}</span>
-                  <a>添加</a> <em>为企业成员配置增值税发票抬头</em><i>!</i>
+                  <span v-if="states.company_invoice_title">{{companyInfo.company_invoice_title}}</span>
+                  <input v-else v-model="companyInfo.company_invoice_title" type="text">
+                  <a @click="modification('company_invoice_title',companyInfo.company_invoice_title)">
+                    <sub v-if="states.company_invoice_title">{{companyInfo.company_invoice_title?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
+
+                  <em>为企业成员配置增值税发票抬头</em><i>!</i>
                 </div>
               </el-col>
             </el-row>
@@ -104,9 +125,12 @@
               <el-col :span="3"><div class="grid-content bg-purple">行业类型</div></el-col>
               <el-col :span="14">
                 <div class="grid-content bg-purple-light">
-                  <span>{{companyInfo.company_industry_type}}</span>
-
-                  <a>修改</a>
+                  <span v-if="states.company_industry_type">{{companyInfo.company_industry_type}}</span>
+                  <input v-else v-model="companyInfo.company_industry_type" type="text">
+                  <a @click="modification('company_industry_type',companyInfo.company_industry_type)">
+                    <sub v-if="states.company_industry_type">{{companyInfo.company_industry_type?'修改':'添加'}}</sub>
+                    <sub v-else>保存</sub>
+                  </a>
                 </div>
               </el-col>
             </el-row>
@@ -169,7 +193,17 @@
             "company_industry_type":"",
             "company_create_time":"",
             "company_corp_id":""
+          },
+          states:{
+            text:'',
+            company_short_name:true,
+            company_address:true,
+            company_contact_number:true,
+            company_domain_name:true,
+            company_invoice_title:true,
+            company_industry_type:true,
           }
+
         };
       },
       created(){
@@ -193,16 +227,41 @@
           })
         },
         modification(key,value){
-          var fromData = {
-            user_token:localStorage.getItem('user_token'),
-            user_id:localStorage.getItem('user_id'),
-            target_company_id:localStorage.getItem('owner_company_id')
-          };
-          fromData[key] = value;
-          this.$http.post(this.api.set_company_info,fromData).then((res)=>{
-            //console.log(res);
-            this.companyInfo = res.value;
-          })
+          var _this = this;
+          if(!this.states[key]){
+            this.$confirm('是否保存?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              var fromData = {
+                user_token:localStorage.getItem('user_token'),
+                user_id:localStorage.getItem('user_id'),
+                target_company_id:localStorage.getItem('owner_company_id')
+              };
+              fromData[key] = value;
+              this.$http.post(this.api.set_company_info,fromData).then((res)=>{
+                //console.log(res);
+                this.companyInfo = res.value;
+                this.$message({
+                  type: 'success',
+                  message: '保存成功!'
+                });
+                this.states[key] = !this.states[key];
+              })
+            }).catch(() => {
+              this.companyInfo[key] = this.states.text;
+              this.states.text='';
+              this.states[key] = !this.states[key];
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              });
+            });
+          }else {
+            this.states[key] = !this.states[key];
+            this.states.text= value;
+          }
         }
       }
     }
@@ -215,6 +274,11 @@
       color: dodgerblue;
       margin: 0 5px;
       cursor: pointer;
+      sub{
+        font-style: normal;
+        vertical-align: inherit;
+        font-size: inherit;
+      }
     }
     b{
       font-weight: normal;
