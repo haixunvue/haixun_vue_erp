@@ -97,16 +97,16 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>员工权限</span>
+              <el-button v-if="showSavePermissionBtn" type="primary" @click="company_staff_set_permission">保存</el-button>            
           </div>
-          <el-form :model="form" label-width="80px">
+          <el-form  label-width="80px">
             <el-form-item>
-              <el-checkbox-group v-model="form.type">
+              <el-checkbox-group @change="permissionChange" v-model="selected_permission">
                 <el-checkbox
-                  v-for ="(item,index) in menuList"
+                  v-for ="(item,index) in permissionList"
                   v-if ="item.permission"
-                  :name="index"
                   :key="index"
-                  :label="item.name">{{item.name}}
+                  :label="item.permission">{{item.name}}
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
@@ -143,7 +143,7 @@
     name: 'tree',
     data(){
       return{
-        menuList:[],
+        permissionList:[],
         staff_list:[{staff_name: '总部',children:[]}],
         staff_selected:null,
         defaultProps: {
@@ -160,7 +160,8 @@
           staff_name:"",
           staff_notes:"",
         },
-        selected_permission:'',
+        selected_permission:[],
+        showSavePermissionBtn:false,
         form: {
           name:''
         },
@@ -185,11 +186,19 @@
       this.user_token = localStorage.getItem("user_token");
       this.user_id = localStorage.getItem("user_id");
 
+      this.permissionList=menu_staff.filter((item)=>{
+          return item.permission;
+      })
+
       this.initExpand()
       this.company_staff_list();
     },
 
     methods: {
+      permissionChange(){
+        this.showSavePermissionBtn=true
+          console.log('selected_permission',this.selected_permission)
+      },
       showAddFormDialog(){
         this.addStaffLinker.name= '';
           this.dialogAddFormVisible = true
@@ -209,19 +218,25 @@
         })
       },
       initExpand(){
-        this.menuList=menu_staff;
+        
         this.setTree.map((a) => {
           this.defaultExpandKeys.push(a.id)
         });
         this.isLoadingTree = true;
       },
-      handleNodeClick(data,n,s){//点击员工节点
+      handleNodeClick(data,n,s){//点击员工节点,选中员工
         if(data.id){
           this.staff_selected = data;
           this.staff_Info_form.staff_department= data.staff_department;
           this.staff_Info_form.staff_name= data.staff_name;
           this.staff_Info_form.staff_notes= data.staff_notes;
-
+          let selected_permission= []
+          this.permissionList.filter((item)=>{
+            if(this.staff_selected[item.permission]=='true'){
+                selected_permission.push(item.permission)
+            }      
+          })
+          this.selected_permission=selected_permission;
           //this.company_staff_get_infos();
           this.company_staff_linker_list();
 
@@ -375,9 +390,9 @@
           user_id:this.user_id,
           target_id:this.staff_selected.id,
         }
-        for (var key in this.staff_selected){
-          params[key] =this.staff_selected[key]
-         }
+        // for (var key in this.staff_selected){
+        //   params[key] =this.staff_selected[key]
+        //  }
         params.staff_department=this.staff_Info_form.staff_department;
         params.staff_name=this.staff_Info_form.staff_name;
         params.staff_notes=this.staff_Info_form.staff_notes;
@@ -385,13 +400,42 @@
 
         this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
           if(res.is_success){
-            this.cancelEdit();
-          }else{
+            this.staff_selected = res.value
+            this.company_staff_list();
+            this.is_edit=false
+            this.input_disable='input-disable'
+            this.staffEdit='编辑'
+          }
+          console.log('res',res)
+        })
+      },
+      company_staff_set_permission(){
+        let params={
+          user_token:this.user_token,
+          user_id:this.user_id,
+          target_id:this.staff_selected.id,
+        }
+        this.permissionList.map(item=>{
+            params[item.permission]= "false";
+        })
+
+        this.selected_permission.length>0&&this.selected_permission.map(item=>{
+            params[item]= "true";
+        })
+
+
+        this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
+          if(res.is_success){
+            this.staff_selected = res.value
+            this.company_staff_list();
+             this.showSavePermissionBtn=false
+
           }
           console.log('res',res)
         })
       },
       editStaff(){
+
         if(this.is_edit){
            this.company_staff_set_infos();
         }else{
@@ -401,6 +445,9 @@
         }
       },
       cancelEdit(){
+        this.staff_Info_form.staff_department= this.staff_selected.staff_department;
+        this.staff_Info_form.staff_name= this.staff_selected.staff_name;
+        this.staff_Info_form.staff_notes= this.staff_selected.staff_notes;
         this.is_edit=false
         this.input_disable='input-disable'
         this.staffEdit='编辑'

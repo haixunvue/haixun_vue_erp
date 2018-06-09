@@ -38,7 +38,12 @@ const api={
     'company_money_recharge_channel_list':'/apis/v1807g/company_money_recharge_channel/list',
     'company_staff_linker_delete':'/apis/v1807g/company_staff_linker/delete',
     'company_staff_set_infos':'/apis/v1807g/company_staff/set_infos',
-  'account_staff_list':'/apis/v1807g/account/list/paging'
+    'company_money_recharge_add':'/apis/v1807g/company_money_recharge/add',
+
+  'account_staff_list':'/apis/v1807g/account/list/paging',
+
+    'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
+    'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息
 
 };
 export default api;

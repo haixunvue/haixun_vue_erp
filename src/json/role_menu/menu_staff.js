@@ -99,26 +99,9 @@ export default  [
     ]
   },
   {
-    "routerName": "staff_report",
-    "name": "业绩报表",
-    "permission":"",
-    "icon": "",
-    "list1": [
-      {
-        "routerName": "add_product",
-        "name": "新增产品",
-        "icon": "",
-      },
-      {
-        "routerName": "store_performance",
-        "name": "店铺业绩",
-      }
-    ]
-  },
-  {
     "routerName": "power_management",
     "name": "权限管理",
-    "permission":"",
+    "permission":"permission_power_management",
     "icon": "",
     "list1": [
       {
@@ -129,6 +112,23 @@ export default  [
       {
         "routerName": "staff_power",
         "name": "员工权限",
+      }
+    ]
+  },
+  {
+    "routerName": "staff_report",
+    "name": "业绩报表",
+    "permission":"permission_staff_report",
+    "icon": "",
+    "list1": [
+      {
+        "routerName": "add_product",
+        "name": "新增产品",
+        "icon": "",
+      },
+      {
+        "routerName": "store_performance",
+        "name": "店铺业绩",
       }
     ]
   },

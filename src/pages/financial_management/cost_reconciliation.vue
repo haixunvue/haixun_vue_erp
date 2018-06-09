@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-right:20px">
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="充值记录" name="first">
         <cost-reconciliation1/>

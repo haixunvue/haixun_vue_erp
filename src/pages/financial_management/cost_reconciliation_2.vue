@@ -10,7 +10,9 @@
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
                     v-model="datetime_start"
+                    @change="(val)=>{this.datetime_start=val}"
                     type="datetime"
+                    value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择开始日期时间"
                     align="right"
                     :picker-options="pickerOptions1">
@@ -20,7 +22,9 @@
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
                     v-model="datetime_end"
+                    @change="(val)=>{this.datetime_end=val}"
                     type="datetime"
+                    value-format="yyyy-MM-dd hh:mm:ss"
                     placeholder="选择结束日期时间"
                     align="right"
                     :picker-options="pickerOptions1">
@@ -51,7 +55,7 @@
           </div>
           <div class="table-table">
             <el-table
-              :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+              :data="list_data"
               border
               style="width: 100%;margin-bottom:20px"
               :default-sort = "{prop: 'right', order: 'descending'}"
@@ -61,74 +65,66 @@
                 prop="name"
                 label="报账类型"
                 sortable
-                width="120"
+
               >
               </el-table-column>
               <el-table-column
                 prop="username"
                 label="是否审核"
                 sortable
-                width="120"
+
               >
               </el-table-column>
               <el-table-column
                 prop="password"
                 label="单据编号"
                 sortable
-                width="180"
+
               >
               </el-table-column>
               <el-table-column
                 prop="tel"
                 label="收款帐户"
                 sortable
-                width="150"
+
               >
               </el-table-column>
               <el-table-column
                 prop="idcardnum"
                 label="报账金额"
                 sortable
-                width="120"
+
               >
               </el-table-column>
               <el-table-column
                 prop="status"
                 label="报账币别"
                 sortable
-                width="120"
+
               >
               </el-table-column>
               <el-table-column
                 prop="people"
                 label="制单人"
                 sortable
-                width="120"
+
               >
               </el-table-column>
               <el-table-column
                 prop="data"
                 label="制单日期"
                 sortable
-                width="180"
+
               >
               </el-table-column>
               <el-table-column
                 prop="remarks "
                 label="备注"
                 sortable
-                width="150"
+
               >
               </el-table-column>
-              <el-table-column
-                fixed="right"
-                label="操作"
-                width="130">
-                <template slot-scope="scope">
-                  <el-button type="primary" icon="el-icon-edit" @click="edit" size="small"></el-button>
-                  <el-button type="danger" icon="el-icon-delete" @click="del" size="small"></el-button>
-                </template>
-              </el-table-column>
+         
             </el-table>
             <el-pagination
               @size-change="handleSizeChange"
@@ -137,7 +133,7 @@
               :page-sizes="[5, 20, 50, 100]"
               :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="totalItems"
+              :total="totalCount"
               style="clear:both;text-align:center">
             </el-pagination>
           </div>
@@ -146,56 +142,59 @@
     <!--弹窗-->
     <el-dialog :title=dialogTitle :visible.sync="dialogTableVisible">
       <el-row class="dialog-item">
-        <el-col :span="12">
+        <el-col :span="24">
           <span class="dialog-left">单据编号</span>
-          新建中...
+            {{addForm.recharge_num}}
         </el-col>
-        <el-col :span="12"></el-col>
       </el-row>
       <el-row class="dialog-item">
         <el-col :span="12">
           <span class="dialog-left">收款帐户</span>
-          <el-select v-model="value" placeholder="请选择" size="mini">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select v-model="addForm.bank_card_number_receive" placeholder="请选择" size="mini">
+            <el-option v-for="item in options1" :key="item.account_num" :label="item.account_num" :value="item.account_num+','+item.title"></el-option>
           </el-select>
         </el-col>
         <el-col :span="12">
             <span class="dialog-left">报账类型</span>
-            <el-radio v-model="reimbursementType" label="1">贷款</el-radio>
+            <el-radio-group v-model="addForm.reimbursement_type">
+            <el-radio  label="1">贷款</el-radio>
             <!--<el-radio v-model="radio" label="2">押金</el-radio>-->
+            </el-radio-group>
         </el-col>
       </el-row>
       <el-row class="dialog-item">
         <el-col :span="12">
           <span class="dialog-left">报账金额</span>
-          <el-input v-model="input" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
+          <el-input v-model="addForm.money_number" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
         </el-col>
         <el-col :span="12">
           <span class="dialog-left">报账币别</span>
-          <el-select v-model="value" placeholder="请选择" size="mini">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select v-model="addForm.money_type" placeholder="请选择" size="mini">
+            <el-option  key="RMB" label="人民币" value="RMB"></el-option>
           </el-select>
         </el-col>
       </el-row>
       <el-row class="dialog-item">
         <el-col :span="12">
           <span class="dialog-left">报账银行</span>
-          <el-input v-model="input" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
+          <el-input v-model="addForm.bank_name_payment" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
         </el-col>
         <el-col :span="12">
           <span class="dialog-left">银行账号</span>
-          <el-input v-model="input" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
+          <el-input v-model="addForm.bank_card_number_payment" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
         </el-col>
       </el-row>
       <el-row class="dialog-item">
         <el-col :span="12">
           <span class="dialog-left">银行户名</span>
-          <el-input v-model="input" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
+          <el-input v-model="addForm.bank_card_name_payment" placeholder="请输入内容" class="dialog-input" size="mini"></el-input>
         </el-col>
         <el-col :span="12">
           <span style="margin-right:25px">是否备注姓名</span>
-          <el-radio v-model="radio" label="1">是</el-radio>
-          <el-radio v-model="radio" label="2">否</el-radio>
+          <el-radio-group v-model="addForm.is_notes_name">
+          <el-radio  label="true">是</el-radio>
+          <el-radio  label="false">否</el-radio>
+          </el-radio-group>
         </el-col>
       </el-row>
       <el-row class="dialog-item">
@@ -220,7 +219,7 @@
       <el-row class="dialog-item">
         <el-col :span="24">
           <span class="dialog-left left" style="margin-right:55px">备注</span>
-          <el-input type="textarea" :rows="4" placeholder="请输入内容"></el-input>
+          <el-input v-model="addForm.notes" type="textarea" :rows="4" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
     </el-dialog>
@@ -242,27 +241,28 @@
         process_status:'',
         bank_card_number:'',
         list_data:[],
-        value:'',
-        activeName:'first',
-
         options2:options2,
         options1: [],
-        data: [
-          {
-            name:'货款',
-            username:'通过审核',
-            password:'FXE201805120004',
-            tel:'交通银行（深圳）',
-            idcardnum:'1200.00',
-            status:'人民币',
-            people:'KH041006',
-            data:'2018-05-12 07:21:48',
-            remarks:'费用预付'
-          },
-        ],
-        totalItems:0,
+        totalCount:0,
         currentPage:1,
         pagesize:5,
+        addForm:{
+              recharge_num:'',
+              money_number:'',//				金钱
+              notes:'',//						备注
+              proof_document:'',//			证明文件
+              bank_name_receive:'',//收款银行名称
+              bank_card_number_receive:'',//  收款银行卡号
+              bank_name_payment:'',//支付银行名称
+              bank_card_number_payment:'',//支付银行卡号
+              bank_card_name_payment:'',//支付银行卡户名
+              reimbursement_type:'',//报账 类型
+              money_type:'RMB',//				类型
+              is_notes_name:'',//						备注姓名
+        },
+
+
+
         dialogTableVisible:false,
         radio:'1',
         input:'',
@@ -311,12 +311,31 @@
             })
       },
       handleSizeChange: function (size) {
+        this.currentPage = 1;
         this.pagesize = size;
+        this.company_money_recharge_list()
       },
       handleCurrentChange: function(currentPage){
-        this.currentPage = currentPage;
+          this.currentPage = currentPage;
+        this.company_money_recharge_list()
       },
       add: function(){
+        this.addForm={
+              recharge_num:moment().format('YYYYMMDDhhmmssSSS')+this.user_id,
+              money_number:'',//				金钱
+              notes:'',//						备注
+              proof_document:'',//			证明文件
+              bank_name_receive:'',//收款银行名称
+              bank_card_number_receive:'',//  收款银行卡号
+              bank_name_payment:'',//支付银行名称
+              bank_card_number_payment:'',//支付银行卡号
+              bank_card_name_payment:'',//支付银行卡户名
+              reimbursement_type:'',//报账 类型
+              money_type:'RMB',//				类型
+              is_notes_name:'',//						备注姓名
+        }
+
+
         this.dialogTableVisible = true
         this.dialogTitle="自助报账"
       },
@@ -346,6 +365,8 @@
         console.log(file, fileList);
       },
       search() {
+          this.currentPage = 1;
+          this.company_money_recharge_list()
       },
       clearSearch: function(){
         this.datetime_start='';
@@ -363,36 +384,48 @@
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
       company_money_recharge_list(){
-
-        let user_query =''
-        if(this.datetime_start&&this.datetime_end){
-            user_query = ``;
-        }else if(this.datetime_start){
-            user_query = ``;
-        }else if(this.datetime_end){
-            user_query = ``;
-        }else{
-            user_query = ``;
-        }
-
-        this.$http.post(this.api.company_money_recharge,{
+      let params = {
             user_token:this.user_token,
             user_id:this.user_id,
-            //user_query: user_query,   		//目标公司
             target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
             pageSize:this.pagesize,
-            }).then((res)=>{
+        }
+        if(this.datetime_start){
+            params.datetime_start=this.datetime_start;
+        }
+        if(this.datetime_end){
+            params.datetime_end=this.datetime_end;
+        }
+        if(this.bank_card_number){
+            params.bank_card_number=this.bank_card_number;
+        }
+        if(this.process_status){
+            params.process_status=this.process_status;
+        }
+
+        this.$http.post(this.api.company_money_recharge,params).then((res)=>{
                 console.log('list_data',res);
                 if(res.is_success){
-                    this.list_data = res.value;
+                    this.list_data = res.value.list;
+                    this.totalCount = res.value.totalCount;
                 }else{
                      this.list_data=[];
                 }
 
 
             })
-      }
+      },
+      company_money_recharge_add(){
+          this.$http.post(this.api.company_money_recharge_add,{}).then((res)=>{
+                console.log('list_data',res);
+                if(res.is_success){
+                    this.company_money_recharge_list();
+                }else{
+                     this.list_data=[];
+                }
+            })
+      },
 
     },
      mounted() {
@@ -402,7 +435,6 @@
             this.user_id = localStorage.getItem("user_id");
             this.company_money_recharge_list();
             this.company_money_recharge_channel_list();
-            console.log(moment().format('YYYYMMDDhhmmssSSS'))
      },
   }
 </script>

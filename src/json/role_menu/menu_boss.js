@@ -53,7 +53,7 @@ export default  [
   {
     "routerName": "power_management",
     "name": "权限管理",
-    "icon": "",
+    "icon": "permission_power_management",
     "list1": [
       {
         "routerName": "amazon_auth",
