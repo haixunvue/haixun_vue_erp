@@ -65,7 +65,7 @@
     </el-form-item>
   </el-form>
   <el-table
-    :data="tableData"
+    :data="list_data"
     border
     style="width: 100%"
     :default-sort = "{prop: 'right', order: 'descending'}"
