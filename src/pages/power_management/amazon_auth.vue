@@ -174,7 +174,7 @@
             this.company_shop_list()
           },
           company_shop_list(){
-            this.$http.post(this.api.company_shop_list,{
+            this.$http.post(this.api.company_shop_list_paging,{
               user_token:this.user_token,
               user_id:this.user_id,
               page:this.currentPage-1,  //页码

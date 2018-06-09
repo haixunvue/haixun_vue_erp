@@ -479,7 +479,6 @@
     },
      mounted() {
             this.owner_company_id = localStorage.getItem("owner_company_id")
-            this.target_company_full_name = localStorage.getItem("target_company_full_name")
             this.owner_user_id = localStorage.getItem("owner_user_id")
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");

@@ -172,7 +172,16 @@
           handleClick(tab, event) {
             console.log(tab, event);
           }
-        }
+         
+        },
+        mounted() {
+          console.log(' this.$route.query.id', this.$route.query.id)
+            this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.owner_user_id = localStorage.getItem("owner_user_id")
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            this.id= this.$route.query.id
+        },
       }
 </script>
 <style scoped>
