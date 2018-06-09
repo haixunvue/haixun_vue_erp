@@ -111,8 +111,8 @@
       width="90"
       >
       <template slot-scope="scope">
-        <el-button type="primary" @click="showToggle(scope.row)" v-if="scope.row.flag" size="small">审核通过</el-button>
-        <el-button type="info" @click="showToggle(scope.row)" v-else size="small">不予通过</el-button>
+        <span v-if="scope.row.flag">审核通过</span>
+        <span v-else>不予通过</span>
       </template>
     </el-table-column>
     <el-table-column
