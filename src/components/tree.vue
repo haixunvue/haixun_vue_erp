@@ -375,9 +375,9 @@
           user_id:this.user_id,
           target_id:this.staff_selected.id,
         }
-        for (var key in this.staff_selected){
-          params[key] =this.staff_selected[key]
-         }
+        // for (var key in this.staff_selected){
+        //   params[key] =this.staff_selected[key]
+        //  }
         params.staff_department=this.staff_Info_form.staff_department;
         params.staff_name=this.staff_Info_form.staff_name;
         params.staff_notes=this.staff_Info_form.staff_notes;
@@ -385,8 +385,11 @@
 
         this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
           if(res.is_success){
-            this.cancelEdit();
-          }else{
+            this.staff_selected = res.value
+            this.company_staff_list();
+            this.is_edit=false
+            this.input_disable='input-disable'
+            this.staffEdit='编辑'
           }
           console.log('res',res)
         })
@@ -401,6 +404,9 @@
         }
       },
       cancelEdit(){
+        this.staff_Info_form.staff_department= this.staff_selected.staff_department;
+        this.staff_Info_form.staff_name= this.staff_selected.staff_name;
+        this.staff_Info_form.staff_notes= this.staff_selected.staff_notes;
         this.is_edit=false
         this.input_disable='input-disable'
         this.staffEdit='编辑'
