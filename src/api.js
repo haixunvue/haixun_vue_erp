@@ -1,4 +1,4 @@
-const api={ 
+const api={
     'user_add':'/v1806/user/add',
     'user_infor_set':'/restful/set/_account/user',
     'user_list':'/restful/list/_account/user',
@@ -27,7 +27,7 @@ const api={
     'amazon_re_authorize':'/apis/v1807g/company_shop/re_authorize',	//公司店铺添加，亚马逊授权
     'company_shop_list':'/apis/v1807g/company_shop/list',	//公司
     'company_shop_delete':'/apis/v1807g/company_shop/delete',	//公司店铺
-    'company_staff_list':'/apis/v1807g/company_staff/list',	
+    'company_staff_list':'/apis/v1807g/company_staff/list',
     'link_list_user_to_company_staff':'/restful/list/_linked/user_to_company_staff',
     'company_money_recharge':'/apis/v1807g/company_money_recharge/listall/paging',
     'company_staff_add':'/apis/v1807g/company_staff/add',
@@ -40,6 +40,9 @@ const api={
     'company_staff_set_infos':'/apis/v1807g/company_staff/set_infos',
     'company_money_recharge_add':'/apis/v1807g/company_money_recharge/add',
 
+
+    'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
+    'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息
 
 };
 export default api;
