@@ -44,6 +44,8 @@ const api={
 
     'account_staff_list':'/apis/v1807g/account/list/paging',
     'get_company_list':'/apis/v1807g/company/list',
+  'account_get_infos':'/apis/v1807g/account/get_infos',
+  'account_set_infos':'/apis/v1807g/account/set_infos',
 
     'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
     'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息

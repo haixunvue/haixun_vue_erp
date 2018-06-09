@@ -3,7 +3,7 @@
   <template>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="用户信息" name="first">
-        <el-form class="user-info" :model="userInfo" label-width="80px">
+        <el-form class="user-info" :ref="userInfo" :model="userInfo" label-width="80px">
           <h3>常规信息</h3>
           <el-form-item label="性别">
             <el-input v-model="userInfo.sex"></el-input>
@@ -19,16 +19,16 @@
           </el-form-item>
           <h3>联系信息</h3>
           <el-form-item label="手机号码">
-            <el-input v-model="userInfo.mobile"></el-input>
+            <el-input v-model="userInfo.phone_number"></el-input>
           </el-form-item>
           <el-form-item label="QQ号码">
-            <el-input v-model="userInfo.qq"></el-input>
+            <el-input v-model="userInfo.qq_number"></el-input>
           </el-form-item>
           <el-form-item label="邮箱">
-            <el-input v-model="userInfo.mail"></el-input>
+            <el-input v-model="userInfo.email"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button type="primary" @click="setInfo(userInfo)">保存</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -62,13 +62,13 @@
             </el-checkbox-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button type="primary">保存</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="用户资产(公司)" name="third">
-        <el-input style="width: 200px" :aria-placeholder="搜索"></el-input>
+        <el-input style="width: 200px"></el-input>
         <el-button>搜索</el-button>
         <el-button>添加公司</el-button>
         <el-table
@@ -144,14 +144,18 @@
         data() {
           return {
             activeName:'first',
+            totalCount:0,
+            currentPage:1,
+            pagesize:5,
+            data: [],
             userInfo:{
               sex:'',
               birth:'',
               blood:'',
               location:'',
-              mobile:'',
-              qq:'',
-              mail:'',
+              phone_number:'',
+              qq_number:'',
+              email:'',
             },
             userPermission:{
               generalize:[],
@@ -170,17 +174,50 @@
         },
         methods: {
           handleClick(tab, event) {
-            console.log(tab, event);
-          }
 
+          },
+          handleSizeChange: function (size) {
+            this.currentPage = 1;
+            this.pagesize = size;
+          },
+          handleCurrentChange: function(currentPage){
+            this.currentPage = currentPage;
+          },
+          account_get_infos(){
+            let params={
+              user_token:this.user_token,
+              user_id:this.user_id,
+              target_id:this.id,
+            }
+            this.$http.post(this.api.account_get_infos,params).then((res)=>{
+              if(res.is_success){
+                this.userInfo = res.value;
+              }else{
+                this.userInfo={};
+              }
+            })
+          },
+          setInfo(userInfo){
+
+            userInfo.user_token=this.user_token
+            userInfo.user_id=this.user_id
+            userInfo.target_id=this.id
+            this.$http.post(this.api.account_set_infos,userInfo).then((res)=>{
+              if(res.is_success){
+                console.log(res);
+              }else{
+
+              }
+            })
+          }
         },
         mounted() {
-          console.log(' this.$route.query.id', this.$route.query.id)
             this.owner_company_id = localStorage.getItem("owner_company_id")
             this.owner_user_id = localStorage.getItem("owner_user_id")
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.id= this.$route.query.id
+          this.account_get_infos()
         },
       }
 </script>
