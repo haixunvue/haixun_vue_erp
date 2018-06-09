@@ -77,7 +77,7 @@
       label="操作"
       width="125">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" @click="user_edit" size="small"></el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="user_edit(scope.row.id)" size="small"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -136,11 +136,15 @@
               }
             })
           },
-          user_edit() {
-            router.push({
-              path:'user_edit'
-            })
-          },
+            user_edit(id) {
+        console.log(id)
+        router.push({
+          path:'user_edit',
+          query: {
+            id: id
+          }
+        })
+      },
           user_del() {
             this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
               confirmButtonText: '确定',
