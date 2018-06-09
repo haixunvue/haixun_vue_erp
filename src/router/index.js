@@ -15,7 +15,7 @@ const registered = r => require.ensure([], () => r(require('../pages/Register'))
 
 //global
 const G_user_list = r => require.ensure([], () => r(require('../pages/Global/User_list')), 'G_user_list');
-const G_user_edit = r => require.ensure([], () => r(require('../pages/Global/User_edit')), 'G_user_edit');
+const user_edit = r => require.ensure([], () => r(require('../pages/account_management/User_edit')), 'user_edit');
 const G_company_list = r => require.ensure([], () => r(require('../pages/Global/Company_list')), 'G_company_list');
 const G_company_edit = r => require.ensure([], () => r(require('../pages/Global/Company_edit')), 'G_company_edit');
 const G_company_add = r => require.ensure([], () => r(require('../pages/Global/Company_add')), 'G_company_add');
@@ -98,8 +98,8 @@ export default new Router({
                    path: 'G_user_list',
                    component: G_user_list,
                 },{
-                   path: 'G_user_edit',
-                   component: G_user_edit,
+                   path: 'user_edit',
+                   component: user_edit,
                 },{
                    path: 'G_company_list',
                    component: G_company_list,
