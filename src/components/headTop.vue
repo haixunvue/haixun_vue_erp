@@ -17,7 +17,7 @@
         active-text-color="#ffd04b">
         <el-menu-item index="1">海逊ERP</el-menu-item>
         <el-menu-item index="2">
-          <el-select v-if="!isFromBack" v-model="roleValue" @change="changeValue()" placeholder="请选择">
+          <el-select size="mini" v-if="!isFromBack" v-model="roleValue" @change="changeValue()" placeholder="请选择">
             <el-option
               v-for="(item,index) in roleList"
               :value="index"
