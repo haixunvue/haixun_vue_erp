@@ -47,8 +47,8 @@
             <el-checkbox-group v-model="target_warehouse_location" @change="warehouse_location_Change" class="left">
               <el-checkbox v-for="(item,index) in Option2" :label="item.value" :key="index">{{item.name}}</el-checkbox>
             </el-checkbox-group>
-                <el-button type="primary" size="mini" style="margin-left:20px">查询</el-button>
-          <el-button type="primary" size="mini" style="margin-left:5px">重置</el-button>
+                <el-button type="primary" size="mini" style="margin-left:20px" v-on:click="search">查询</el-button>
+          <el-button type="primary" size="mini" style="margin-left:5px" v-on:click="clearSearch">重置</el-button>
           </div>
           
         </div>
@@ -167,6 +167,18 @@
       }
     },
     methods: {
+      search: function(){
+          this.currentPage = 1;
+          this.cost_statistics_logistics_paging()
+      },
+      clearSearch: function(){
+       this.datetime_start=''
+        this.datetime_end=''
+        this.target_staff_id=''
+        this.target_shop_id=''
+        this.all_warehouse_location=false
+        this.all_warehouse_location_Change(false)
+      },
       target_staff_Change(value){
           console.log(value)
           this.company_shop_list()
@@ -235,6 +247,18 @@
                    }
             if(this.datetime_end){
                 params.datetime_end=this.datetime_end;
+            }
+            if(this.target_staff_id){
+                params.target_staff_id=this.target_staff_id;
+            }
+            if(this.target_shop_id){
+                params.target_shop_id=this.target_shop_id;
+            }
+            
+            if(this.target_warehouse_location&&this.target_warehouse_location.length>0){
+                this.target_warehouse_location.map((item,index)=>{
+                  params['warehouse_location_0'+index]=item
+                })
             }
           
             this.$http.post(this.api.cost_statistics_logistics_paging,params).then((res)=>{
