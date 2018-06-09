@@ -256,6 +256,7 @@
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.get_company_list();
+            this.company_money_recharge_list();
 
         },
       }
