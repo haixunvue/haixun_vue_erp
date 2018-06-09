@@ -134,6 +134,16 @@
     >
     </el-table-column>
   </el-table>
+  <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page="currentPage"
+    :page-sizes="[5, 20, 50, 100]"
+    :page-size="pagesize"
+    layout="total, sizes, prev, pager, next, jumper"
+    :total="totalCount"
+    style="clear:both;text-align:center">
+  </el-pagination>
 </div>
 </template>
 
