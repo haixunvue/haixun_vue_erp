@@ -40,6 +40,7 @@ const api={
     'company_staff_set_infos':'/apis/v1807g/company_staff/set_infos',
     'company_money_recharge_add':'/apis/v1807g/company_money_recharge/add',
 
+  'account_staff_list':'/apis/v1807g/account/list/paging',
 
     'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
     'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息

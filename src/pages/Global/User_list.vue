@@ -9,8 +9,8 @@
 <div class="content">
   <h1>用户列表</h1>
   <div class="line"></div>
-  <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">  
-  </el-input> 
+  <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">
+  </el-input>
   <el-table
     :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
     border
@@ -49,7 +49,7 @@
     </el-table-column>
     <el-table-column
       prop="status"
-      label="身份信息" 
+      label="身份信息"
       sortable
       >
     </el-table-column>
@@ -93,13 +93,13 @@
         },
         methods: {
           handleSizeChange: function (size) {
-              this.pagesize = size;            
+              this.pagesize = size;
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
           },
           getuserlist(){
-            
+
             var tk = localStorage.getItem("token")
             this.$http.post(this.api.user_list,
             {
@@ -107,7 +107,7 @@
             }).then((res)=>{
               // console.log(res);
               this.data = res.values;
-              this.data2 = this.data.concat(); 
+              this.data2 = this.data.concat();
               this.totalItems = res.values.length;
             })
 
@@ -116,7 +116,7 @@
             // console.log("1")
             let from = (this.currentPage - 1) * this.pageSize;
             let to = this.currentPage * this.pageSize;
-                 
+
             for (; from < to; from++) {
               if (list[from]) {
                 this.data2.push(list[from]);
@@ -125,7 +125,7 @@
           },
           user_edit() {
             router.push({
-              path:'G_user_edit'
+              path:'/account_management/user_edit'
             })
           },
           user_del() {
@@ -142,22 +142,22 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           }
         },
         mounted(){
           this.getuserlist();
         },
-        watch: {  
-           schfilter: function(val, oldVal){  
+        watch: {
+           schfilter: function(val, oldVal){
                 // console.log(val)
-                if(val != ""){                       
-                    
+                if(val != ""){
+
                   this.data3 = [];
                   this.data.length=0;
                   for(var demokey of this.data2){
-                    if(demokey.username.indexOf(this.schfilter)>=0){          
+                    if(demokey.username.indexOf(this.schfilter)>=0){
                         this.data.push(demokey);
                     }
                   }
@@ -165,14 +165,14 @@
                   this.totalItems = this.data.length;
                   this.currentChangePage(this.data3)
                 }else{
-        
+
                   this.data.length=0;
                   this.totalItems = this.data2.length;
                   this.data = this.data2.concat();
                 }
-                
-                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));  
-            }   
+
+                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));
+            }
         }
       }
 </script>

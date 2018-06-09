@@ -7,15 +7,19 @@
 -->
 <template>
 <div class="content">
-  <h1>内部用户</h1>
+  <h1>内部员工</h1>
   <div class="line"></div>
-  <el-form ref="form" :model="form" label-width="80px">
-    <el-form-item label="身份信息">
-      <el-input class="name-info" v-model="form.name"></el-input>
+  <el-form :inline="true" :model="form" label-width="80px" size="mini">
+    <el-form-item>
+      <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">
+      </el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="onSearch">搜索</el-button>
     </el-form-item>
   </el-form>
   <el-table
-    :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+    :data="data"
     border
     style="width: 100%"
     :default-sort = "{prop: 'right', order: 'descending'}"
@@ -64,7 +68,7 @@
     </el-table-column>
     <el-table-column
       prop="idcardnum"
-      label="身份信息"
+      label="资产信息"
       sortable
     >
     </el-table-column>
@@ -84,7 +88,7 @@
     :page-sizes="[5, 20, 50, 100]"
     :page-size="pagesize"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="totalItems">
+    :total="totalCount">
   </el-pagination>
 </div>
 </template>
@@ -97,52 +101,44 @@
         data() {
           return {
             data: [],
-            totalItems:0,
+            schfilter:"",
+            search_text:'',
+            totalCount:0,
             currentPage:1,
             pagesize:5,
-            schfilter:"",
-            data2:[],
-            data3:[],
-            form:{
-              name:''
-            }
           }
         },
         methods: {
           handleSizeChange: function (size) {
-              this.pagesize = size;
+            this.currentPage = 1;
+            this.pagesize = size;
+            this.getuserlist();
           },
           handleCurrentChange: function(currentPage){
-              this.currentPage = currentPage;
+            this.currentPage = currentPage;
+            this.getuserlist()
           },
           getuserlist(){
-
-            var tk = localStorage.getItem("token")
-            this.$http.post(this.api.user_list,
-            {
-              user_token:tk
-            }).then((res)=>{
-              // console.log(res);
-              this.data = res.values;
-              this.data2 = this.data.concat();
-              this.totalItems = res.values.length;
-            })
-
-          },
-          currentChangePage(list) {
-            // console.log("1")
-            let from = (this.currentPage - 1) * this.pageSize;
-            let to = this.currentPage * this.pageSize;
-
-            for (; from < to; from++) {
-              if (list[from]) {
-                this.data2.push(list[from]);
-              }
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+              permission_backstage:true,
+              search_text:this.schfilter||''
             }
+            this.$http.post(this.api.account_staff_list,params).then((res)=>{
+              if(res.is_success){
+                this.data = res.value.list;
+                this.totalCount = res.value.totalCount;
+              }else{
+                this.list_data=[];
+              }
+            })
           },
           user_edit() {
             router.push({
-              path:'G_user_edit'
+              path:'user_edit'
             })
           },
           user_del() {
@@ -161,36 +157,19 @@
                 message: '已取消删除'
               });
             });
+          },
+          onSearch(){
+            this.search_text=this.schfilter
+            this.getuserlist();
           }
         },
-        mounted(){
+        created(){
+          this.owner_company_id = localStorage.getItem("owner_company_id")
+          this.owner_user_id = localStorage.getItem("owner_user_id")
+          this.user_token = localStorage.getItem("user_token");
+          this.user_id = localStorage.getItem("user_id");
           this.getuserlist();
         },
-        watch: {
-           schfilter: function(val, oldVal){
-                // console.log(val)
-                if(val != ""){
-
-                  this.data3 = [];
-                  this.data.length=0;
-                  for(var demokey of this.data2){
-                    if(demokey.username.indexOf(this.schfilter)>=0){
-                        this.data.push(demokey);
-                    }
-                  }
-                  this.currentPage = 1;
-                  this.totalItems = this.data.length;
-                  this.currentChangePage(this.data3)
-                }else{
-
-                  this.data.length=0;
-                  this.totalItems = this.data2.length;
-                  this.data = this.data2.concat();
-                }
-
-                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));
-            }
-        }
       }
 </script>
 <style scoped>
@@ -198,9 +177,6 @@
       margin: 20px 0;
       border-top: 1px solid #dcdfe6;
     }
-   .name-info{
-     width: 20%;
-   }
    .el-pagination{
      position: absolute;
      bottom: 50px;
