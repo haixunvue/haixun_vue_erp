@@ -17,6 +17,15 @@
                   </template>
               </el-table-column>
             </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 20, 50, 100]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
         </div>
         <div class="bottom">
             <div class="bottom-left left">说明！</div>
@@ -83,7 +92,10 @@
                 shop_list:[],
                 input:'',
                 title:'',
-                re_auth_data:''
+                re_auth_data:'',
+              totalCount:0,
+              currentPage:1,
+              pagesize:5,
             }
         },
           mounted() {
@@ -94,7 +106,7 @@
             this.company_shop_list();
         },
         methods:{
-           
+
             addAuthorization(){
                 this.shop_name='';
                 this.account_id='';
@@ -152,14 +164,26 @@
 
             })
           },
+          handleSizeChange: function (size) {
+            this.currentPage = 1;
+            this.pagesize = size;
+            this.company_shop_list();
+          },
+          handleCurrentChange: function(currentPage){
+            this.currentPage = currentPage;
+            this.company_shop_list()
+          },
           company_shop_list(){
             this.$http.post(this.api.company_shop_list,{
-            user_token:this.user_token,
-            user_id:this.user_id,
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
             }).then((res)=>{
                 console.log('company_shop_list',res);
                 if(res.is_success){
-                    this.shop_list = res.value;
+                    this.shop_list = res.value.list;
+                  this.totalCount = res.value.totalCount;
                 }else{
                      this.shop_list=[];
                 }
@@ -247,6 +271,11 @@
         display: inline-block;
         width:150px;
         text-align: right;
+    }
+    .el-pagination{
+      position: absolute;
+      bottom: 50px;
+      right: 100px;
     }
 
 </style>
