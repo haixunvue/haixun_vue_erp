@@ -13,7 +13,7 @@
   </div>
 
   <div class="line"></div>
-  <el-form ref="form" :model="form" label-width="110px">
+  <el-form  label-width="110px">
     <el-form-item label="公司ID">
       <el-input v-model="company_id"></el-input>
     </el-form-item>
@@ -125,16 +125,16 @@
             user_token: this.user_token ,
             user_id: this.user_id ,
             target_company_id:this.id,
-            company_full_name=this.company_full_name,		// 全称
-            company_short_name=this.company_short_name,      //   简称
-            legal_person=this.legal_person,//法人名称
-            company_address=this.company_address,	//		 公司地址
-            scope_operation=this.scope_operation,//经营范围
-            registered_capital=this.registered_capital,//注册资金/万(¥)
-            company_contact_number=this.company_contact_number,	// 公司联系
-            company_domain_name=this.company_domain_name,	// 公司网站
-            company_member_max=this.company_member_max,		// 员工最大数量
-            expense_account=this.expense_account,
+            company_full_name:this.company_full_name,		// 全称
+            company_short_name:this.company_short_name,      //   简称
+            legal_person:this.legal_person,//法人名称
+            company_address:this.company_address,	//		 公司地址
+            scope_operation:this.scope_operation,//经营范围
+            registered_capital:this.registered_capital,//注册资金/万(¥)
+            company_contact_number:this.company_contact_number,	// 公司联系
+            company_domain_name:this.company_domain_name,	// 公司网站
+            company_member_max:this.company_member_max,		// 员工最大数量
+            expense_account:this.expense_account,
           }).then((res)=>{
             //console.log(res);
             if(res.is_success){
@@ -147,16 +147,16 @@
             user_token: this.user_token ,
             user_id: this.user_id ,
             owner_user_id:this.id,
-            company_full_name=this.company_full_name,		// 全称
-            company_short_name=this.company_short_name,      //   简称
-            legal_person=this.legal_person,//法人名称
-            company_address=this.company_address,	//		 公司地址
-            scope_operation=this.scope_operation,//经营范围
-            registered_capital=this.registered_capital,//注册资金/万(¥)
-            company_contact_number=this.company_contact_number,	// 公司联系
-            company_domain_name=this.company_domain_name,	// 公司网站
-            company_member_max=this.company_member_max,		// 员工最大数量
-            expense_account=this.expense_account,
+            company_full_name:this.company_full_name,		// 全称
+            company_short_name:this.company_short_name,      //   简称
+            legal_person:this.legal_person,//法人名称
+            company_address:this.company_address,	//		 公司地址
+            scope_operation:this.scope_operation,//经营范围
+            registered_capital:this.registered_capital,//注册资金/万(¥)
+            company_contact_number:this.company_contact_number,	// 公司联系
+            company_domain_name:this.company_domain_name,	// 公司网站
+            company_member_max:this.company_member_max,		// 员工最大数量
+            expense_account:this.expense_account,
           }).then((res)=>{
             //console.log(res);
             if(res.is_success){
