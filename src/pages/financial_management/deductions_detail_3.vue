@@ -1,6 +1,6 @@
 <template>
   <div >
-  
+
         <div style="margin-bottom:5px">
           <el-select v-model="target_staff_id" placeholder="选择员工" size="mini" @change="target_staff_Change">
             <el-option
@@ -39,7 +39,7 @@
                     :picker-options="pickerOptions1">
                   </el-date-picker>
        </div>
-        
+
         <div class="middle">
           <div class="middle-top">
             <span class="left search-result-text">仓库位置：</span>
@@ -50,7 +50,7 @@
                 <el-button type="primary" size="mini" style="margin-left:20px" v-on:click="search">查询</el-button>
           <el-button type="primary" size="mini" style="margin-left:5px" v-on:click="clearSearch">重置</el-button>
           </div>
-          
+
         </div>
         <div class="line"></div>
         <div class="bottom">
@@ -62,20 +62,20 @@
             fit
           >
             <el-table-column
-              prop="name"
+              prop="_createTime"
               label="日期"
             >
             </el-table-column>
             <el-table-column
-              prop="username"
+              prop=""
               label="订单ID"
             >
             </el-table-column>
-            <el-table-column
+            <el-table-columnid
               prop="password"
               label="订单金额"
             >
-            </el-table-column>
+            </el-table-columnid>
             <el-table-column
               prop="tel"
               label="退款费用"
@@ -108,7 +108,7 @@
             style="clear:both;text-align:center">
           </el-pagination>
         </div>
-    
+
  </div>
 </template>
 
@@ -116,7 +116,7 @@
   import router from "../../router";
 
   const Option2 = [{name:'默认仓库',value:'none'}, {name:'FBA',value:'fba'}];
- 
+
  export default {
     data() {
       return {
@@ -158,7 +158,7 @@
         Optioned2: [],
         Option2: Option2,
         data_list:[],
-        
+
       }
     },
     methods: {
@@ -186,7 +186,7 @@
         let checkedCount = value.length;
         this.all_warehouse_location = checkedCount == Option2.length;
         this.all_warehouse_location_isIndeterminate = checkedCount > 0 && checkedCount < Option2.length;
-      
+
       },
       handleSizeChange: function (size) {
                    this.currentPage = 1;
@@ -224,7 +224,7 @@
              if(this.target_staff_id){
                 params.target_staff_id=this.target_staff_id;
               }
-          
+
             this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
                 console.log('company_shop_list',res);
                 if(res.is_success){
@@ -257,13 +257,13 @@
             if(this.target_shop_id){
                 params.target_shop_id=this.target_shop_id;
             }
-            
+
             if(this.target_warehouse_location&&this.target_warehouse_location.length>0){
                 this.target_warehouse_location.map((item,index)=>{
                   params['warehouse_location_0'+index]=item
                 })
             }
-          
+
             this.$http.post(this.api.cost_statistics_platform_paging,params).then((res)=>{
                 console.log('cost_statistics_platform_paging',res);
                  if(res.is_success){
