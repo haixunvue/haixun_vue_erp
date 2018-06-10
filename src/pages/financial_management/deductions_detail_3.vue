@@ -217,7 +217,7 @@
               user_id:this.user_id,
               user_id:this.user_id,
               target_company_id:this.owner_company_id,
-              page:this.currentPage-1,  //页码
+              page:0,  //页码
               pageSize:1000,
             }
 
