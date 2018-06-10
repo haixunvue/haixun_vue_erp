@@ -127,8 +127,12 @@
                 })
             },
             updataIdInfo(role){
-              localStorage.setItem('owner_user_id',role.isBoss?role.owner_user_id:role.user_id)
-              localStorage.setItem('owner_company_id',role.isBoss?role.id:role.owner_company_id)   
+              let isBoss = role._type=='boss';
+              localStorage.setItem('owner_user_id',role.owner_user_id)
+              localStorage.setItem('owner_company_id',isBoss?role.id:role.owner_company_id)  
+              
+              console.log('owner_user_id',role.owner_user_id)
+              console.log('owner_company_id:',isBoss?role.id:role.owner_company_id)
             },
             getName(){
               this.name = this.user_info.nickname;
