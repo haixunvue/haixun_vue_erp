@@ -48,13 +48,13 @@
           </el-dropdown-menu>
         </el-dropdown>
        </span> -->
-        <div class="message" index="3">
-          <div>
+        <div class="message"   index="3">
+          <div v-if="voice_prompt">
             <i class="el-icon-warning"></i>
             <span>11</span>
           </div>
-          <div>
-            <i class="el-icon-message"></i>
+          <div v-if="system_message_receiving">
+            <i class="el-icon-message"  ></i>
             <span>4</span>
           </div>
         </div>
@@ -92,6 +92,8 @@
               roleList:[],
               roleValue:'',
               isFromBack:false,
+              system_message_receiving:false,//消息
+              voice_prompt:false,//语音提示
             }
         },
         methods:{
@@ -167,6 +169,8 @@
         },
         created(){
            this.user_info = JSON.parse( localStorage.getItem("user_info"))
+           this.system_message_receiving= this.user_info.permission_system_message_receiving=='true'
+           this.voice_prompt= this.user_info.permission_voice_prompt=='true'
         },
         mounted() {
             this.isFromBack = localStorage.getItem("login_type")=='back'//是否来自后台
