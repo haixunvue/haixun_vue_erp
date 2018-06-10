@@ -307,11 +307,13 @@
 
       },
       company_money_recharge_channel_list: function(){
-            this.$http.post(this.api.company_money_recharge_channel_list,{
+            this.$http.post(this.api.company_money_recharge_channel_list_paging,{
             user_token:this.user_token,
             user_id:this.user_id,
+            page:0,  //页码
+            pageSize:1000,
             }).then((res)=>{
-                console.log('company_money_recharge_channel_list',res);
+                console.log('company_money_recharge_channel_list_paging',res);
                 if(res.is_success){
                     this.options1 = res.value;
                 }else{

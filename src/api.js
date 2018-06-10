@@ -37,6 +37,7 @@ const api={
     'company_staff_linker_list':'/apis/v1807g/company_staff_linker/list',
     'company_staff_linker_add':'/apis/v1807g/company_staff_linker/add',
     'company_money_recharge_channel_list':'/apis/v1807g/company_money_recharge_channel/list',
+    'company_money_recharge_channel_list_paging':'/apis/v1807g/company_money_recharge_channel/list/paging',
     'company_staff_linker_delete':'/apis/v1807g/company_staff_linker/delete',
     'company_staff_set_infos':'/apis/v1807g/company_staff/set_infos',
     'company_money_recharge_add':'/apis/v1807g/company_money_recharge/add',
