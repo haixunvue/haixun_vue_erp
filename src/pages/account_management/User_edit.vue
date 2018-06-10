@@ -194,7 +194,10 @@
           },
           addCompany(){
             router.push({
-              path:'/main/company_info'
+              path:'/main/company_info',
+              query: {
+                 owner_user_id: this.id
+              }
             })
           },
           handleSizeChange: function (size) {
