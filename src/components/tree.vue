@@ -469,7 +469,7 @@
         this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
           if(res.is_success){
             this.staff_selected = res.value
-            //this.company_staff_list();
+            this.company_staff_list();
              this.showSavePermissionBtn=false
 
           }
@@ -496,7 +496,7 @@
         this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
           if(res.is_success){
             this.staff_selected = res.value
-            //this.company_staff_list();
+            this.company_staff_list();
              this.showSavePermissionBtn=false
 
           }
