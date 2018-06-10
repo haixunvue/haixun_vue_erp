@@ -102,8 +102,6 @@
       return {
         data: [],
         schfilter:"",
-        data2:[],
-        data3:[],
         search_text:'',
         totalCount:0,
         currentPage:1,

@@ -83,11 +83,11 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="用户资产(公司)" name="third">
-        <el-input style="width: 200px"></el-input>
+        <el-input  v-model="search_text" style="width: 200px"></el-input>
         <el-button>搜索</el-button>
         <el-button>添加公司</el-button>
         <el-table
-          :data="data"
+          :data="company_list"
           border
           style="width: 100%"
           :default-sort = "{prop: 'right', order: 'descending'}"
@@ -166,7 +166,7 @@
             totalCount:0,
             currentPage:1,
             pagesize:5,
-            data: [],
+            company_list: [],
             userInfo:null,
             sex:'',
               birth:'',
@@ -185,13 +185,7 @@
               common_permissionList:common_permission,
               common_permissionList_selected:[],
             },
-            form: {
-              name: '老刘',
-              username:'admin1',
-              right:'超级管理员',
-              order:'20',
-              money:1000.00
-            }
+            search_text:''
           }
         },
         methods: {
@@ -201,9 +195,11 @@
           handleSizeChange: function (size) {
             this.currentPage = 1;
             this.pagesize = size;
+            this.company_list_paging()
           },
           handleCurrentChange: function(currentPage){
             this.currentPage = currentPage;
+            this.company_list_paging()
           },
           account_get_infos(){
             let params={
@@ -364,6 +360,26 @@
           this.userPermission.common_permissionList_selected=common_permissionList_selected;
           
           
+          },
+          company_list_paging(){
+              let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+              target_user_id:this.id,
+            }
+            if(this.search_text){
+              params.search_text=this.search_text
+            }
+            this.$http.post(this.api.company_list_paging,params).then((res)=>{
+              if(res.is_success){
+                this.company_list = res.value.list;
+                this.totalCount = res.value.totalCount;
+              }else{
+                this.company_list=[];
+              }
+            })
           }
 
         },
@@ -375,6 +391,7 @@
             this.id= this.$route.query.id
             this.account_get_infos()
             this.init_permission()
+            this.company_list_paging()
         },
       }
 </script>
