@@ -83,9 +83,9 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="用户资产(公司)" name="third">
-        <el-input  v-model="search_text" style="width: 200px"></el-input>
-        <el-button>搜索</el-button>
-        <el-button>添加公司</el-button>
+        <el-input size="mini" v-model="search_text" style="width: 200px"></el-input>
+        <el-button size="mini">搜索</el-button>
+        <el-button size="mini" @click="addCompany()">添加公司</el-button>
         <el-table
           :data="company_list"
           border
@@ -99,7 +99,7 @@
           >
           </el-table-column>
           <el-table-column
-            prop="companyName"
+            prop="company_full_name"
             label="公司全称"
             sortable
           >
@@ -192,6 +192,11 @@
           handleClick(tab, event) {
 
           },
+          addCompany(){
+            router.push({
+              path:'/main/company_info'
+            })
+          },
           handleSizeChange: function (size) {
             this.currentPage = 1;
             this.pagesize = size;
@@ -210,7 +215,7 @@
             this.$http.post(this.api.account_get_infos,params).then((res)=>{
               if(res.is_success){
                 this.userInfo = res.value;
-                
+
                 this.set_user_infos()
                 this.set_selected_permission()
               }
@@ -269,7 +274,7 @@
         }else{
           params['permission_backstage']= 'false'
         }
- 
+
         //-----boss
         this.userPermission.boss_permissionList.map(item=>{
             params[item.permission]= "false";
@@ -304,7 +309,7 @@
         this.$http.post(this.api.account_set_infos,params).then((res)=>{
               console.log(res);
               if(res.is_success){
-                
+
               }else{
 
               }
@@ -327,39 +332,39 @@
           this.userPermission.admin_permissionList.filter((item)=>{
             if(this.userInfo[item.permission]=='true'){
                 admin_permissionList_selected.push(item.permission)
-            }      
+            }
           })
           this.userPermission.admin_permissionList_selected=admin_permissionList_selected;
-          
+
           //公司管理  选中
           let boss_permissionList_selected= []
           this.userPermission.boss_permissionList.filter((item)=>{
             if(this.userInfo[item.permission]=='true'){
                 boss_permissionList_selected.push(item.permission)
-            }      
+            }
           })
           this.userPermission.boss_permissionList_selected=boss_permissionList_selected;
-          
+
            //推广管理  选中
           let popularize_permissionList_selected= []
           this.userPermission.popularize_permissionList.filter((item)=>{
             if(this.userInfo[item.permission]=='true'){
                 popularize_permissionList_selected.push(item.permission)
-            }      
+            }
           })
           this.userPermission.popularize_permissionList_selected=popularize_permissionList_selected;
-          
+
 
            //通用管理  选中
           let common_permissionList_selected= []
           this.userPermission.common_permissionList.filter((item)=>{
             if(this.userInfo[item.permission]=='true'){
                 common_permissionList_selected.push(item.permission)
-            }      
+            }
           })
           this.userPermission.common_permissionList_selected=common_permissionList_selected;
-          
-          
+
+
           },
           company_list_paging(){
               let params = {

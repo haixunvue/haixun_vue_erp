@@ -35,6 +35,8 @@ const C_Preport = r => require.ensure([], () => r(require('../pages/company/Prep
 const company_home = r => require.ensure([], () => r(require('../pages/company/company_home')), 'company_home');
 const company_product = r => require.ensure([], () => r(require('../pages/company/company_product')), 'company_product');
 const fbm_order = r => require.ensure([], () => r(require('../pages/company/fbm_order')), 'fbm_order');
+const fba_order = r => require.ensure([], () => r(require('../pages/company/fba_order')), 'fba_order');
+const company_info = r => require.ensure([], () => r(require('../pages/company/company_info')), 'company_info');
 
 //commodity
 const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
@@ -48,7 +50,6 @@ const Cd_product_add = r => require.ensure([], () => r(require('../pages/commodi
 const Cd_order_list = r => require.ensure([], () => r(require('../pages/commodity/Order_list')), 'Cd_order_list');
 const Cd_order_list2 = r => require.ensure([], () => r(require('../pages/commodity/Order_list2')), 'Cd_order_list2');
 const Cd_order_list_boss = r => require.ensure([], () => r(require('../pages/commodity/Order_list_boss')), 'Cd_order_list_boss');
-const fba_order = r => require.ensure([], () => r(require('../pages/company/fba_order')), 'fba_order');
 const Cd_order_edit = r => require.ensure([], () => r(require('../pages/commodity/Order_edit')), 'Cd_order_edit');
 const Cd_order_add = r => require.ensure([], () => r(require('../pages/commodity/Order_add')), 'Cd_order_add');
 const cost_reconciliation = r => require.ensure([], () => r(require('../pages/financial_management/cost_reconciliation')), 'cost_reconciliation');
@@ -191,6 +192,9 @@ export default new Router({
                 },{
                    path: 'fba_order',
                    component: fba_order,
+                },{
+                   path: 'company_info',
+                   component: company_info,
                 },{
                    path: 'Cd_order_edit',
                    component: Cd_order_edit,
