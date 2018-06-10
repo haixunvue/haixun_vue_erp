@@ -21,7 +21,7 @@
             <el-option
               v-for="(item,index) in roleList"
               :value="index"
-              :label="item.showName"
+              :label="item._title"
               :key="index"
             >
             </el-option>
@@ -98,10 +98,9 @@
         },
         methods:{
           changeValue(){
-            console.log(this.roleList[Number(this.roleValue)].menutype)
             let role_item = this.roleList[Number(this.roleValue)]
             this.updataIdInfo(role_item)         
-            this.updateMenu(role_item.menutype)
+            this.updateMenu(role_item._type)
           },
              get_account_role(){
                 this.$http.post(this.api.account_role,{
@@ -114,32 +113,16 @@
                      return;
                    }
 
-                   let role_list = []
-                    res.value.companys.map((item)=>{
-                          if(item){
-                            item.showName='老板-'+item.company_short_name;
-                            item.isBoss = true;
-                            item.menutype = 'boss';
-                            role_list.push(item)
-                          }
-                            
-                    })
-                    res.value.staffs.map((item)=>{
-                      if(item){
-                            item.showName='员工-'+item.name;
-                            item.isBoss = false;
-                            item.menutype = 'staff';
-                            role_list.push(item)
-                      }
-                    })
-                   this.roleList = role_list;
-                   if(role_list.length>0){
+                  if(res.value.length>0){
                     this.roleValue=0;
-                    this.updataIdInfo(role_list[0])
-                   this.updateMenu(role_list[0].menutype);
+                    this.updataIdInfo(res.value[0])
+                   this.updateMenu(res.value[0]._type);
                    }else{
                      this.updateMenu('staff');
                    }
+                   
+                   this.roleList = res.value;
+                 
 
                 })
             },
