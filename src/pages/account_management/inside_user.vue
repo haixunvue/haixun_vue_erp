@@ -9,7 +9,7 @@
 <div class="content">
   <h1>内部员工</h1>
   <div class="line"></div>
-  <el-form :inline="true" :model="form" label-width="80px" size="mini">
+  <el-form :inline="true" label-width="80px" size="mini">
     <el-form-item>
       <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">
       </el-input>
