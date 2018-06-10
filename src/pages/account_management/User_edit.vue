@@ -28,15 +28,15 @@
             <el-input v-model="email"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="setUserInfo">保存</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="account_set_infos">保存</el-button>
+            <el-button @click="set_user_infos">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="用户权限" name="second">
         <el-form class="user-permission" label-position="top" :model="userPermission" label-width="80px">
           <el-form-item label="推广:">
-             <el-checkbox-group  v-model="userPermission.popularize_permissionList_select">
+             <el-checkbox-group  v-model="userPermission.popularize_permissionList_selected">
                 <el-checkbox
                   v-for ="(item,index) in userPermission.popularize_permissionList"
                   v-if ="item.permission"
@@ -77,8 +77,8 @@
               </el-checkbox-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">保存</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="setUserPermission">保存</el-button>
+            <el-button @click="set_selected_permission">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -181,7 +181,7 @@
               boss_permissionList:[],
               boss_permissionList_selected:[],
               popularize_permissionList:popularize_permission,
-              popularize_permissionList_select:[],
+              popularize_permissionList_selected:[],
               common_permissionList:common_permission,
               common_permissionList_selected:[],
             },
@@ -215,17 +215,24 @@
               if(res.is_success){
                 this.userInfo = res.value;
                 
-                this.sex=res.value.sex
-                this.birth=res.value.birth
-                this.blood=res.value.blood
-                this.location=res.value.location
-                this.phone_number=res.value.phone_number
-                this.qq_number=res.value.qq_number
-                this.email=res.value.email
+                this.set_user_infos()
+                this.set_selected_permission()
               }
             })
           },
-          setUserInfo(){
+          set_user_infos(){
+            if(!this.userInfo){
+              return;
+            }
+                this.sex=this.userInfo.sex
+                this.birth=this.userInfo.birth
+                this.blood=this.userInfo.blood
+                this.location=this.userInfo.location
+                this.phone_number=this.userInfo.phone_number
+                this.qq_number=this.userInfo.qq_number
+                this.email=this.userInfo.email
+          },
+          account_set_infos(){
            let params={
                user_token:this.user_token,
               user_id:this.user_id,
@@ -240,14 +247,73 @@
             }
             console.log('setUserInfo',params)
             this.$http.post(this.api.account_set_infos,params).then((res)=>{
-              console.log(res);
               if(res.is_success){
-                console.log(res);
+                 this.userInfo = res.value;
+                 this.set_user_infos()
+                this.set_selected_permission()
               }else{
 
               }
             })
           },
+        setUserPermission(){
+          let params={
+            user_token:this.user_token,
+            user_id:this.user_id,
+            target_id:this.id,
+          }
+        this.userPermission.admin_permissionList.map(item=>{
+            params[item.permission]= "false";
+        })
+        if(this.userPermission.admin_permissionList_selected.length>0){
+           params['permission_backstage']= 'true'
+          this.userPermission.admin_permissionList_selected.map(item=>{
+            params[item]= "true";
+          })
+        }else{
+          params['permission_backstage']= 'false'
+        }
+ 
+        //-----boss
+        this.userPermission.boss_permissionList.map(item=>{
+            params[item.permission]= "false";
+        })
+        if(this.userPermission.boss_permissionList_selected.length>0){
+          params['permission_company']= 'true'
+            this.userPermission.boss_permissionList_selected.map(item=>{
+            params[item]= "true";
+            })
+        }else{
+            params['permission_company']= 'false'
+        }
+
+
+        //-----
+        this.userPermission.popularize_permissionList.map(item=>{
+            params[item.permission]= "false";
+        })
+
+        this.userPermission.popularize_permissionList_selected.length>0&&this.userPermission.popularize_permissionList_selected.map(item=>{
+            params[item]= "true";
+        })
+        //-----
+        this.userPermission.common_permissionList.map(item=>{
+            params[item.permission]= "false";
+        })
+
+        this.userPermission.common_permissionList_selected.length>0&&this.userPermission.common_permissionList_selected.map(item=>{
+            params[item]= "true";
+        })
+
+        this.$http.post(this.api.account_set_infos,params).then((res)=>{
+              console.log(res);
+              if(res.is_success){
+                
+              }else{
+
+              }
+            })
+        },
           init_permission(){
            this.userPermission.admin_permissionList=menu_admin.filter((item)=>{
               return item.permission;
@@ -256,6 +322,49 @@
               return item.permission;
            })
           },
+          set_selected_permission(){
+            if(!this.userInfo){
+              return;
+            }
+            //后台管理  选中
+          let admin_permissionList_selected= []
+          this.userPermission.admin_permissionList.filter((item)=>{
+            if(this.userInfo[item.permission]=='true'){
+                admin_permissionList_selected.push(item.permission)
+            }      
+          })
+          this.userPermission.admin_permissionList_selected=admin_permissionList_selected;
+          
+          //公司管理  选中
+          let boss_permissionList_selected= []
+          this.userPermission.boss_permissionList.filter((item)=>{
+            if(this.userInfo[item.permission]=='true'){
+                boss_permissionList_selected.push(item.permission)
+            }      
+          })
+          this.userPermission.boss_permissionList_selected=boss_permissionList_selected;
+          
+           //推广管理  选中
+          let popularize_permissionList_selected= []
+          this.userPermission.popularize_permissionList.filter((item)=>{
+            if(this.userInfo[item.permission]=='true'){
+                popularize_permissionList_selected.push(item.permission)
+            }      
+          })
+          this.userPermission.popularize_permissionList_selected=popularize_permissionList_selected;
+          
+
+           //通用管理  选中
+          let common_permissionList_selected= []
+          this.userPermission.common_permissionList.filter((item)=>{
+            if(this.userInfo[item.permission]=='true'){
+                common_permissionList_selected.push(item.permission)
+            }      
+          })
+          this.userPermission.common_permissionList_selected=common_permissionList_selected;
+          
+          
+          }
 
         },
         mounted() {
