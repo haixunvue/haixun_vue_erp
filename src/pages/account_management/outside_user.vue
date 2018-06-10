@@ -25,13 +25,13 @@
       :default-sort = "{prop: 'right', order: 'descending'}"
     >
       <el-table-column
-        prop="name"
+        prop="username"
         label="姓名"
         sortable
       >
       </el-table-column>
       <el-table-column
-        prop="username"
+        prop="idcard_number"
         label="身份账号"
         sortable
       >
@@ -49,19 +49,19 @@
       >
       </el-table-column>
       <el-table-column
-        prop="tel"
+        prop="qq_number"
         label="QQ"
         sortable
       >
       </el-table-column>
       <el-table-column
-        prop="idcardnum"
+        prop="email"
         label="邮箱"
         sortable
       >
       </el-table-column>
       <el-table-column
-        prop="idcardnum"
+        prop="phone_number"
         label="手机号码"
         sortable
       >
