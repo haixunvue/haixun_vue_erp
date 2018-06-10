@@ -89,7 +89,7 @@
         <el-table
           :data="company_list"
           border
-          style="width: 100%"
+          style="width: 100%;margin-top: 20px"
           :default-sort = "{prop: 'right', order: 'descending'}"
         >
           <el-table-column
@@ -130,11 +130,10 @@
           </el-table-column>
           <el-table-column
             fixed="right"
-            label="操作"
-            width="125">
+            label="操作">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-edit" @click="editCompany(scope.row.id)" size="small">详情</el-button>
-              <el-button icon="el-icon-edit" @click="deleteCompany(scope.row.id)" size="small">删除</el-button>
+              <el-button icon="el-icon-delete" @click="deleteCompany(scope.row.id)" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

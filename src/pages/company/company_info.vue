@@ -13,9 +13,9 @@
   </div>
 
   <div class="line"></div>
-  <el-form  label-width="110px">
-    <el-form-item label="公司ID">
-      <el-input v-model="company_id"></el-input>
+  <el-form class="company-info" label-width="110px">
+    <el-form-item v-if="is_edit" label="公司ID">
+      <span>{{company_id}}</span>
     </el-form-item>
     <el-form-item label="企业全称">
       <el-input v-model="company_full_name"></el-input>
@@ -164,7 +164,7 @@
             }
           })
         },
-          
+
         },
       mounted() {
         this.owner_company_id = localStorage.getItem("owner_company_id")
@@ -182,11 +182,14 @@
           this.title= '新增公司'
           this.is_edit= false;
         }
-        
+
       },
       }
 </script>
 <style scoped>
+  .company-info{
+    width: 40%;
+  }
     .line{
       margin: 20px 0;
       border-top: 1px solid #dcdfe6;
