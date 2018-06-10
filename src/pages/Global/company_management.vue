@@ -19,57 +19,57 @@
     >
     <el-table-column
       fixed
-      prop="name"
-      label="ID"
+      prop="id"
+      label="id"
       sortable
       width="130"
       size="mini"
       >
     </el-table-column>
     <el-table-column
-      prop="name"
-      label="公司名"
+           prop="company_full_name"
+            label="公司全称"
       sortable
       width="130"
       >
     </el-table-column>
     <el-table-column
-      prop="regmoney"
+      prop="registered_capital"
       label="注册资金/万(¥)"
       sortable
       width="140"
       >
     </el-table-column>
     <el-table-column
-      prop="reg_address"
+      prop="company_address"
       label="注册地点"
       sortable
       width="110"
       >
     </el-table-column>
     <el-table-column
-      prop="legalp"
+      prop="legal_person"
       label="法人名称"
       sortable
       width="110"
       >
     </el-table-column>
     <el-table-column
-      prop="range"
+      prop="scope_operation"
       label="经营范围"
       sortable
       width="110"
       >
     </el-table-column>
     <el-table-column
-      prop="work_address"
+      prop="company_address"
       label="办公地址"
       sortable
       width="300"
       >
     </el-table-column>
     <el-table-column
-      prop="tel"
+      prop="company_contact_number"
       label="电话"
       sortable
       width="110"
