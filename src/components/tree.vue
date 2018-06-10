@@ -267,6 +267,15 @@
             }      
           })
           this.selected_permission=selected_permission;
+
+          let shop_list_selected= []
+          this.shop_list.filter((item)=>{
+            
+            if(this.staff_selected['permissions_shop_id_'+item.id]=='true'){
+                shop_list_selected.push(item.id)
+            }      
+          })
+          this.shop_list_selected=shop_list_selected;
           //this.company_staff_get_infos();
           this.company_staff_linker_list();
 
@@ -442,6 +451,7 @@
         })
       },
       company_staff_set_permission(){
+        //模块权限
         let params={
           user_token:this.user_token,
           user_id:this.user_id,
@@ -459,7 +469,7 @@
         this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
           if(res.is_success){
             this.staff_selected = res.value
-            this.company_staff_list();
+            //this.company_staff_list();
              this.showSavePermissionBtn=false
 
           }
@@ -467,6 +477,31 @@
         })
       },
       company_staff_set_Shop(){
+        //店铺权限
+        let params={
+          user_token:this.user_token,
+          user_id:this.user_id,
+          target_id:this.staff_selected.id,
+        }
+       
+        this.shop_list.map(item=>{
+            params['permissions_shop_id_'+item.id]= "false";
+        })
+
+        this.shop_list_selected.length>0&&this.shop_list_selected.map(item=>{
+            params['permissions_shop_id_'+item]= "true";
+        })
+
+
+        this.$http.post(this.api.company_staff_set_infos,params).then((res)=>{
+          if(res.is_success){
+            this.staff_selected = res.value
+            //this.company_staff_list();
+             this.showSavePermissionBtn=false
+
+          }
+          console.log('res',res)
+        })
 
       },
       company_shop_list(){
