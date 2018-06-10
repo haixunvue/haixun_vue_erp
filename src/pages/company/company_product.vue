@@ -38,27 +38,20 @@
       :default-sort="{prop: 'cname', order: 'descending'}"
       align="center"
       size="mini"
-      
     >
       <el-table-column
-        fixed
-        prop="id"
+        type="selection"
+        width="55"
         label="选择"
-        width="220px"
-
       >
-        <template slot-scope="scope">
-          <el-checkbox ></el-checkbox>
-        </template>
       </el-table-column>
       <el-table-column
         prop="pic"
-        label="产品信息"
-        width="300px"
+        label="产品"
+        width="100"
       >
         <template slot-scope="scope">
-          <div class="left" style="width:45px;height:45px;background:#ccc">
-
+          <!--<div class="left" style="width:45px;height:45px;background:#ccc">
           </div>
           <div class="right">
             <div>
@@ -67,91 +60,62 @@
             <div>
               SKU: JIANGU001923beige
             </div>
-          </div>
+          </div>-->
         </template>
       </el-table-column>
       <el-table-column
         prop="cost"
-        label="成本(¥)"
+        label="标题"
 
       >
       </el-table-column>
       <el-table-column
         prop="profit"
-        label="利润(¥)"
+        label="SKU"
 
       >
       </el-table-column>
       <el-table-column
         prop="buy_data"
-        label="下单时间"
+        label="价格"
         width="155"
       >
       </el-table-column>
       <el-table-column
         prop="shop"
-        label="店铺"
+        label="库存"
         width="100"
       >
       </el-table-column>
       <el-table-column
-        prop="amazon"
-        label="Amazon"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="international_order"
-        label="国际运单"
-        width="200"
+        label="图片"
       >
         <template slot-scope="scope">
-          <el-popover trigger="hover" placement="right">
-            <p class="order-box-title">顺丰快递:238923489732748970234</p>
-            <div slot="reference">
-              单号: {{ scope.row.international_order}} <br/>
-              <span>未发货</span>
+            <div>
+              单号: {{ scope.row.buy_data}} <br/>
             </div>
-          </el-popover>
         </template>
       </el-table-column>
       <el-table-column
         prop="international_order"
-        label="国内运单"
+        label="来源"
         width="200"
-      >
-        <template slot-scope="scope">
-          <el-popover trigger="hover" placement="right">
-            <p class="order-box-title">顺丰快递:238923489732748970234</p>
-            <div slot="reference">
-              单号:{{ scope.row.international_order}} <br/>
-              <span>已发货</span>
-            </div>
-          </el-popover>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="count"
-        label="数量"
-        width="50"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="updata_data"
-        label="更新时间"
-        width="155"
       >
       </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
-        width="65">
+        width="150">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="open" size="mini"></el-button>
-          <!-- <el-button type="danger" icon="el-icon-delete"  size="mini"></el-button> -->
+          <el-button type="danger" icon="el-icon-delete"  size="mini"></el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
+
+
+
+    <!--<el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
@@ -159,247 +123,19 @@
       :page-size="pagesize"
       layout="total, sizes, prev, pager, next, jumper"
       style="clear:both;text-align:center">
-    </el-pagination>
+    </el-pagination>-->
+
+
+
+
     <!--弹窗区域-->
-    <el-dialog title="订单详情 - ID:47839" :visible.sync="dialogTableVisible" width="80%">
-      <!--内部弹窗区域-->
-      <el-dialog
-        width="60%"
-        title="国际运单"
-        :visible.sync="innerVisible"
-        append-to-body
-        class="inline-dialog">
-        <div class="inner-goods clear">
-          <img class="inner-goods-img" src="/static/images/lcLU0ZgiTa.png" alt=""/>
-          <div class="inner-goods-text">
-            <p>GAZHFERY Big Head Cap Hat Male Flat Hat Large Baseball Cap Sunscreen Be Deepening Incre</p>
-            <span>SKU:GFF-BAAFG-731042-06&nbsp;&nbsp;&nbsp;数量:1</span>
-          </div>
-          <div class="inner-goods-right">
-            <p>运输数量<span v-if="isDetil">&nbsp;&nbsp;&nbsp;1</span></p>
-            <el-input-number size="mini" v-model="num" v-if="isAdd"></el-input-number>
-          </div>
-        </div>
-        <div class="synchronous" v-if="isDetil">
-          同步成功&nbsp;&nbsp;&nbsp;未发货
-        </div>
-        <div class="inner-input-item clear">
-          <div class="inner-input-item-left">
-            <span>中文:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-          <div class="inner-input-item-right">
-            <span>英文:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-        </div>
-        <div class="inner-input-item clear">
-          <div class="inner-input-item-left">
-            <span>重量:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-          <div class="inner-input-item-right">
-            <span>体积:</span>
-            <el-input size="mini" style="width:50px"></el-input>&nbsp;&nbsp;x&nbsp;&nbsp;
-            <el-input size="mini" style="width:50px"></el-input>&nbsp;&nbsp;x&nbsp;&nbsp;
-            <el-input size="mini" style="width:50px"></el-input>
-          </div>
-        </div>
-        <!--<div class="inner-input-item clear" v-if="isAdd">
-          <div class="inner-input-item-left">
-            <span>物流:</span>
-            <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            <el-button type="success" size="mini" class="add-btn">生成运单</el-button>
-          </div>
-        </div>-->
-        <div class="inner-input-item clear" v-if="isDetil">
-          <div class="inner-input-item-left">
-            <span>运单:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-          <div class="inner-input-item-right">
-            <span>追踪:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-        </div>
-        <div class="inner-input-item clear" style="margin-bottom:100px;border:none" v-if="isAdd">
-          <div class="inner-input-item-left">
-            <span>运单:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-          <div class="inner-input-item-right">
-            <span>追踪:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-          </div>
-        </div>
-        <div class="inner-input-item clear" style="margin-bottom:100px;border:none" v-if="isDetil">
-          <div class="inner-input-item-left">
-            <span>备注:</span>
-            <el-input placeholder="请输入内容" size="mini"></el-input>
-            <el-button size="mini" class="add-btn">保存备注</el-button>
-          </div>
+    <el-dialog title="产品详情" :visible.sync="dialogTableVisible" width="80%">
 
-        </div>
-      </el-dialog>
-      <p>店铺：gaoya(德国)&nbsp;&nbsp;&nbsp;Amazon：发货&nbsp;&nbsp;&nbsp;购买日期：2018/05/09 03:47&nbsp;&nbsp;&nbsp;AmazonID：305-1226403-5312348</p>
-      <div class="speed-of-progress">
-        <el-steps :active="2" align-center>
-          <el-step title="待确定" description="待确定"></el-step>
-          <el-step title="已支付" description="已支付"></el-step>
-          <el-step title="虚发货" description="虚发货"></el-step>
-          <el-step title="已采购" description="已采购"></el-step>
-          <el-step title="已签收" description="已签收"></el-step>
-          <el-step title="国际已发货" description="国际已发货"></el-step>
-          <el-step title="已完成" description="已完成"></el-step>
-        </el-steps>
-      </div>
-      <div class="goods-box clear">
-        <div class="goods-item clear" v-for="(item,index) in goodsData">
-          <img class="goods-item-pic" :src=item.picUrl alt=""/>
-          <div class="goods-item-text">
-            <a href="">{{item.name}}</a>
-            <p>SKU:{{item.sku}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数量:{{item.count}}</p>
-            <div class="edit-input" v-if="isEdit">
-              <el-input size="mini" placeholder="请输入内容" v-model="item.purchasePrice" class="el-input">
-                <template slot="prepend">采购价</template>
-              </el-input>
-              <el-input size="mini" placeholder="请输入内容" v-model="item.wayBill" class="el-input">
-                <template slot="prepend">运单号</template>
-              </el-input>
-            </div>
-            <p v-else>采购价(¥):{{item.purchasePrice}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;运单:{{item.wayBill}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物流:{{item.logIstics}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发货日期:{{item.dataTime}}</p>
-
-          </div>
-          <div class="goods-item-edit">
-            <h4>待签收</h4>
-            <div v-if="isEdit">
-              <el-button type="text" class="eidt-btn" @click="pre">保存</el-button>
-              <el-button type="text" class="eidt-btn" @click="isEdit = false">取消</el-button>
-            </div>
-            <div v-else>
-              <el-button type="text" class="eidt-btn" @click="edit">采购编辑</el-button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="address">
-        <div class="address-pred">
-          <p>收件人/地址：德国
-            <span class="eidtAddress-btn" v-if="isEditAddress"><el-button type="text">保存</el-button><el-button
-              type="text" @click="isEditAddress = false">取消</el-button></span>
-            <span class="eidtAddress-btn" v-else><el-button type="text" @click="editAddress">编辑</el-button></span>
-
-          </p>
-        </div>
-        <div v-if="!isEditAddress">
-          <div><span>收件人:Hubert Marsmann</span><span>TEL:08122-9598731</span><span>ZIP:85435</span></div>
-          <div>
-            <span>州:Bayern</span><span>市:Erding</span><span> 街道:Küchenschmiede Erding e.K.</span><span>地址:Am Gries 4</span>
-          </div>
-        </div>
-        <div class="address-input" v-else>
-          <div>
-            <el-input size="mini" placeholder="请输入内容" style="width:200px;margin-bottom:10px">
-              <template slot="prepend">联系人</template>
-            </el-input>
-            <el-input size="mini" placeholder="请输入内容" style="width:200px">
-              <template slot="prepend">电话号</template>
-            </el-input>
-            <el-input size="mini" placeholder="请输入内容" style="width:200px">
-              <template slot="prepend">邮编</template>
-            </el-input>
-          </div>
-          <div>
-            <el-input size="mini" placeholder="请输入内容" style="width:200px;margin-bottom:10px">
-              <template slot="prepend">州</template>
-            </el-input>
-            <el-input size="mini" placeholder="请输入内容" style="width:200px">
-              <template slot="prepend">市</template>
-            </el-input>
-            <el-input size="mini" placeholder="请输入内容" style="width:200px">
-              <template slot="prepend">街道门派</template>
-            </el-input>
-          </div>
-          <el-input size="mini" placeholder="请输入内容" style="width:610px">
-            <template slot="prepend">地址</template>
-          </el-input>
-        </div>
-      </div>
-      <div class="order-amount">
-        订单金额:[EUR]47.24 - Amazon佣金: [EUR]7.08 = 到账: [EUR]40.16
-      </div>
-      <div class="waybill">
-        <div class="waybill-title">
-          <span>国际运单</span>
-          <el-button type="text" @click="addWaybill">添加</el-button>
-        </div>
-        <div class="waybill-item">
-          <div class="waybill-item-top">
-            <span>运单号:YT1812926306500138</span>
-            <span>追踪号:</span>
-            <span class="waybill-item-top-right">
-                    <span>未发货</span>
-                    <span>未同步</span>
-                    <span>2018/05/10</span>
-                </span>
-          </div>
-          <div class="waybill-item-bottom">
-            <span>线路:[云途]德国专线挂号[DEZXR]</span>
-            <span>发货日期:</span>
-            <span class="waybill-item-bottom-right">
-                    <el-button type="text">作废</el-button>
-                    <el-button type="text">打印</el-button>
-                    <el-button type="text" @click="addDetail">明细</el-button>
-                </span>
-          </div>
-        </div>
-      </div>
-      <div class="tab-box">
-        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="内部备注" name="first">
-            <el-input
-              type="textarea"
-              :rows="3"
-              placeholder="请输入内容"
-              v-model="textarea"
-              class="textarea">
-            </el-input>
-            <!--<el-select v-model="value" placeholder="请选择" size="mini" class="select">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>-->
-            <el-button type="success" size="mini" class="add-btn">添加</el-button>
-          </el-tab-pane>
-          <el-tab-pane label="客户邮件" name="second">
-            <div class="email-item">无客户邮件</div>
-          </el-tab-pane>
-          <el-tab-pane label="操作日志" name="third">
-            <div class="log-item">
-              <span class="log-item-name">postyuntu:</span>
-              <span>国内物流签收</span>
-              <span class="log-item-time">05/09 11:38</span>
-            </div>
-            <div class="log-item">
-              <span class="log-item-name">postyuntu:</span>
-              <span>国内物流签收</span>
-              <span class="log-item-time">05/09 11:38</span>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import router from "../../router";
-
   export default {
     data() {
       return {
@@ -469,7 +205,6 @@
           }
         ],
         activeName: 'first',
-        textarea: '',
         options1: [
           {
             value: '0',
@@ -493,6 +228,14 @@
         isDetil: false,
         radio: 1
       }
+    },
+    created(){
+      this.$http.post(this.api.product_list,{
+        user_token:localStorage.getItem('user_token'),
+        user_id:localStorage.getItem('user_id')
+      }).then((res)=>{
+        console.log(res);
+      })
     },
     methods: {
       handleSizeChange: function (size) {

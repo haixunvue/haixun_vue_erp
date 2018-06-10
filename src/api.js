@@ -52,6 +52,7 @@ const api={
 
     'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
     'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息
+    'product_list':'/apis/v1807g/product/list/paging',   // 产品列表
 
 };
 export default api;
