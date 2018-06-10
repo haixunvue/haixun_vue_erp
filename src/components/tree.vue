@@ -220,8 +220,29 @@
         }).then((res)=>{
           console.log('company_staff_list',res);
           if(res.is_success){
-            this.$set(this.staff_list[0], 'children', res.value)
-            // this.staff_list.children=res.value
+            if(res.value.length<=0){
+                this.$set(this.staff_list[0], 'children', res.value)
+                return;
+            }
+            let null_department_staffs=[];//没有分配部门
+            let has_department_staffs={};//有分配部门
+            res.value.map((item)=>{
+              if(!item.staff_department){
+                null_department_staffs.push(item)
+              }else{
+                if(!has_department_staffs[item.staff_department]){
+                  has_department_staffs[item.staff_department]={staff_name: item.staff_department,children:[]}
+                }
+                has_department_staffs[item.staff_department].children.push(item)
+              }
+            })
+            let result = []
+            for(var key in has_department_staffs){
+              result.push(has_department_staffs[key])
+            }
+            result = result.concat(null_department_staffs)
+
+            this.$set(this.staff_list[0], 'children', result)
           }
         })
       },
@@ -255,10 +276,10 @@
       },
       renderContent(h, { node, data, store }) {
         let btnTitle = '';
-        if(data.staff_name=='总部'){
-          btnTitle = "添加新员工"
+        if(data.id){
+           btnTitle = '删除';     
         }else{
-          btnTitle = '删除';
+         btnTitle = "添加新员工"
         }
         return (<span class="custom-tree-node">
           <span>{data.staff_name}</span>
@@ -269,11 +290,10 @@
 
       },
       treeBtnClick(node, data, store){
-        if(data.staff_name=='总部'){
-          this.company_staff_add(node, data, store)
-
-        }else{
+        if(data.id){     
           this.company_staff_delete(node, data, store)
+        }else{
+           this.company_staff_add(node, data, store)
         }
       },
       company_staff_add(node, data, store){
@@ -284,7 +304,7 @@
           user_token:this.user_token,
           user_id:this.user_id,
           staff_name:'新员工',//   			员工名称
-          staff_department:'',// 		员工部门
+          staff_department:data.staff_name=='总部'?'':data.staff_name,// 		员工部门
           staff_notes:'',// 			员工备注
 
         }).then((res)=>{
