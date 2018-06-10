@@ -115,6 +115,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>员工店铺分配</span>
+             <el-button v-if="showSave_shop_list_Btn" type="primary" @click="company_staff_set_Shop">保存</el-button>  
           </div>
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item>
@@ -464,6 +465,9 @@
           }
           console.log('res',res)
         })
+      },
+      company_staff_set_Shop(){
+
       },
       company_shop_list(){
 
