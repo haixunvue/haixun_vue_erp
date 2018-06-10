@@ -10,6 +10,7 @@
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
                     v-model="datetime_start"
+                    size="mini"
                     @change="(val)=>{this.datetime_start=val}"
                     type="datetime"
                     value-format="yyyy-MM-dd hh:mm:ss"
@@ -22,6 +23,7 @@
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
                     v-model="datetime_end"
+                    size="mini"
                      @change="(val)=>{this.datetime_end=val}"
                     type="datetime"
                     value-format="yyyy-MM-dd hh:mm:ss"
@@ -46,7 +48,7 @@
               fit
             >
               <el-table-column
-                prop="name"
+                prop="id"
                 label="单据编号"
                 sortable
 
@@ -60,21 +62,21 @@
               >
               </el-table-column>
               <el-table-column
-                prop="amountCollected"
+                prop="money_number"
                 label="收款金额/¥"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="receivables"
+                prop="money_type"
                 label="收款币别"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="account"
+                prop="bank_card_number_receive"
                 label="收款帐户"
                 sortable
 
@@ -102,7 +104,7 @@
               >
               </el-table-column>
               <el-table-column
-                prop="data"
+                prop="_createTime"
                 label="日期"
                 sortable
 
@@ -183,7 +185,7 @@
         this.currentPage = currentPage;
         this.company_money_recharge_list()
       },
-   
+
       company_money_recharge_list(){
         let params = {
             user_token:this.user_token,
@@ -251,5 +253,8 @@
     display: inline-block;
     margin-left: 20px;
     font-size: 14px;
+  }
+  .el-button{
+    margin-left: 10px;
   }
 </style>

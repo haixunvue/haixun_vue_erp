@@ -20,6 +20,16 @@ export default  [
       {
         "routerName": "company_order",
         "name": "公司订单",
+        "list2": [
+          {
+            "routerName": "company_order",
+            "name": "FMB订单",
+          },
+          {
+            "routerName": "deductions_detail",
+            "name": "FBA订单",
+          }
+        ]
       }
     ]
   },

@@ -10,6 +10,7 @@
                   <span class="demonstration">开始时间：</span>
                   <el-date-picker
                     v-model="datetime_start"
+                    size="mini"
                     @change="(val)=>{this.datetime_start=val}"
                     type="datetime"
                     value-format="yyyy-MM-dd hh:mm:ss"
@@ -22,6 +23,7 @@
                   <span class="demonstration">结束时间：</span>
                   <el-date-picker
                     v-model="datetime_end"
+                    size="mini"
                     @change="(val)=>{this.datetime_end=val}"
                     type="datetime"
                     value-format="yyyy-MM-dd hh:mm:ss"
@@ -31,7 +33,7 @@
                   </el-date-picker>
                 </div>
               </div>
-              <div class="header-bottom">
+              <div class="header-top">
                 <el-select v-model="bank_card_number" placeholder="账户" size="mini" class="header-bottom-select">
                   <el-option v-for="(item,index) in options1" :key="index" :label="item.account_num" :value="item.account_num"></el-option>
                 </el-select>
@@ -69,35 +71,39 @@
               >
               </el-table-column>
               <el-table-column
-                prop="username"
+                prop="process_status"
                 label="是否审核"
                 sortable
-
               >
+                <template slot-scope="scope">
+                  <span v-if="scope.row.process_status=='none'">未处理</span>
+                  <span v-else-if="scope.row.process_result=='pass'">审核通过</span>
+                  <span v-else-if="scope.row.process_result=='nopass'">审核不通过</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="password"
+                prop="id"
                 label="单据编号"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="tel"
+                prop="bank_card_number_receive"
                 label="收款帐户"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="idcardnum"
+                prop="money_number"
                 label="报账金额"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="status"
+                prop="money_type"
                 label="报账币别"
                 sortable
 
@@ -111,20 +117,20 @@
               >
               </el-table-column>
               <el-table-column
-                prop="data"
+                prop="_createTime"
                 label="制单日期"
                 sortable
 
               >
               </el-table-column>
               <el-table-column
-                prop="remarks "
+                prop="notes"
                 label="备注"
                 sortable
 
               >
               </el-table-column>
-         
+
             </el-table>
             <el-pagination
               @size-change="handleSizeChange"
@@ -410,7 +416,6 @@
         }
 
         this.$http.post(this.api.company_money_recharge,params).then((res)=>{
-                console.log('list_data',res);
                 if(res.is_success){
                     this.list_data = res.value.list;
                     this.totalCount = res.value.totalCount;

@@ -43,11 +43,12 @@ const api={
     'cost_statistics_logistics_paging':'/apis/v1807g/company_money_cost_statistics_logistics/listall/paging',
     'cost_statistics_paging':'/apis/v1807g/company_money_cost_statistics/listall/paging',
     'cost_statistics_platform_paging':'/apis/v1807g/company_money_cost_statistics_platform/listall/paging',
+    'company_list_paging':'/apis/v1807g/company/list/paging',
 
     'account_staff_list':'/apis/v1807g/account/list/paging',
     'get_company_list':'/apis/v1807g/company/list',
-  'account_get_infos':'/apis/v1807g/account/get_infos',
-  'account_set_infos':'/apis/v1807g/account/set_infos',
+    'account_get_infos':'/apis/v1807g/account/get_infos',
+    'account_set_infos':'/apis/v1807g/account/set_infos',
 
     'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
     'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息

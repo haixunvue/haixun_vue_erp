@@ -59,7 +59,7 @@
           </div>
         </div>
         <el-submenu  class="user" index="4">
-          <template slot="title">{{name}} - {{status}}</template>
+          <template slot="title">{{name}} {{status}}</template>
           <el-menu-item index="4-1"  @click="Cd_User_edit3">修改密码</el-menu-item>
           <el-menu-item index="4-2" @click="goOut">安全退出</el-menu-item>
         </el-submenu>
