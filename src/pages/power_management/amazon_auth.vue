@@ -177,6 +177,7 @@
             this.$http.post(this.api.company_shop_list_paging,{
               user_token:this.user_token,
               user_id:this.user_id,
+              target_company_id:this.owner_company_id,
               page:this.currentPage-1,  //页码
               pageSize:this.pagesize,
             }).then((res)=>{
