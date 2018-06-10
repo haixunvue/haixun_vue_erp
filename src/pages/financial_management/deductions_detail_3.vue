@@ -67,22 +67,22 @@
             >
             </el-table-column>
             <el-table-column
-              prop=""
+              prop="order_id"
               label="订单ID"
             >
             </el-table-column>
             <el-table-columnid
-              prop="password"
+              prop="order_amount"
               label="订单金额"
             >
             </el-table-columnid>
             <el-table-column
-              prop="tel"
+              prop="refund_fee"
               label="退款费用"
             >
             </el-table-column>
             <el-table-column
-              prop="idcardnum"
+              prop="platform_fees"
               label="平台费用"
             >
             </el-table-column>

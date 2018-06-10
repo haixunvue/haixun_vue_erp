@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h1>公司订单</h1>
+    <h1>FBM订单</h1>
     <div class="line"></div>
     <div class="select-box">
       <el-row :gutter="10" style="margin-bottom:5px">

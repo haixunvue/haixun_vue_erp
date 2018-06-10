@@ -193,7 +193,7 @@
             target_company_id: this.owner_company_id,   		//目标公司
             page:this.currentPage-1,  //页码
             pageSize:this.pagesize,
-            process_status:'down_pass'
+            process_status:''
         }
         if(this.datetime_start){
             params.datetime_start=this.datetime_start;

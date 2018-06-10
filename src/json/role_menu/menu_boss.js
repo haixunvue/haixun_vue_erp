@@ -22,11 +22,11 @@ export default  [
         "name": "公司订单",
         "list2": [
           {
-            "routerName": "company_order",
+            "routerName": "fbm_order",
             "name": "FMB订单",
           },
           {
-            "routerName": "deductions_detail",
+            "routerName": "fba_order",
             "name": "FBA订单",
           }
         ]

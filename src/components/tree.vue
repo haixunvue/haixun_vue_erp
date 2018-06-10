@@ -19,117 +19,119 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="18"  v-if ="staff_selected">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>关联账号:</span>
-            <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="showAddFormDialog">关联新账户</el-button>
-          </div>
-          <el-dialog width="30%" title="添加用户关联" :visible.sync="dialogAddFormVisible">
-            <el-form  :model="addStaffLinker">
-              <el-form-item label="用户名">
-                <el-input class="formLabelWidth" v-model="addStaffLinker.name" auto-complete="off"></el-input>
+      <div style="height: 100%;overflow: auto">
+        <el-col :span="18"  v-if ="staff_selected">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>关联账号:</span>
+              <el-button style="padding: 3px 0;margin-right:20px" type="text" @click="showAddFormDialog">关联新账户</el-button>
+            </div>
+            <el-dialog width="30%" title="添加用户关联" :visible.sync="dialogAddFormVisible">
+              <el-form  :model="addStaffLinker">
+                <el-form-item label="用户名">
+                  <el-input class="formLabelWidth" v-model="addStaffLinker.name" auto-complete="off"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogAddFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="company_staff_linker_add">添 加</el-button>
+              </div>
+            </el-dialog>
+            <el-table
+              :data="link_staff_list"
+              stripe
+              style="width: 100%">
+              <el-table-column
+                prop="id"
+                label="id"
+                width="150">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="账号"
+                width="150">
+              </el-table-column>
+              <el-table-column
+                prop="nikename"
+                label="昵称"
+                width="150">
+              </el-table-column>
+              <el-table-column
+                prop="mobile"
+                label="联系方式"
+                width="150">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="状态"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                width="100"
+                label="操作">
+                <template slot-scope="scope">
+                  <el-button @click="company_staff_linker_delete(scope.row.id)" type="text" size="small">取消关联</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>员工属性</span>
+            </div>
+            <el-form ref="form" :model="form" label-width="80px">
+              <el-form-item label="名称">
+                <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_name"></el-input>
+              </el-form-item>
+              <el-form-item label="部门">
+                <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_department"></el-input>
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_notes"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="editStaff">{{staffEdit}}</el-button>
+                <el-button v-if="is_edit" @click="cancelEdit">取消</el-button>
               </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogAddFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="company_staff_linker_add">添 加</el-button>
-            </div>
-          </el-dialog>
-          <el-table
-            :data="link_staff_list"
-            stripe
-            style="width: 100%">
-            <el-table-column
-              prop="id"
-              label="id"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="账号"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="nikename"
-              label="昵称"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="mobile"
-              label="联系方式"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="status"
-              label="状态"
-              width="100">
-            </el-table-column>
-            <el-table-column
-              width="100"
-              label="操作">
-              <template slot-scope="scope">
-                <el-button @click="company_staff_linker_delete(scope.row.id)" type="text" size="small">取消关联</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>员工属性</span>
-          </div>
-          <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="名称">
-              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_name"></el-input>
-            </el-form-item>
-            <el-form-item label="部门">
-              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_department"></el-input>
-            </el-form-item>
-            <el-form-item label="备注">
-              <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_notes"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="editStaff">{{staffEdit}}</el-button>
-              <el-button v-if="is_edit" @click="cancelEdit">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>员工权限</span>
+          </el-card>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>员工权限</span>
               <el-button v-if="showSavePermissionBtn" type="primary" @click="company_staff_set_permission">保存</el-button>
-          </div>
-          <el-form  label-width="80px">
-            <el-form-item>
-              <el-checkbox-group @change="permissionChange" v-model="selected_permission">
-                <el-checkbox
-                  v-for ="(item,index) in permissionList"
-                  v-if ="item.permission"
-                  :key="index"
-                  :label="item.permission">{{item.name}}
-                </el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-form>
-        </el-card>
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>员工店铺分配</span>
-             <el-button v-if="showSave_shop_list_Btn" type="primary" @click="company_staff_set_Shop">保存</el-button>
-          </div>
-          <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item>
-              <el-checkbox-group @change="shop_list_selected_Change" v-model="shop_list_selected">
-                <el-checkbox
-                  v-for ="(item,index) in shop_list"
-                  :key="index"
-                  :label="item.id">{{item.shop_name}}
-                </el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
+            </div>
+            <el-form  label-width="80px">
+              <el-form-item>
+                <el-checkbox-group @change="permissionChange" v-model="selected_permission">
+                  <el-checkbox
+                    v-for ="(item,index) in permissionList"
+                    v-if ="item.permission"
+                    :key="index"
+                    :label="item.permission">{{item.name}}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+            </el-form>
+          </el-card>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>员工店铺分配</span>
+              <el-button v-if="showSave_shop_list_Btn" type="primary" @click="company_staff_set_Shop">保存</el-button>
+            </div>
+            <el-form ref="form" :model="form" label-width="80px">
+              <el-form-item>
+                <el-checkbox-group @change="shop_list_selected_Change" v-model="shop_list_selected">
+                  <el-checkbox
+                    v-for ="(item,index) in shop_list"
+                    :key="index"
+                    :label="item.id">{{item.shop_name}}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </el-col>
+      </div>
     </el-row>
   </div>
 </template>

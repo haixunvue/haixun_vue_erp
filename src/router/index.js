@@ -34,7 +34,7 @@ const C_Preport = r => require.ensure([], () => r(require('../pages/company/Prep
 
 const company_home = r => require.ensure([], () => r(require('../pages/company/company_home')), 'company_home');
 const company_product = r => require.ensure([], () => r(require('../pages/company/company_product')), 'company_product');
-const company_order = r => require.ensure([], () => r(require('../pages/company/company_order')), 'company_order');
+const fbm_order = r => require.ensure([], () => r(require('../pages/company/fbm_order')), 'fbm_order');
 
 //commodity
 const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
@@ -48,7 +48,7 @@ const Cd_product_add = r => require.ensure([], () => r(require('../pages/commodi
 const Cd_order_list = r => require.ensure([], () => r(require('../pages/commodity/Order_list')), 'Cd_order_list');
 const Cd_order_list2 = r => require.ensure([], () => r(require('../pages/commodity/Order_list2')), 'Cd_order_list2');
 const Cd_order_list_boss = r => require.ensure([], () => r(require('../pages/commodity/Order_list_boss')), 'Cd_order_list_boss');
-const Cd_order_list2_boss = r => require.ensure([], () => r(require('../pages/commodity/Order_list2_boss')), 'Cd_order_list2_boss');
+const fba_order = r => require.ensure([], () => r(require('../pages/company/fba_order')), 'fba_order');
 const Cd_order_edit = r => require.ensure([], () => r(require('../pages/commodity/Order_edit')), 'Cd_order_edit');
 const Cd_order_add = r => require.ensure([], () => r(require('../pages/commodity/Order_add')), 'Cd_order_add');
 const cost_reconciliation = r => require.ensure([], () => r(require('../pages/financial_management/cost_reconciliation')), 'cost_reconciliation');
@@ -152,8 +152,8 @@ export default new Router({
                 },
                 //公司订单
                 {
-                  path: 'company_order',
-                  component: company_order,
+                  path: 'fbm_order',
+                  component: fbm_order,
                 },
                 {
                    path: 'Cd_product_list',
@@ -189,8 +189,8 @@ export default new Router({
                    path: 'Cd_order_list_boss',
                    component: Cd_order_list_boss,
                 },{
-                   path: 'Cd_order_list2_boss',
-                   component: Cd_order_list2_boss,
+                   path: 'fba_order',
+                   component: fba_order,
                 },{
                    path: 'Cd_order_edit',
                    component: Cd_order_edit,
