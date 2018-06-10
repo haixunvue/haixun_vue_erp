@@ -36,30 +36,45 @@
       <el-tab-pane label="用户权限" name="second">
         <el-form class="user-permission" label-position="top" :model="userPermission" label-width="80px">
           <el-form-item label="推广:">
-            <el-checkbox-group v-model="userPermission.generalize">
-              <el-checkbox label="推广信息"></el-checkbox>
-              <el-checkbox label="推广公司管理"></el-checkbox>
-            </el-checkbox-group>
+             <el-checkbox-group  v-model="userPermission.popularize_permissionList_select">
+                <el-checkbox
+                  v-for ="(item,index) in userPermission.popularize_permissionList"
+                  v-if ="item.permission"
+                  :key="index"
+                  :label="item.permission">{{item.name}}
+                </el-checkbox>
+              </el-checkbox-group>
           </el-form-item>
           <el-form-item label="后台管理:">
-            <el-checkbox-group v-model="userPermission.bgManagement">
-              <el-checkbox label="后台账号"></el-checkbox>
-              <el-checkbox label="后台财务"></el-checkbox>
-              <el-checkbox label="后台物流"></el-checkbox>
-            </el-checkbox-group>
+
+            <el-checkbox-group  v-model="userPermission.admin_permissionList_selected">
+                <el-checkbox
+                  v-for ="(item,index) in userPermission.admin_permissionList"
+                  v-if ="item.permission"
+                  :key="index"
+                  :label="item.permission">{{item.name}}
+                </el-checkbox>
+              </el-checkbox-group>
           </el-form-item>
           <el-form-item label="公司管理:">
-            <el-checkbox-group v-model="userPermission.cpManagement">
-              <el-checkbox label="公司管理"></el-checkbox>
-              <el-checkbox label="员工管理"></el-checkbox>
-              <el-checkbox label="公司财务"></el-checkbox>
-            </el-checkbox-group>
+            <el-checkbox-group  v-model="userPermission.boss_permissionList_selected">
+                <el-checkbox
+                  v-for ="(item,index) in userPermission.boss_permissionList"
+                  v-if ="item.permission"
+                  :key="index"
+                  :label="item.permission">{{item.name}}
+                </el-checkbox>
+              </el-checkbox-group>
           </el-form-item>
           <el-form-item label="通用:">
-            <el-checkbox-group v-model="userPermission.general">
-              <el-checkbox label="系统消息接收"></el-checkbox>
-              <el-checkbox label="语音提示"></el-checkbox>
-            </el-checkbox-group>
+                <el-checkbox-group  v-model="userPermission.common_permissionList_selected">
+                <el-checkbox
+                  v-for ="(item,index) in userPermission.common_permissionList"
+                  v-if ="item.permission"
+                  :key="index"
+                  :label="item.permission">{{item.name}}
+                </el-checkbox>
+              </el-checkbox-group>
           </el-form-item>
           <el-form-item>
             <el-button type="primary">保存</el-button>
@@ -140,6 +155,10 @@
 
 <script>
     import router from "../../router/index";
+    import menu_boss from '@/json/role_menu/menu_boss';
+    import menu_admin from '@/json/role_menu/menu_admin';
+    const common_permission = [{permission:'permission_system_message_receiving',name:'系统消息接收'},{permission:'permission_voice_prompt',name:'语音提示'}]
+    const popularize_permission = [{permission:'permission_popularize',name:'推广信息'},{permission:'permission_popularize_computer_manage',name:'推广公司管理'}]
     export default {
         data() {
           return {
@@ -157,10 +176,14 @@
               qq_number:'',
               email:'',
             userPermission:{
-              generalize:[],
-              bgManagement:[],
-              cpManagement:[],
-              general:[],
+              admin_permissionList:[],
+              admin_permissionList_selected:[],
+              boss_permissionList:[],
+              boss_permissionList_selected:[],
+              popularize_permissionList:popularize_permission,
+              popularize_permissionList_select:[],
+              common_permissionList:common_permission,
+              common_permissionList_selected:[],
             },
             form: {
               name: '老刘',
@@ -224,7 +247,16 @@
 
               }
             })
-          }
+          },
+          init_permission(){
+           this.userPermission.admin_permissionList=menu_admin.filter((item)=>{
+              return item.permission;
+           })
+           this.userPermission.boss_permissionList=menu_boss.filter((item)=>{
+              return item.permission;
+           })
+          },
+
         },
         mounted() {
             this.owner_company_id = localStorage.getItem("owner_company_id")
@@ -233,6 +265,7 @@
             this.user_id = localStorage.getItem("user_id");
             this.id= this.$route.query.id
             this.account_get_infos()
+            this.init_permission()
         },
       }
 </script>
