@@ -105,19 +105,19 @@
           >
           </el-table-column>
           <el-table-column
-            prop="companyPerson"
+            prop="legal_person"
             label="公司法人"
             sortable
           >
           </el-table-column>
           <el-table-column
-            prop="contact"
+            prop="company_contact_number"
             label="联系方式"
             sortable
           >
           </el-table-column>
           <el-table-column
-            prop="companyAssets"
+            prop="registered_capital"
             label="公司资产"
             sortable
           >
@@ -133,8 +133,8 @@
             label="操作"
             width="125">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" @click="user_edit" size="small">详情</el-button>
-              <el-button icon="el-icon-edit" @click="user_edit" size="small">删除</el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="editCompany(scope.row.id)" size="small">详情</el-button>
+              <el-button icon="el-icon-edit" @click="deleteCompany(scope.row.id)" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -199,6 +199,26 @@
                  owner_user_id: this.id
               }
             })
+          },
+          editCompany(company_id){
+            router.push({
+              path:'/main/company_info',
+              query: {
+                 company_id: company_id
+              }
+            })
+          },
+          deleteCompany(company_id){
+             this.$http.post(this.api.company_delete,{
+            user_token: this.user_token ,
+            user_id: this.user_id ,
+            target_id:company_id
+          }).then((res)=>{
+            //console.log(res);
+            if(res.is_success){
+              this.company_list_paging()
+            }
+          })
           },
           handleSizeChange: function (size) {
             this.currentPage = 1;
