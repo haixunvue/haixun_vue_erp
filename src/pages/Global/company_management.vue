@@ -9,10 +9,10 @@
 <div class="content">
   <h1>公司列表</h1>
   <div class="line"></div>
-  <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">  
+  <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">  
   </el-input> 
   <el-table
-    :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+    :data="company_list"
     border
     style="width: 100%"
     :default-sort = "{prop: 'name', order: 'descending'}"
@@ -86,8 +86,8 @@
       label="操作"
       width="125">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" @click="company_edit" size="small"></el-button>
-        <el-button type="danger" icon="el-icon-delete" @click="company_del" size="small"></el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="company_edit(scope.row.id)" size="small"></el-button>
+        <el-button type="danger" icon="el-icon-delete" @click="company_del(scope.row.id)" size="small"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -110,99 +110,94 @@
     export default {
         data() {
           return {
-            data: [],
-            totalItems:0,
+            company_list:[],
+            search_text:'',
+            totalCount:0,
             currentPage:1,
             pagesize:5,
-            schfilter:"",
-            data2:[],
-            data3:[]
           }
         },
         methods: {
+          search: function(){
+          this.currentPage = 1;
+          this.company_list_paging()
+      },
+        clearSearch: function(){
+          this.search_text=''
+            this.company_list_paging()
+          },
           handleSizeChange: function (size) {
-              this.pagesize = size;            
+                   this.currentPage = 1;
+            this.pagesize = size;
+            this.company_list_paging();         
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
+        this.company_list_paging();
           },
-          getcompanylist(){
-            var tk = localStorage.getItem("token")
-
-            this.$http.post(this.api.company_list,
-            {
-              user_token:tk
-            }).then((res)=>{
-              // console.log(res);
-              this.data = res.values;
-              this.data2 = this.data.concat(); 
-              this.totalItems = res.values.length;
-            })
-
-
-          },
-          currentChangePage(list) {
-            // console.log("1")
-            let from = (this.currentPage - 1) * this.pageSize;
-            let to = this.currentPage * this.pageSize;
-                 
-            for (; from < to; from++) {
-              if (list[from]) {
-                this.data2.push(list[from]);
-              }
+           company_list_paging(){
+              let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
             }
-          },
-          company_edit() {
-            router.push({
-              path:'G_company_edit'
+            if(this.search_text){
+              params.search_text=this.search_text
+            }
+            this.$http.post(this.api.company_list_paging,params).then((res)=>{
+              if(res.is_success){
+                this.company_list = res.value.list;
+                this.totalCount = res.value.totalCount;
+              }else{
+                this.company_list=[];
+              }
             })
           },
-          company_del() {
+   
+          company_edit(company_id){
+            router.push({
+              path:'company_info',
+              query: {
+                 company_id: company_id
+              }
+            })
+          },
+          company_del(company_id) {
             this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
+              this.deleteCompany(company_id)
             }).catch(() => {
               this.$message({
                 type: 'info',
                 message: '已取消删除'
               });          
             });
-          }
+          },
+          deleteCompany(company_id){
+             this.$http.post(this.api.company_delete,{
+            user_token: this.user_token ,
+            user_id: this.user_id ,
+            target_id:company_id
+          }).then((res)=>{
+            //console.log(res);
+            if(res.is_success){
+              this.company_list_paging()
+            }
+          })
+          },
         },
         mounted(){
-          this.getcompanylist();
+       this.owner_company_id = localStorage.getItem("owner_company_id")
+        this.owner_user_id = localStorage.getItem("owner_user_id")
+        this.user_token = localStorage.getItem("user_token");
+        this.user_id = localStorage.getItem("user_id");
+          this.company_list_paging();
         },
-        watch: {  
-           schfilter: function(val, oldVal){  
-                // console.log(val)
-                if(val != ""){                       
-                    
-                  this.data3 = [];
-                  this.data.length=0;
-                  for(var demokey of this.data2){
-                    if(demokey.name.indexOf(this.schfilter)>=0){          
-                        this.data.push(demokey);
-                    }
-                  }
-                  this.currentPage = 1;
-                  this.totalItems = this.data.length;
-                  this.currentChangePage(this.data3)
-                }else{
-        
-                  this.data.length=0;
-                  this.totalItems = this.data2.length;
-                  this.data = this.data2.concat();
-                }
-                
-                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));  
-            }   
-        }
+       
       }
 </script>
 <style scoped>
