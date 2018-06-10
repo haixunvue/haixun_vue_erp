@@ -97,7 +97,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>员工权限</span>
-              <el-button v-if="showSavePermissionBtn" type="primary" @click="company_staff_set_permission">保存</el-button>            
+              <el-button v-if="showSavePermissionBtn" type="primary" @click="company_staff_set_permission">保存</el-button>
           </div>
           <el-form  label-width="80px">
             <el-form-item>
@@ -115,7 +115,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>员工店铺分配</span>
-             <el-button v-if="showSave_shop_list_Btn" type="primary" @click="company_staff_set_Shop">保存</el-button>  
+             <el-button v-if="showSave_shop_list_Btn" type="primary" @click="company_staff_set_Shop">保存</el-button>
           </div>
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item>
@@ -248,7 +248,7 @@
         })
       },
       initExpand(){
-        
+
         this.setTree.map((a) => {
           this.defaultExpandKeys.push(a.id)
         });
@@ -264,16 +264,16 @@
           this.permissionList.filter((item)=>{
             if(this.staff_selected[item.permission]=='true'){
                 selected_permission.push(item.permission)
-            }      
+            }
           })
           this.selected_permission=selected_permission;
 
           let shop_list_selected= []
           this.shop_list.filter((item)=>{
-            
+
             if(this.staff_selected['permissions_shop_id_'+item.id]=='true'){
                 shop_list_selected.push(item.id)
-            }      
+            }
           })
           this.shop_list_selected=shop_list_selected;
           //this.company_staff_get_infos();
@@ -287,23 +287,23 @@
       renderContent(h, { node, data, store }) {
         let btnTitle = '';
         if(data.id){
-           btnTitle = '删除';     
+           btnTitle = '删除';
         }else{
          btnTitle = "添加新员工"
          if(data.staff_name=='总部'){
               node.expanded = true;
           }
         }
-        return (<span class="custom-tree-node">
+        return (<span>
           <span>{data.staff_name}</span>
         <span>
-        <el-button size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
+        <el-button class="custom-tree-node" size="mini" type="text" on-click={ () => this.treeBtnClick(node, data, store )}>{btnTitle}</el-button>
         </span>
         </span>);
 
       },
       treeBtnClick(node, data, store){
-        if(data.id){     
+        if(data.id){
           this.company_staff_delete(node, data, store)
         }else{
            this.company_staff_add(node, data, store)
@@ -483,7 +483,7 @@
           user_id:this.user_id,
           target_id:this.staff_selected.id,
         }
-       
+
         this.shop_list.map(item=>{
             params['permissions_shop_id_'+item.id]= "false";
         })
@@ -514,7 +514,7 @@
               page:0,  //页码
               pageSize:1000,
             }
-        
+
             this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
                 if(res.is_success){
                     this.shop_list =  res.value.list;
@@ -549,7 +549,7 @@
   }
 </script>
 
-<style>
+<style  lang="less">
   .search-result-text{
     font-size: 14px;
     color: #333;
@@ -610,5 +610,17 @@
   .input-disable.is-disabled textarea.el-textarea__inner{
     background: #fff;
     border: 0;
+  }
+  .el-tree-node__content:hover{
+    .custom-tree-node{
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 14px;
+    }
+  }
+  .el-tree-node__content{
+    .custom-tree-node{
+      display: none;
+    }
   }
 </style>
