@@ -16,7 +16,7 @@ const registered = r => require.ensure([], () => r(require('../pages/Register'))
 //global
 const G_user_list = r => require.ensure([], () => r(require('../pages/Global/User_list')), 'G_user_list');
 const user_edit = r => require.ensure([], () => r(require('../pages/account_management/User_edit')), 'user_edit');
-const G_company_list = r => require.ensure([], () => r(require('../pages/Global/Company_list')), 'G_company_list');
+const company_management = r => require.ensure([], () => r(require('../pages/Global/company_management')), 'company_management');
 const G_company_edit = r => require.ensure([], () => r(require('../pages/Global/Company_edit')), 'G_company_edit');
 const G_company_add = r => require.ensure([], () => r(require('../pages/Global/Company_add')), 'G_company_add');
 const corporate_finance = r => require.ensure([], () => r(require('../pages/financial_management/corporate_finance')), 'corporate_finance');
@@ -37,6 +37,7 @@ const company_product = r => require.ensure([], () => r(require('../pages/compan
 const fbm_order = r => require.ensure([], () => r(require('../pages/company/fbm_order')), 'fbm_order');
 const fba_order = r => require.ensure([], () => r(require('../pages/company/fba_order')), 'fba_order');
 const company_info = r => require.ensure([], () => r(require('../pages/company/company_info')), 'company_info');
+const code_management = r => require.ensure([], () => r(require('../pages/system_management/code_management')), 'code_management');
 
 //commodity
 const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
@@ -102,8 +103,8 @@ export default new Router({
                    path: 'user_edit',
                    component: user_edit,
                 },{
-                   path: 'G_company_list',
-                   component: G_company_list,
+                   path: 'company_management',
+                   component: company_management,
                 },{
                    path: 'G_company_edit',
                    component: G_company_edit,
@@ -195,6 +196,9 @@ export default new Router({
                 },{
                    path: 'company_info',
                    component: company_info,
+                },{
+                   path: 'code_management',
+                   component: code_management,
                 },{
                    path: 'Cd_order_edit',
                    component: Cd_order_edit,
