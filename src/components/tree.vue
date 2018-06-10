@@ -11,7 +11,7 @@
                      node-key="id"
                      highlight-current
                      :props="defaultProps"
-                     :expand-on-click-node="false"
+                     :expand-on-click-node="true"
                      :render-content="renderContent"
                      :default-expanded-keys="defaultExpandKeys"
                      @node-click="handleNodeClick">
@@ -280,6 +280,9 @@
            btnTitle = '删除';     
         }else{
          btnTitle = "添加新员工"
+         if(data.staff_name=='总部'){
+              node.expanded = true;
+          }
         }
         return (<span class="custom-tree-node">
           <span>{data.staff_name}</span>
