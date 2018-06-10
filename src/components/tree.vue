@@ -118,11 +118,12 @@
           </div>
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item>
-              <el-checkbox-group v-model="form.type">
-                <el-checkbox label="美食/餐厅线上活动" name="type">1</el-checkbox>
-                <el-checkbox label="地推活动" name="type">2</el-checkbox>
-                <el-checkbox label="线下主题活动" name="type">3</el-checkbox>
-                <el-checkbox label="单纯品牌曝光" name="type">4</el-checkbox>
+              <el-checkbox-group @change="shop_list_selected_Change" v-model="shop_list_selected">
+                <el-checkbox
+                  v-for ="(item,index) in shop_list"
+                  :key="index"
+                  :label="item.id">{{item.shop_name}}
+                </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </el-form>
@@ -151,7 +152,8 @@
           label: 'staff_name'
         },
         link_staff_list: [],
-
+        shop_list:[],
+        shop_list_selected:[],
         addStaffLinker: {
           name:''
         },
@@ -162,6 +164,7 @@
         },
         selected_permission:[],
         showSavePermissionBtn:false,
+        showSave_shop_list_Btn:false,
         form: {
           name:''
         },
@@ -192,11 +195,16 @@
 
       this.initExpand()
       this.company_staff_list();
+      this.company_shop_list();
     },
 
     methods: {
       permissionChange(){
         this.showSavePermissionBtn=true
+          console.log('selected_permission',this.selected_permission)
+      },
+      shop_list_selected_Change(){
+        this.showSave_shop_list_Btn=true
           console.log('selected_permission',this.selected_permission)
       },
       showAddFormDialog(){
@@ -434,6 +442,27 @@
           console.log('res',res)
         })
       },
+      company_shop_list(){
+
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              user_id:this.user_id,
+              target_company_id:this.owner_company_id,
+              page:0,  //页码
+              pageSize:1000,
+            }
+        
+            this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
+                if(res.is_success){
+                    this.shop_list =  res.value.list;
+                }else{
+                     this.shop_list=[];
+                }
+
+
+            })
+          },
       editStaff(){
 
         if(this.is_edit){
