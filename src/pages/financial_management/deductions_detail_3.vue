@@ -164,7 +164,7 @@
     methods: {
       search: function(){
           this.currentPage = 1;
-          this.cost_statistics_logistics_paging()
+          this.cost_statistics_platform_paging()
       },
       clearSearch: function(){
        this.datetime_start=''
@@ -191,11 +191,11 @@
       handleSizeChange: function (size) {
                    this.currentPage = 1;
             this.pagesize = size;
-            this.cost_statistics_logistics_paging();
+            this.cost_statistics_platform_paging();
       },
       handleCurrentChange: function(currentPage){
         this.currentPage = currentPage;
-        this.cost_statistics_logistics_paging();
+        this.cost_statistics_platform_paging();
       },
        company_staff_list(){
         //员工列表
@@ -236,7 +236,7 @@
 
             })
           },
-       cost_statistics_logistics_paging(){
+       cost_statistics_platform_paging(){
 
             let params = {
               user_token:this.user_token,
@@ -264,8 +264,8 @@
                 })
             }
           
-            this.$http.post(this.api.cost_statistics_logistics_paging,params).then((res)=>{
-                console.log('cost_statistics_logistics_paging',res);
+            this.$http.post(this.api.cost_statistics_platform_paging,params).then((res)=>{
+                console.log('cost_statistics_platform_paging',res);
                  if(res.is_success){
                     this.data_list = res.value.list;
                   this.totalCount = res.value.totalCount;
@@ -284,7 +284,7 @@
             this.user_id = localStorage.getItem("user_id");
             this.company_staff_list();
             this.company_shop_list();
-            this.cost_statistics_logistics_paging();
+            this.cost_statistics_platform_paging();
     }
   }
 </script>

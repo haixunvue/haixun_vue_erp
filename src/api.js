@@ -41,6 +41,8 @@ const api={
     'company_staff_set_infos':'/apis/v1807g/company_staff/set_infos',
     'company_money_recharge_add':'/apis/v1807g/company_money_recharge/add',
     'cost_statistics_logistics_paging':'/apis/v1807g/company_money_cost_statistics_logistics/listall/paging',
+    'cost_statistics_paging':'/apis/v1807g/company_money_cost_statistics/listall/paging',
+    'cost_statistics_platform_paging':'/apis/v1807g/company_money_cost_statistics_platform/listall/paging',
 
     'account_staff_list':'/apis/v1807g/account/list/paging',
     'get_company_list':'/apis/v1807g/company/list',

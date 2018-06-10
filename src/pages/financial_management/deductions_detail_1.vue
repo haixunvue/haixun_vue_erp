@@ -264,8 +264,8 @@
                 })
             }
           
-            this.$http.post(this.api.cost_statistics_logistics_paging,params).then((res)=>{
-                console.log('cost_statistics_logistics_paging',res);
+            this.$http.post(this.api.cost_statistics_paging,params).then((res)=>{
+                console.log('cost_statistics_paging',res);
                  if(res.is_success){
                     this.data_list = res.value.list;
                   this.totalCount = res.value.totalCount;
