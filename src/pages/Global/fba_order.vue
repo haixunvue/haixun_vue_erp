@@ -4,17 +4,32 @@
     <div class="line"></div>
     <div style="margin-bottom:5px" >
         <el-select 
-          v-model="value" 
-          placeholder="选择员工"
-          v-on:change="change(value)"
-          size="mini">
-          <el-option
-              v-for ="item in form.company"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-          </el-option>
-        </el-select>
+        v-if="!companyId"
+        v-model="company_selected_id" 
+        placeholder="请选择公司"
+        size="mini"
+        v-on:change="onCompanyChange()">
+        <el-option
+            v-for ="item in company_list"
+            :key="item.id"
+            :label="item.company_full_name"
+            :value="item.id">
+        </el-option>
+      </el-select>
+        <el-select 
+        v-if="!staffId"
+        v-model="staff_selected_id" 
+        placeholder="请选择公司员工"
+        size="mini"
+        v-on:change="onStaffChange()">
+        <el-option
+            v-for ="item in staff_list"
+            :key="item.id"
+            :label="item.staff_name"
+            
+            :value="item.id">
+        </el-option>
+      </el-select>
         <el-select 
           v-model="value" 
           placeholder="选择国家"
@@ -275,6 +290,10 @@
     export default {
         data() {
             return {
+             company_list:[],
+            company_selected_id:'',
+            staff_list:[],
+            staff_selected_id:'',
                 form:{
                   company: [],
                   infor1:'',
@@ -399,9 +418,74 @@
             },
             user_edit:function(){
                 this.dialogTableVisible = true;
+            },
+             onCompanyChange(){
+              this.company_staff_list();
+          },
+           onStaffChange(){
+           },
+           company_staff_list(){
+             let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
             }
-        }
+            if(this.company_selected_id){
+              params.user_query=`owner_company_id=='${this.company_selected_id}'`;
+            }
+
+            //员工列表
+            this.$http.post(this.api.company_staff_list,params).then((res)=>{
+              console.log('company_staff_list',res);
+              if(res.is_success){
+                this.staff_list=res.value
+              }
+            })
+          },
+          get_company_list(){
+            this.$http.post(this.api.get_company_list,{
+              user_token:this.user_token,
+              user_id:this.user_id,
+            }).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                this.company_list = res.value;
+              }
+            })
+          },
+        
+        },
+        created(){
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            if(this.companyId){
+              this.company_selected_id =this.companyId  
+            }else{
+                this.get_company_list()  
+            }
+            if(this.staffId){
+              this.staff_selected_id =this.staffId
+              
+            }else{
+              this.company_staff_list()
+            }
+            console.log('show_company_selector',this.show_company_selector)
+            console.log('show_staff_selector',this.show_staff_selector)
+        },
+        props:{
+         title:{
+          default:'',
+          type:String,
+         },
+         companyId:{
+           default:'',
+          type:String,
+         },
+         staffId:{
+           default:'',
+          type:String,
+         },
       }
+    }
 </script>
 <style scoped>
     .el-input{

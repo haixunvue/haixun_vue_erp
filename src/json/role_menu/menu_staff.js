@@ -62,11 +62,11 @@ export default  [
     "icon": "",
     "list1": [
       {
-        "routerName": "fbm_order",
+        "routerName": "fbm_order_staff",
         "name": "FBM订单",
       },
       {
-        "routerName": "fba_order",
+        "routerName": "fba_order_staff",
         "name": "FBA订单",
       }
     ]

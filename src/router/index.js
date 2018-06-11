@@ -38,6 +38,10 @@ const company_home = r => require.ensure([], () => r(require('../pages/company/c
 const company_product = r => require.ensure([], () => r(require('../pages/company/company_product')), 'company_product');
 const company_info = r => require.ensure([], () => r(require('../pages/company/company_info')), 'company_info');
 const code_management = r => require.ensure([], () => r(require('../pages/system_management/code_management')), 'code_management');
+const fba_order_boss = r => require.ensure([], () => r(require('../pages/company/fba_order_boss')), 'fba_order_boss');
+const fba_order_staff = r => require.ensure([], () => r(require('../pages/order_management/fba_order_staff')), 'fba_order_staff');
+const fbm_order_boss = r => require.ensure([], () => r(require('../pages/company/fbm_order_boss')), 'fbm_order_boss');
+const fbm_order_staff = r => require.ensure([], () => r(require('../pages/order_management/fbm_order_staff')), 'fbm_order_staff');
 
 //commodity
 //const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
@@ -82,6 +86,7 @@ const Message = r => require.ensure([], () => r(require('../pages/Message')), 'M
 const product_sum = r => require.ensure([], () => r(require('../pages/product_management/product_sum')), 'product_sum');
 const fbm_order = r => require.ensure([], () => r(require('../pages/Global/fbm_order')), 'fbm_order');
 const fba_order = r => require.ensure([], () => r(require('../pages/Global/fba_order')), 'fba_order');
+
 export default new Router({
     routes: [
         {
@@ -101,8 +106,8 @@ export default new Router({
             component: main, //
             children: [
                 {
-                   path: 'G_user_list',
-                   component: G_user_list,
+                   path: 'fba_order_boss',
+                   component: fba_order_boss,
                 },{
                    path: 'user_edit',
                    component: user_edit,
@@ -116,17 +121,17 @@ export default new Router({
                    path: 'product_management',
                    component: product_management,
                 },{
-                   path: 'G_company_add',
-                   component: G_company_add,
+                   path: 'fba_order_staff',
+                   component: fba_order_staff,
                 },{
                    path: 'corporate_finance',
                    component: corporate_finance,
                 },{
-                   path: 'G_order_list',
-                   component: G_order_list,
+                   path: 'fbm_order_boss',
+                   component: fbm_order_boss,
                 },{
-                   path: 'G_order_edit',
-                   component: G_order_edit,
+                   path: 'fbm_order_staff',
+                   component: fbm_order_staff,
                 },{
                    path: 'G_warehouse',
                    component: G_warehouse,
