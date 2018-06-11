@@ -180,9 +180,8 @@
       }
     },
      props:{
-      setTree:{
-        type:Array,
-        required:true
+      isGlobal:{
+        type:Boolean,
       },
     },
 
@@ -195,7 +194,7 @@
       this.permissionList=menu_staff.filter((item)=>{
           return item.permission;
       })
-
+      console.log('sdf',this.isGlobal);
       this.initExpand()
       this.company_staff_list();
       this.company_shop_list();
@@ -251,7 +250,7 @@
       },
       initExpand(){
 
-        this.setTree.map((a) => {
+        [].map((a) => {
           this.defaultExpandKeys.push(a.id)
         });
         this.isLoadingTree = true;

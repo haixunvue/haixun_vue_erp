@@ -31,11 +31,7 @@
   </div>
 </template>
 <script>
-  import menuList_staff_u from '@/json/menu_staff_uncompany';
-  import menuList_staff from '@/json/menu_staff_company';
-  import menuList_boss from '@/json/menu_boss';
-  import menuList_boss_u from '@/json/menu_boss_uncompany';
-  import menuList_admin from '@/json/menu_admin';
+
 
   //以下是新菜单
   import menu_staff from '@/json/role_menu/menu_staff';

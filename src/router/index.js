@@ -17,6 +17,7 @@ const registered = r => require.ensure([], () => r(require('../pages/Register'))
 const G_user_list = r => require.ensure([], () => r(require('../pages/Global/User_list')), 'G_user_list');
 const user_edit = r => require.ensure([], () => r(require('../pages/account_management/User_edit')), 'user_edit');
 const company_management = r => require.ensure([], () => r(require('../pages/Global/company_management')), 'company_management');
+const staff_management = r => require.ensure([], () => r(require('../pages/Global/staff_management')), 'staff_management');
 const G_company_edit = r => require.ensure([], () => r(require('../pages/Global/Company_edit')), 'G_company_edit');
 const G_company_add = r => require.ensure([], () => r(require('../pages/Global/Company_add')), 'G_company_add');
 const corporate_finance = r => require.ensure([], () => r(require('../pages/financial_management/corporate_finance')), 'corporate_finance');
@@ -106,8 +107,8 @@ export default new Router({
                    path: 'company_management',
                    component: company_management,
                 },{
-                   path: 'G_company_edit',
-                   component: G_company_edit,
+                   path: 'staff_management',
+                   component: staff_management,
                 },{
                    path: 'G_company_add',
                    component: G_company_add,

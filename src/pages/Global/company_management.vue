@@ -9,8 +9,15 @@
 <div class="content">
   <h1>公司列表</h1>
   <div class="line"></div>
-  <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">  
-  </el-input> 
+  <el-form :inline="true" label-width="80px" size="mini">
+    <el-form-item>
+      <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">
+      </el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="search">搜索</el-button>
+    </el-form-item>
+  </el-form>
   <el-table
     :data="company_list"
     border
@@ -98,7 +105,7 @@
     :page-sizes="[5, 20, 50, 100]"
     :page-size="pagesize"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="totalItems">
+    :total="totalCount">
   </el-pagination>
 </div>
 </template>
