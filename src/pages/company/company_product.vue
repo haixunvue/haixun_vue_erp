@@ -21,7 +21,7 @@
         methods:{
           
         },
-        mounted() {
+        created() {
            this.companyId = localStorage.getItem("owner_company_id")
           
         },

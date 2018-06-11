@@ -1,6 +1,6 @@
 <template>
 <div>
-    <product-management :companyId="companyId" :staffId="staffId" :title="title"/>
+    <product-management :company-id="companyId" :staff-id="staffId" :title="title"/>
 </div>
 </template>
 
@@ -22,7 +22,7 @@
         methods:{
           
         },
-        mounted() {
+        created() {
            this.companyId = localStorage.getItem("owner_company_id")
            this.staffId = localStorage.getItem("user_id");
           

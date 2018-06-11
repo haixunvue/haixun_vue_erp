@@ -1,36 +1,36 @@
 <template>  
 <div class="content">
   <h1>{{title}}</h1>
-  <div class="line" v-if="!(companyId&&staffId)"></div>
+  <div class="line" v-if="show_company_selector||show_staff_selector"></div>
   <el-form ref="form" :model="form" label-width="80px" size="mini">
-     <el-form-item v-if="!companyId" label="公司" v-show="ifboos">
+     <el-form-item v-if="show_company_selector" label="公司" >
       <el-select 
-        v-model="value" 
+        v-model="company_selected_id" 
         placeholder="请选择公司"
-        v-on:change="change(value)">
+        v-on:change="onCompanyChange()">
         <el-option
-            v-for ="item in form.company"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for ="item in company_list"
+            :key="item.id"
+            :label="item.company_full_name"
+            :value="item.id">
         </el-option>
       </el-select>
     </el-form-item> 
     
-    <el-form-item v-if="!staffId" label="选择员工" v-show="ifboos">
+    <el-form-item v-if="show_staff_selector" label="选择员工" >
       <el-select 
-        v-model="value" 
+        v-model="staff_selected_id" 
         placeholder="请选择公司员工"
-        v-on:change="change(value)">
+        v-on:change="onStaffChange()">
         <el-option
-            v-for ="item in form.company"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for ="item in staff_list"
+            :key="item.id"
+            :label="item.staff_name"
+            :value="item.id">
         </el-option>
       </el-select>
     </el-form-item>
-    <div class="line" v-show="ifboos"></div>
+    <div class="line" ></div>
     <!-- <el-form-item label="店铺" style="margin-bottom:5px">
       <el-select 
         v-model="value" 
@@ -381,6 +381,12 @@
     export default {
         data() {
           return {
+            company_list:[],
+            company_selected_id:'',
+            show_company_selector:false,
+            staff_list:[],
+            staff_selected_id:'',
+            show_staff_selector:false,
             infor:'',
             radio1:'1',
             radio2:'1',
@@ -617,10 +623,62 @@
               })
             }
             
-          }
+          },
+          onCompanyChange(){
+              this.company_staff_list();
+          },
+           onStaffChange(){
+           },
+           company_staff_list(){
+             let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+            }
+            if(this.company_selected_id){
+              params.user_query=`owner_company_id=='${this.company_selected_id}'`;
+            }
+
+            //员工列表
+            this.$http.post(this.api.company_staff_list,params).then((res)=>{
+              console.log('company_staff_list',res);
+              if(res.is_success){
+                this.staff_list=res.value
+              }
+            })
+          },
+          get_company_list(){
+            this.$http.post(this.api.get_company_list,{
+              user_token:this.user_token,
+              user_id:this.user_id,
+            }).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                this.company_list = res.value;
+              }
+            })
+          },
         },
-        mounted(){
-          this.getinfor();
+        created(){
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            if(this.companyId){
+               this.show_company_selector= false;
+              this.company_selected_id =this.companyId  
+            }else{
+              this.show_company_selector= true;
+                this.get_company_list()
+             
+            }
+            if(this.staffId){
+              this.show_staff_selector= false;
+              this.staff_selected_id =this.staffId
+              
+            }else{
+              this.show_staff_selector= true;
+              this.company_staff_list()
+            }
+            console.log('show_company_selector',this.show_company_selector)
+            console.log('show_staff_selector',this.show_staff_selector)
         },
         props:{
          title:{
@@ -628,9 +686,11 @@
           type:String,
          },
          companyId:{
+           default:'',
           type:String,
          },
          staffId:{
+           default:'',
           type:String,
          },
       },
