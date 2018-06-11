@@ -55,7 +55,7 @@ export default  [
         ]
       },
       {
-        "routerName": "business_report",
+        "routerName": "business_report_boss",
         "name": "业绩报表",
       }
     ]

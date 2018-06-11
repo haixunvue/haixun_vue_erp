@@ -62,6 +62,9 @@ const Cd_Creport2 = r => require.ensure([], () => r(require('../pages/commodity/
 const Cd_Preport = r => require.ensure([], () => r(require('../pages/commodity/Preport')), 'Cd_Preport');
 const Cd_Preport2 = r => require.ensure([], () => r(require('../pages/commodity/Preport2')), 'Cd_Preport2');
 const business_report = r => require.ensure([], () => r(require('../pages/financial_management/business_report')), 'business_report');
+const business_report_admin = r => require.ensure([], () => r(require('../pages/financial_management/business_report_admin')), 'business_report_admin');
+const business_report_boss = r => require.ensure([], () => r(require('../pages/financial_management/business_report_boss')), 'business_report_boss');
+const business_report_staff = r => require.ensure([], () => r(require('../pages/financial_management/business_report_staff')), 'business_report_staff');
 const deductions_detail = r => require.ensure([], () => r(require('../pages/financial_management/deductions_detail')), 'deductions_detail');
 const deductions_detail_admin = r => require.ensure([], () => r(require('../pages/financial_management/deductions_detail_admin')), 'deductions_detail_admin');
 const Cd_User_edit = r => require.ensure([], () => r(require('../pages/commodity/User_edit')), 'Cd_User_edit');
@@ -140,17 +143,17 @@ export default new Router({
                    path: 'amazon_auth',
                    component: amazon_auth,
                 },{
-                   path: 'C_rechange',
-                   component: C_rechange,
+                   path: 'business_report_admin',
+                   component: business_report_admin,
                 },{
-                   path: 'C_Finance',
-                   component: C_Finance,
+                   path: 'business_report_staff',
+                   component: business_report_staff,
                 },{
                    path: 'staff_power',
                    component: staff_power,
                 },{
-                   path: 'C_Creport',
-                   component: C_Creport,
+                   path: 'business_report_boss',
+                   component: business_report_boss,
                 },{
                    path: 'C_Preport',
                    component: C_Preport,

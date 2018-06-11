@@ -93,7 +93,7 @@ export default  [
         ]
       },
       {
-        "routerName": "business_report",
+        "routerName": "business_report_boss",
         "name": "业绩报表",
       }
     ]
@@ -127,7 +127,7 @@ export default  [
         "icon": "",
       },
       {
-        "routerName": "store_performance",
+        "routerName": "business_report_staff",
         "name": "店铺业绩",
       }
     ]

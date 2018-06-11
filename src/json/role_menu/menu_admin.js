@@ -85,8 +85,8 @@ export default  [
         "icon": "",
       },
       {
-        "routerName": "Salesman_performance",
-        "name": "推销商业绩",
+        "routerName": "business_report_admin",
+        "name": "推销商店业绩",
       }
     ]
   },
