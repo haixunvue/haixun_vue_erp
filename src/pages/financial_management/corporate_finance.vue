@@ -102,18 +102,27 @@
       >
     </el-table-column>
     <el-table-column
-      prop="process_status"
       label="状态"
       sortable
       >
+        <template slot-scope="scope">
+        <span v-if="scope.row.process_status=='down'">已处理</span>
+        <span v-else>未处理</span>
+      </template>
     </el-table-column>
     <el-table-column
       label="操作"
       width="90"
       >
       <template slot-scope="scope">
-        <el-button type="primary" @click="showToggle(scope.row)" v-if="scope.row.flag" size="small">审核通过</el-button>
-        <el-button type="info" @click="showToggle(scope.row)" v-else size="small">不予通过</el-button>
+        <span v-if="scope.row.process_status=='down'">
+          <span v-if="scope.row.process_result=='pass'">审核通过</span>
+          <span v-else> 不予通过</span>
+        </span>
+        <span v-else>
+        <el-button type="primary" @click="examine_pass_confirm(scope.row.id)"  size="small">审核通过</el-button>
+        <el-button type="info" @click="examine_nopass_confirm(scope.row.id)" size="small">不予通过</el-button>
+      </span>
       </template>
     </el-table-column>
     <el-table-column
@@ -254,6 +263,60 @@
 
             })
       },
+      do_examine_pass(id){
+           this.$http.post(this.api.examine_pass,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            target_company_money_recharge_id:id,
+           }).then((res)=>{
+                console.log('list_data',res);
+                if(res.is_success){
+                    this.company_money_recharge_list();
+                }
+
+
+            })
+     },
+      examine_pass_confirm(id){
+        this.$confirm('确定审核通过该记录吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+               this.do_examine_pass(id);
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          },
+          do_examine_nopass(id){
+            this.$http.post(this.api.examine_nopass,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            target_company_money_recharge_id:id,
+           }).then((res)=>{
+                console.log('list_data',res);
+                if(res.is_success){
+                    this.company_money_recharge_list();
+                }
+            })
+          },
+        examine_nopass_confirm(id){
+        this.$confirm('确定审核不通过该记录吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.do_examine_nopass(id);
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          }
         },
         mounted() {
             this.owner_company_id = localStorage.getItem("owner_company_id")

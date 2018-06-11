@@ -56,6 +56,8 @@ const api={
     'get_company_info':'/apis/v1807/company/get_infos', //公司获取信息
     'set_company_info':'/apis/v1807/company/set_infos', //		 公司设置信息
     'product_list':'/apis/v1807g/product/list/paging',   // 产品列表
+    'examine_pass':'/apis/v1807g/company_money_recharge/examine_pass',   // 产品列表
+    'examine_nopass':'/apis/v1807g/company_money_recharge/examine_nopass',   // 产品列表
 
 };
 export default api;
