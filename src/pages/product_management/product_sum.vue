@@ -1,6 +1,6 @@
 <template>
 <div>
-    <product-management :companyId="companyId" :title="title"/>
+    <product-management :company-id="companyId" :staff-id="staffId" :title="title"/>
 </div>
 </template>
 
@@ -15,7 +15,8 @@
         data() {
             return {
                 companyId:'',
-                title:'公司产品'
+                staffId:'',
+                title:'商品汇总'
             }
         },
         methods:{
@@ -23,6 +24,7 @@
         },
         created() {
            this.companyId = localStorage.getItem("owner_company_id")
+           this.staffId = localStorage.getItem("user_id");
           
         },
 

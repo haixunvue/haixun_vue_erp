@@ -4,7 +4,13 @@
       <el-col :span="6">
         <div class="expand">
           <div>
-            <!-- <el-button @click="handleAddTop">添加顶级节点</el-button> -->
+            <el-form v-if="isGlobal" label-width="90px" size="mini">
+            <el-form-item label="选择公司">
+            <el-select v-model="company_selected_index" placeholder="请选择公司" @change="onCompanyChange()">
+                <el-option v-for="(item,index) in company_list" :key="index" :label="item.company_full_name" :value="index"></el-option>
+            </el-select>
+          </el-form-item>
+            </el-form>
             <el-tree ref="expandMenuList" class="expand-tree"
                      v-if="isLoadingTree"
                      :data="staff_list"
@@ -79,7 +85,7 @@
             <div slot="header" class="clearfix">
               <span>员工属性</span>
             </div>
-            <el-form ref="form" :model="form" label-width="80px">
+            <el-form  label-width="80px">
               <el-form-item label="名称">
                 <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_name"></el-input>
               </el-form-item>
@@ -118,7 +124,7 @@
               <span>员工店铺分配</span>
               <el-button v-if="showSave_shop_list_Btn" style="margin-left: 10px;" size="mini" type="primary" @click="company_staff_set_Shop">保存</el-button>
             </div>
-            <el-form ref="form" :model="form" label-width="80px">
+            <el-form  label-width="80px">
               <el-form-item>
                 <el-checkbox-group @change="shop_list_selected_Change" v-model="shop_list_selected">
                   <el-checkbox
@@ -147,8 +153,10 @@
     name: 'tree',
     data(){
       return{
+        company_list: [],
+        company_selected_index: '',
         permissionList:[],
-        staff_list:[{staff_name: '总部',children:[]}],
+        staff_list:[],
         staff_selected:null,
         defaultProps: {
           children: 'children',
@@ -168,9 +176,6 @@
         selected_permission:[],
         showSavePermissionBtn:false,
         showSave_shop_list_Btn:false,
-        form: {
-          name:''
-        },
         isLoadingTree: false,//是否加载节点树
         is_edit:false,
         input_disable:'input-disable',
@@ -194,13 +199,26 @@
       this.permissionList=menu_staff.filter((item)=>{
           return item.permission;
       })
-      console.log('sdf',this.isGlobal);
+
       this.initExpand()
+      if(this.isGlobal){
+         
+       this.get_company_list();
+      }else{
       this.company_staff_list();
       this.company_shop_list();
+      }
+
     },
 
     methods: {
+      onCompanyChange(){
+        let company_info= this.company_list[this.company_selected_index] 
+        this.owner_company_id = company_info.id;
+        this.owner_user_id = company_info.owner_user_id
+        this.company_staff_list();
+      this.company_shop_list();
+      },
       permissionChange(){
         this.showSavePermissionBtn=true
           console.log('selected_permission',this.selected_permission)
@@ -213,6 +231,17 @@
         this.addStaffLinker.name= '';
           this.dialogAddFormVisible = true
       },
+       get_company_list(){
+            this.$http.post(this.api.get_company_list,{
+              user_token:localStorage.getItem('user_token'),
+              user_id:localStorage.getItem('user_id'),
+            }).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                this.company_list = res.value;
+              }
+            })
+          },
       company_staff_list(){
         //员工列表
         this.$http.post(this.api.company_staff_list,{
@@ -222,29 +251,38 @@
         }).then((res)=>{
           console.log('company_staff_list',res);
           if(res.is_success){
-            if(res.value.length<=0){
-                this.$set(this.staff_list[0], 'children', res.value)
-                return;
-            }
-            let null_department_staffs=[];//没有分配部门
-            let has_department_staffs={};//有分配部门
-            res.value.map((item)=>{
-              if(!item.staff_department){
-                null_department_staffs.push(item)
-              }else{
-                if(!has_department_staffs[item.staff_department]){
-                  has_department_staffs[item.staff_department]={staff_name: item.staff_department,children:[]}
-                }
-                has_department_staffs[item.staff_department].children.push(item)
-              }
-            })
             let result = []
-            for(var key in has_department_staffs){
-              result.push(has_department_staffs[key])
+            if(res.value.length<=0){
+                //this.$set(this.staff_list[0], 'children', res.value)
+                result = res.value;
+            }else{
+              let null_department_staffs=[];//没有分配部门
+              let has_department_staffs={};//有分配部门
+              res.value.map((item)=>{
+                if(!item.staff_department){
+                  null_department_staffs.push(item)
+                }else{
+                  if(!has_department_staffs[item.staff_department]){
+                    has_department_staffs[item.staff_department]={staff_name: item.staff_department,children:[]}
+                  }
+                  has_department_staffs[item.staff_department].children.push(item)
+                }
+              })
+              
+              for(var key in has_department_staffs){
+                result.push(has_department_staffs[key])
+              }
+              result = result.concat(null_department_staffs)
             }
-            result = result.concat(null_department_staffs)
 
-            this.$set(this.staff_list[0], 'children', result)
+            if(this.staff_list.length>0){
+               this.$set(this.staff_list[0], 'children', result)
+            }else{
+              this.staff_list = [{staff_name: '总部',children:result}]
+            }
+            
+
+           
           }
         })
       },
@@ -379,7 +417,7 @@
         this.$http.post(this.api.company_staff_linker_add,{
           user_token:this.user_token,
           user_id:this.user_id,
-           owner_company_id:this.owner_company_id,
+          owner_company_id:this.owner_company_id,
           owner_user_id:this.owner_user_id,
           owner_staff_id:this.staff_selected.id,
           target_user_name:this.addStaffLinker.name,
@@ -509,7 +547,6 @@
 
             let params = {
               user_token:this.user_token,
-              user_id:this.user_id,
               user_id:this.user_id,
               target_company_id:this.owner_company_id,
               page:0,  //页码

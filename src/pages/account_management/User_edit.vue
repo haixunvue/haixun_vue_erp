@@ -84,7 +84,7 @@
       </el-tab-pane>
       <el-tab-pane label="用户资产(公司)" name="third">
         <el-input size="mini" v-model="search_text" style="width: 200px"></el-input>
-        <el-button size="mini">搜索</el-button>
+        <el-button size="mini" @click="company_list_paging()">搜索</el-button>
         <el-button size="mini" @click="addCompany()">添加公司</el-button>
         <el-table
           :data="company_list"
