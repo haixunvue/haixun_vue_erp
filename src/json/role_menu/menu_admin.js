@@ -55,7 +55,7 @@ export default  [
         ]
       },
       {
-        "routerName": "business_management",
+        "routerName": "business_report_admin",
         "name": "业绩管理",
       },
       {
@@ -86,7 +86,7 @@ export default  [
       },
       {
         "routerName": "business_report_admin",
-        "name": "推销商店业绩",
+        "name": "推销商业绩",
       }
     ]
   },
