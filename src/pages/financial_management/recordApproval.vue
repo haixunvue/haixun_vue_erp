@@ -94,18 +94,23 @@
       >
     </el-table-column>
     <el-table-column
-      prop="process_status"
       label="状态"
       sortable
       >
+        <template slot-scope="scope">
+        <span v-if="scope.row.process_status=='down'">已处理</span>
+        <span v-else>未处理</span>
+      </template>
     </el-table-column>
     <el-table-column
       label="操作"
       width="90"
       >
       <template slot-scope="scope">
-        <span v-if="scope.row.flag">审核通过</span>
-        <span v-else>不予通过</span>
+        <span v-if="scope.row.process_status=='down'">
+          <span v-if="scope.row.process_result=='pass'">审核通过</span>
+          <span v-else> 不予通过</span>
+        </span>
       </template>
     </el-table-column>
     <el-table-column
