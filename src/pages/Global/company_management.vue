@@ -11,7 +11,7 @@
   <div class="line"></div>
   <el-form :inline="true" label-width="80px" size="mini">
     <el-form-item>
-      <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">
+      <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">
       </el-input>
     </el-form-item>
     <el-form-item>
@@ -105,7 +105,7 @@
     :page-sizes="[5, 20, 50, 100]"
     :page-size="pagesize"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="totalItems">
+    :total="totalCount">
   </el-pagination>
 </div>
 </template>
