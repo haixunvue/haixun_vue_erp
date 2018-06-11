@@ -17,7 +17,7 @@
         },
         data() {
             return {
-                isGlobal:false,
+                isGlobal:true,
             }
         },
         methods:{
