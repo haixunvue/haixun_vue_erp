@@ -43,6 +43,16 @@ export default  [
       {
         "routerName": "order_management",
         "name": "订单管理",
+        "list2": [
+          {
+            "routerName": "fbm_order",
+            "name": "FBM订单",
+          },
+          {
+            "routerName": "fba_order",
+            "name": "FBA订单",
+          }
+        ]
       },
       {
         "routerName": "business_management",

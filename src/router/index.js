@@ -36,8 +36,6 @@ const C_Preport = r => require.ensure([], () => r(require('../pages/company/Prep
 
 const company_home = r => require.ensure([], () => r(require('../pages/company/company_home')), 'company_home');
 const company_product = r => require.ensure([], () => r(require('../pages/company/company_product')), 'company_product');
-const fbm_order = r => require.ensure([], () => r(require('../pages/company/fbm_order')), 'fbm_order');
-const fba_order = r => require.ensure([], () => r(require('../pages/company/fba_order')), 'fba_order');
 const company_info = r => require.ensure([], () => r(require('../pages/company/company_info')), 'company_info');
 const code_management = r => require.ensure([], () => r(require('../pages/system_management/code_management')), 'code_management');
 
@@ -82,7 +80,8 @@ const Message = r => require.ensure([], () => r(require('../pages/Message')), 'M
 
 //product_management 员工 产品管理
 const product_sum = r => require.ensure([], () => r(require('../pages/product_management/product_sum')), 'product_sum');
-
+const fbm_order = r => require.ensure([], () => r(require('../pages/Global/fbm_order')), 'fbm_order');
+const fba_order = r => require.ensure([], () => r(require('../pages/Global/fba_order')), 'fba_order');
 export default new Router({
     routes: [
         {
