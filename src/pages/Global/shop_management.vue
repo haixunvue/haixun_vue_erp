@@ -38,7 +38,7 @@
     </el-form-item>
   </el-form>
   <el-table
-    :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+    :data="shop_list"
     border
     style="width: 100%"
     :default-sort = "{prop: 'name', order: 'descending'}"
@@ -68,47 +68,14 @@
       sortable
       >
     </el-table-column>
-    <!-- <el-table-column
-      prop="legalp"
-      label="法人名称"
-      sortable
-      width="110"
-      >
-    </el-table-column>
-    <el-table-column
-      prop="range"
-      label="经营范围"
-      sortable
-      width="110"
-      >
-    </el-table-column>
-    <el-table-column
-      prop="work_address"
-      label="办公地址"
-      sortable
-      width="300"
-      >
-    </el-table-column>
-    <el-table-column
-      prop="tel"
-      label="电话"
-      sortable
-      width="110"
-      >
-    </el-table-column>
-    <el-table-column
-      prop="dialogImageUrl"
-      label="营业执照照片"
-      sortable
-      >
-    </el-table-column> -->
+    
     <el-table-column
       fixed="right"
       label="操作"
       width="125">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" @click="company_edit" size="small"></el-button>
-        <el-button type="danger" icon="el-icon-delete" @click="company_del" size="small"></el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="shop_edit" size="small"></el-button>
+        <el-button type="danger" icon="el-icon-delete" @click="shop_del" size="small"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -119,7 +86,7 @@
     :page-sizes="[5, 20, 50, 100]"
     :page-size="pagesize"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="totalItems">
+    :total="totalCount">
   </el-pagination>
 </div>
 </template>
@@ -136,46 +103,28 @@
             staff_list:[],
             staff_selected_id:'',
              search_text:'',
-            data: [],
-            totalItems:0,
+             totalCount:0,
             currentPage:1,
             pagesize:5,
-            schfilter:"",
-            data2:[],
-            data3:[]
+            shop_list: [],
           }
         },
         methods: {
           search: function(){
           this.currentPage = 1;
-          //this.cost_statistics_platform_paging()
+          this.company_shop_list()
           },
           clearSearch: function(){
         this.company_selected_id=''
         this.staff_selected_id=''
         this.search_text=''
-        //this.all_warehouse_location_Change(false)
-      },
+        this.company_shop_list(false)
+         },
           handleSizeChange: function (size) {
               this.pagesize = size;            
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
-          },
-          getcompanylist(){
-            var tk = localStorage.getItem("token")
-
-            this.$http.post(this.api.company_list,
-            {
-              user_token:tk
-            }).then((res)=>{
-              // console.log(res);
-              this.data = res.values;
-              this.data2 = this.data.concat(); 
-              this.totalItems = res.values.length;
-            })
-
-
           },
           currentChangePage(list) {
             // console.log("1")
@@ -188,27 +137,37 @@
               }
             }
           },
-          company_edit() {
+          company_edit(shopId) {
             router.push({
               path:'G_company_edit'
             })
           },
-          company_del() {
+          shop_del(shopId) {
             this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
+              this.company_shop_delete(shopId)
             }).catch(() => {
               this.$message({
                 type: 'info',
                 message: '已取消删除'
               });          
             });
+          },
+          company_shop_delete(shopId){
+            this.$http.post(this.api.company_shop_delete,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            target_id:shopId,
+            }).then((res)=>{
+                if(res.is_success){
+                    this.company_shop_list();
+                }
+                console.log('company_shop_list',res);
+
+            })
           },
           onCompanyChange(){
               this.company_staff_list();
@@ -243,12 +202,39 @@
               }
             })
           },
+          company_shop_list(){
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+            }
+            if(this.company_selected_id){
+              params.target_company_id = this.company_selected_id 
+            }
+            if(this.staff_selected_id){
+              params.target_staff_id = this.staff_selected_id 
+            }
+
+            this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
+                console.log('company_shop_list',res);
+                if(res.is_success){
+                    this.shop_list = res.value.list;
+                  this.totalCount = res.value.totalCount;
+                }else{
+                     this.shop_list=[];
+                }
+
+
+            })
+          },
         },
         created(){
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.get_company_list()  
             this.company_staff_list()
+            this.company_shop_list()
         },
        
       }
