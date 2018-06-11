@@ -2,32 +2,36 @@
 <div class="content">
   <h1>店铺管理</h1>
   <div class="line"></div>
-<el-select 
-        v-model="company_selected_id" 
+  <el-form :inline="true" label-width="80px" size="mini">
+    <el-form-item>
+      <el-select
+        v-model="company_selected_id"
         placeholder="请选择公司"
         size="mini"
         v-on:change="onCompanyChange()">
         <el-option
-            v-for ="item in company_list"
-            :key="item.id"
-            :label="item.company_full_name"
-            :value="item.id">
+          v-for ="item in company_list"
+          :key="item.id"
+          :label="item.company_full_name"
+          :value="item.id">
         </el-option>
       </el-select>
-        <el-select 
-        v-model="staff_selected_id" 
+    </el-form-item>
+    <el-form-item>
+      <el-select
+        v-model="staff_selected_id"
         placeholder="请选择公司员工"
         size="mini"
         v-on:change="onStaffChange()">
         <el-option
-            v-for ="item in staff_list"
-            :key="item.id"
-            :label="item.staff_name"
-            
-            :value="item.id">
+          v-for ="item in staff_list"
+          :key="item.id"
+          :label="item.staff_name"
+
+          :value="item.id">
         </el-option>
       </el-select>
-        <el-form :inline="true" label-width="80px" size="mini">
+    </el-form-item>
     <el-form-item>
       <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">
       </el-input>
@@ -45,7 +49,7 @@
     >
     <el-table-column
       fixed
-      prop="name"
+      prop="shop_name"
       label="店铺名"
       sortable
       >
@@ -68,7 +72,7 @@
       sortable
       >
     </el-table-column>
-    
+
     <el-table-column
       fixed="right"
       label="操作"
@@ -121,7 +125,7 @@
         this.company_shop_list(false)
          },
           handleSizeChange: function (size) {
-              this.pagesize = size;            
+              this.pagesize = size;
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
@@ -130,7 +134,7 @@
             // console.log("1")
             let from = (this.currentPage - 1) * this.pageSize;
             let to = this.currentPage * this.pageSize;
-                 
+
             for (; from < to; from++) {
               if (list[from]) {
                 this.data2.push(list[from]);
@@ -153,7 +157,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           },
           company_shop_delete(shopId){
@@ -210,10 +214,10 @@
               pageSize:this.pagesize,
             }
             if(this.company_selected_id){
-              params.target_company_id = this.company_selected_id 
+              params.target_company_id = this.company_selected_id
             }
             if(this.staff_selected_id){
-              params.target_staff_id = this.staff_selected_id 
+              params.target_staff_id = this.staff_selected_id
             }
 
             this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
@@ -232,11 +236,11 @@
         created(){
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
-            this.get_company_list()  
+            this.get_company_list()
             this.company_staff_list()
             this.company_shop_list()
         },
-       
+
       }
 </script>
 <style scoped>
