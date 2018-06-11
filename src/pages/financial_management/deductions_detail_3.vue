@@ -71,11 +71,11 @@
               label="订单ID"
             >
             </el-table-column>
-            <el-table-columnid
+            <el-table-column
               prop="order_amount"
               label="订单金额"
             >
-            </el-table-columnid>
+            </el-table-column>
             <el-table-column
               prop="refund_fee"
               label="退款费用"

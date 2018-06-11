@@ -52,7 +52,7 @@
                 width="150">
               </el-table-column>
               <el-table-column
-                prop="nikename"
+                prop="target_user_name"
                 label="昵称"
                 width="150">
               </el-table-column>
@@ -90,15 +90,15 @@
                 <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_notes"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="editStaff">{{staffEdit}}</el-button>
-                <el-button v-if="is_edit" @click="cancelEdit">取消</el-button>
+                <el-button size="mini" type="primary" @click="editStaff">{{staffEdit}}</el-button>
+                <el-button size="mini" v-if="is_edit" @click="cancelEdit">取消</el-button>
               </el-form-item>
             </el-form>
           </el-card>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>员工权限</span>
-              <el-button v-if="showSavePermissionBtn" type="primary" @click="company_staff_set_permission">保存</el-button>
+              <el-button v-if="showSavePermissionBtn" style="margin-left: 10px;" size="mini" type="primary" @click="company_staff_set_permission">保存</el-button>
             </div>
             <el-form  label-width="80px">
               <el-form-item>
@@ -116,7 +116,7 @@
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>员工店铺分配</span>
-              <el-button v-if="showSave_shop_list_Btn" type="primary" @click="company_staff_set_Shop">保存</el-button>
+              <el-button v-if="showSave_shop_list_Btn" style="margin-left: 10px;" size="mini" type="primary" @click="company_staff_set_Shop">保存</el-button>
             </div>
             <el-form ref="form" :model="form" label-width="80px">
               <el-form-item>

@@ -3,30 +3,32 @@
   <h1>财务审批</h1>
   <div class="line"></div>
   <el-form label-width="90px" size="mini">
-    <el-col :span="8">
-    <el-form-item label="状态">
-      <el-select v-model="search_form.process_status" placeholder="选择状态">
-        <el-option label="已处理" value="down"></el-option>
-        <el-option label="未处理" value="none"></el-option>
-      </el-select>
-    </el-form-item>
-    </el-col>
-    <el-col :span="8">
-    <el-form-item label="选择公司">
-      <el-select v-model="search_form.target_company_id" placeholder="选择公司">
-          <el-option v-for="(item,index) in company_list" :key="index" :label="item.company_full_name" :value="item.id"></el-option>
-      </el-select>
-    </el-form-item>
-    </el-col>
-    <el-col :span="8">
-    <el-form-item label="手机或单据" placeholder="选择手机或单据编号">
-      <el-input v-model="search_form.search_text"></el-input>
-    </el-form-item>
+    <el-col :span="24">
+      <el-col :span="5">
+        <el-form-item label="状态">
+          <el-select v-model="search_form.process_status" placeholder="选择状态">
+            <el-option label="已处理" value="down"></el-option>
+            <el-option label="未处理" value="none"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="5">
+        <el-form-item label="选择公司">
+          <el-select v-model="search_form.target_company_id" placeholder="选择公司">
+            <el-option v-for="(item,index) in company_list" :key="index" :label="item.company_full_name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="5">
+        <el-form-item label="手机或单据" placeholder="选择手机或单据编号">
+          <el-input v-model="search_form.search_text"></el-input>
+        </el-form-item>
+      </el-col>
     </el-col>
     <!--<el-form-item class="inline">-->
       <!--<el-button type="primary" @click="onSubmit">搜索</el-button>-->
     <!--</el-form-item>-->
-    <el-col :span="8">
+    <el-col :span="5">
     <el-form-item label="开始时间">
       <el-date-picker
       v-model="search_form.datetime_start"
@@ -39,7 +41,7 @@
       </el-date-picker>
     </el-form-item>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="5">
     <el-form-item label="结束时间">
       <el-date-picker
         v-model="search_form.datetime_end"
