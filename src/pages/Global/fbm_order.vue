@@ -5,9 +5,9 @@
     <div class="select-box">
       <el-row :gutter="10" style="margin-bottom:5px">
         <!-- <el-col :span="6"> -->
-          <el-select 
+          <el-select
         v-if="!companyId"
-        v-model="company_selected_id" 
+        v-model="company_selected_id"
         placeholder="请选择公司"
         size="mini"
         v-on:change="onCompanyChange()">
@@ -18,9 +18,9 @@
             :value="item.id">
         </el-option>
       </el-select>
-        <el-select 
+        <el-select
         v-if="!staffId"
-        v-model="staff_selected_id" 
+        v-model="staff_selected_id"
         placeholder="请选择公司员工"
         size="mini"
         v-on:change="onStaffChange()">
@@ -28,13 +28,21 @@
             v-for ="item in staff_list"
             :key="item.id"
             :label="item.staff_name"
-            
+
             :value="item.id">
         </el-option>
       </el-select>
         <!-- </el-col> -->
         <!-- <el-col :span="6"> -->
         <el-select v-model="value2" placeholder="选择国家" size="mini">
+          <el-option
+            v-for="item in options2"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-select v-model="value2" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
           <el-option
             v-for="item in options2"
             :key="item.value"
@@ -55,18 +63,6 @@
         <!-- </el-col> -->
       </el-row>
       <el-row :gutter="10">
-
-        <!-- <el-col :span="3"> -->
-        <el-select v-model="value2" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
-          <el-option
-            v-for="item in options2"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <!-- </el-col> -->
-        <!-- <el-col :span="2"> -->
         <el-select v-model="value3" placeholder="支付状态" size="mini">
           <el-option
             v-for="item in options3"
@@ -75,8 +71,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <!-- </el-col> -->
-        <!-- <el-col :span="3"> -->
         <el-select v-model="value4" placeholder="国内物流状态" size="mini">
           <el-option
             v-for="item in options4"
@@ -121,19 +115,19 @@
     <div class="search clear">
       <el-row >
         <!-- <el-col :span="13"> -->
-        <div class="search-radio left" style="margin-right:20px;margin-bottom:5px">
-          <el-radio-group v-model="radio" size="mini">
-            <el-radio :label="1" border>订单ID</el-radio>
-            <el-radio :label="2" border>订单号</el-radio>
-            <el-radio :label="3" border>产品SKU</el-radio>
-            <el-radio :label="4" border>国内运单</el-radio>
-            <el-radio :label="5" border>国际运单</el-radio>
-            <el-radio :label="6" border>国际追踪号</el-radio>
-          </el-radio-group>
-        </div>
+        <!--<div class="search-radio left" style="margin-right:20px;margin-bottom:5px">-->
+          <!--<el-radio-group v-model="radio" size="mini">-->
+            <!--<el-radio :label="1" border>订单ID</el-radio>-->
+            <!--<el-radio :label="2" border>订单号</el-radio>-->
+            <!--<el-radio :label="3" border>产品SKU</el-radio>-->
+            <!--<el-radio :label="4" border>国内运单</el-radio>-->
+            <!--<el-radio :label="5" border>国际运单</el-radio>-->
+            <!--<el-radio :label="6" border>国际追踪号</el-radio>-->
+          <!--</el-radio-group>-->
+        <!--</div>-->
         <!-- </el-col>
         <el-col :span="8"> -->
-        <el-input v-model="input" style="margin-right:0" placeholder="订单号、产品SKU" size="mini"></el-input>
+        <el-input v-model="input" style="margin-right:0" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
         <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">搜索</el-button>
         <!-- </el-col> -->
       </el-row>
@@ -723,13 +717,13 @@
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             if(this.companyId){
-              this.company_selected_id =this.companyId  
+              this.company_selected_id =this.companyId
             }else{
-                this.get_company_list()  
+                this.get_company_list()
             }
             if(this.staffId){
               this.staff_selected_id =this.staffId
-              
+
             }else{
               this.company_staff_list()
             }
@@ -751,7 +745,7 @@
          },
     }
   }
-  
+
 </script>
 <style scoped>
   .clear:after {
