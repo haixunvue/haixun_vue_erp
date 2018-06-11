@@ -73,7 +73,7 @@ const salesman_list = r => require.ensure([], () => r(require('../pages/account_
 const Cd_product_list_admin = r => require.ensure([], () => r(require('../pages/commodity/Product_list_admin')), 'Cd_product_list_admin');
 const outside_user = r => require.ensure([], () => r(require('../pages/account_management/outside_user')), 'outside_user');
 const inside_user = r => require.ensure([], () => r(require('../pages/account_management/inside_user')), 'inside_user');
-const G_company_list2 = r => require.ensure([], () => r(require('../pages/Global/Company_list2')), 'G_company_list2');
+const shop_management = r => require.ensure([], () => r(require('../pages/Global/shop_management')), 'shop_management');
 const recordApproval = r => require.ensure([], () => r(require('../pages/financial_management/recordApproval')), 'recordApproval');
 const Cd_Preport3 = r => require.ensure([], () => r(require('../pages/commodity/Preport3')), 'Cd_Preport3');
 
@@ -266,8 +266,8 @@ export default new Router({
                    path: 'inside_user',
                    component: inside_user,
                 },{
-                   path: 'G_company_list2',
-                   component: G_company_list2,
+                   path: 'shop_management',
+                   component: shop_management,
                 },{
                    path: 'recordApproval',
                    component: recordApproval,
