@@ -3,136 +3,144 @@
     <h1>FBM订单</h1>
     <div class="line"></div>
     <div class="select-box">
-      <el-row :gutter="10" style="margin-bottom:5px">
-        <!-- <el-col :span="6"> -->
-          <el-select
-        v-if="!companyId"
-        v-model="company_selected_id"
-        placeholder="请选择公司"
-        size="mini"
-        v-on:change="onCompanyChange()">
-        <el-option
-            v-for ="item in company_list"
-            :key="item.id"
-            :label="item.company_full_name"
-            :value="item.id">
-        </el-option>
-      </el-select>
-        <el-select
-        v-if="!staffId"
-        v-model="staff_selected_id"
-        placeholder="请选择公司员工"
-        size="mini"
-        v-on:change="onStaffChange()">
-        <el-option
-            v-for ="item in staff_list"
-            :key="item.id"
-            :label="item.staff_name"
+      <el-form :inline="true" label-width="80px">
+        <el-row>
+        <el-col :span="24">
+          <el-form-item>
+            <el-select
+              v-if="!companyId"
+              v-model="company_selected_id"
+              placeholder="请选择公司"
+              size="mini"
+              v-on:change="onCompanyChange()">
+              <el-option
+                v-for ="item in company_list"
+                :key="item.id"
+                :label="item.company_full_name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-if="!staffId"
+              v-model="staff_selected_id"
+              placeholder="请选择公司员工"
+              size="mini"
+              v-on:change="onStaffChange()">
+              <el-option
+                v-for ="item in staff_list"
+                :key="item.id"
+                :label="item.staff_name"
 
-            :value="item.id">
-        </el-option>
-      </el-select>
-        <!-- </el-col> -->
-        <!-- <el-col :span="6"> -->
-        <el-select v-model="value2" placeholder="选择国家" size="mini">
-          <el-option
-            v-for="item in options2"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <el-select v-model="value2" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
-          <el-option
-            v-for="item in options2"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <!-- </el-col>
-        <el-col :span="6"> -->
-        <!-- <el-select v-model="value1" placeholder="选择店铺" size="mini">
-           <el-option
-             v-for="item in options1"
-             :key="item.value"
-             :label="item.label"
-             :value="item.value">
-           </el-option>
-         </el-select> -->
-        <!-- </el-col> -->
-      </el-row>
-      <el-row :gutter="10">
-        <el-select v-model="value3" placeholder="支付状态" size="mini">
-          <el-option
-            v-for="item in options3"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <el-select v-model="value4" placeholder="国内物流状态" size="mini">
-          <el-option
-            v-for="item in options4"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <!-- </el-col> -->
-        <!-- <el-col :span="3"> -->
-        <el-select v-model="value5" placeholder="国际物流状态" size="mini">
-          <el-option
-            v-for="item in options5"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <!-- </el-col> -->
-        <!-- <el-col :span="2"> -->
-        <el-select v-model="value6" placeholder="异常状态" size="mini">
-          <el-option
-            v-for="item in options6"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <!-- </el-col> -->
-        <!-- <el-col :span="9"> -->
-        <el-date-picker
-          v-model="value_time"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="起始日期"
-          end-placeholder="终止日期" size="mini">
-        </el-date-picker>
-        <!-- </el-col> -->
-      </el-row>
-    </div>
-    <!-- <div class="line"></div> -->
-    <div class="search clear">
-      <el-row >
-        <!-- <el-col :span="13"> -->
-        <!--<div class="search-radio left" style="margin-right:20px;margin-bottom:5px">-->
-          <!--<el-radio-group v-model="radio" size="mini">-->
-            <!--<el-radio :label="1" border>订单ID</el-radio>-->
-            <!--<el-radio :label="2" border>订单号</el-radio>-->
-            <!--<el-radio :label="3" border>产品SKU</el-radio>-->
-            <!--<el-radio :label="4" border>国内运单</el-radio>-->
-            <!--<el-radio :label="5" border>国际运单</el-radio>-->
-            <!--<el-radio :label="6" border>国际追踪号</el-radio>-->
-          <!--</el-radio-group>-->
-        <!--</div>-->
-        <!-- </el-col>
-        <el-col :span="8"> -->
-        <el-input v-model="input" style="margin-right:0" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
-        <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">搜索</el-button>
-        <!-- </el-col> -->
-      </el-row>
-
-      <!-- <input type="text" class="search-input" placeholder="订单号、产品SKU"/> -->
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="value2" placeholder="选择国家" size="mini">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="value2" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        </el-row>
+        <el-row>
+        <el-col :span="24">
+          <el-form-item>
+            <el-select v-model="value3" placeholder="支付状态" size="mini">
+              <el-option
+                v-for="item in options3"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="value4" placeholder="国内物流状态" size="mini">
+              <el-option
+                v-for="item in options4"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="value5" placeholder="国际物流状态" size="mini">
+              <el-option
+                v-for="item in options5"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="value6" placeholder="异常状态" size="mini">
+              <el-option
+                v-for="item in options6"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        </el-row>
+        <el-row>
+        <el-col :span="24">
+          <el-form-item>
+            <el-date-picker
+              v-model="datetime_start"
+              size="mini"
+              @change=""
+              type="datetime"
+              value-format="yyyy-MM-dd hh:mm:ss"
+              placeholder="选择开始日期时间"
+              align="right"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-date-picker
+              v-model="datetime_end"
+              size="mini"
+              @change=""
+              type="datetime"
+              value-format="yyyy-MM-dd hh:mm:ss"
+              placeholder="选择结束日期时间"
+              align="right"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-input v-model="input" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">搜索</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">重置</el-button>
+          </el-form-item>
+        </el-col>
+        </el-row>
+      </el-form>
     </div>
     <div class="line" style="margin-bottom:5px"></div>
     <div class="search-result oh" style="margin-bottom:5px">
@@ -497,153 +505,63 @@
 </template>
 
 <script>
-  import router from "../../router";
   export default {
     data() {
       return {
          company_list:[],
+        options:[],
+        value:'',
+        datetime_start:'',
+        datetime_end:'',
             company_selected_id:'',
             staff_list:[],
             staff_selected_id:'',
         input:'',
         total:0,//默认数据总数
-        pagesize:7,//每页的数据条数
+        pagesize:5,//每页的数据条数
         currentPage:1,//默认开始页面
-        tableData: [{
-          id: '0000000001',
-          order_num:'000-0000000-0000001',
-          pic:'/static/images/lcLU0ZgiTa.png',
-          buy_data:'2018-05-08 22:01:53',
-
-          operator:'009 高芳芳',
-          shop:'德国',
-          amazon:'已发货',
-          international: '未发货',
-          international_order:'YT1812926306500039',
-          domestic:'待签收~~',
-          domestic_order:'493348945168~~',
-          count:'2',
-          money:'47.24[EUR]',
-          cost:'-',
-          profit:'-',
-          updata_data:'2018-05-09 18:16:01'
-        },{
-          id: '47839',
-          pic:'/static/images/ntrrLWfLuN.png',
-          buy_data:'2018/05/09',
-          order_num:'305-1226403-5312348',
-          operator:'009 高芳芳',
-          shop:'德国',
-          amazon:'已发货',
-          international: '未发货',
-          international_order:'YT1812926306500039',
-          domestic:'待签收~~',
-          domestic_order:'493348945168~~',
-          count:'2',
-          money:'47.24[EUR]',
-          cost:'-',
-          profit:'-',
-          updata_data:'2018/05/09 18:16'
-        }],
+        totalItems:1,
+        tableData: [],
         dialogTableVisible:false,
         isEdit:false,
         isEditAddress:false,
-        goodsData:[
-          {
-            picUrl:'/static/images/lcLU0ZgiTa.png',
-            name:'GAZHFERY Dame Painter Flat Hut Der Männer Cowboy Bare Hat,Blue1-OneSize',
-            sku:'GFF-BAAFG-721307-03',
-            count:'1',
-            purchasePrice:'18.000',
-            wayBill:'493348945168',
-            logIstics:'minghangkuaidi',
-            dataTime:'2018/05/09 18:29'
-          },
-          {
-            picUrl:'/static/images/ntrrLWfLuN.png',
-            name:'GAZHFERY Dame Painter Flat Hut Der Männer Cowboy Bare Hat,Blue1-OneSize',
-            sku:'GFF-BAAFG-721307-03',
-            count:'2',
-            purchasePrice:'23.000',
-            wayBill:'493348945168',
-            logIstics:'minghangkuaidi',
-            dataTime:'2018/05/09 18:29'
-          }
-        ],
+        goodsData:[],
         activeName:'first',
         textarea:'',
-        options1: [{
-          value: '选项1',
-          label: 'Jiangu(德国)'
-        }, {
-          value: '选项2',
-          label: 'Jiangu(美国)'
-        }],
-        options2: [{
-          value: '选项1',
-          label: '已取消'
-        }, {
-          value: '选项2',
-          label: '所有订单'
-        }, {
-          value: '选项3',
-          label: '未发货'
-        }, {
-          value: '选项4',
-          label: '等待中'
-        }, {
-          value: '选项5',
-          label: '已发货'
-        }],
-        options3: [{
-          value: '选项1',
-          label: '已支付'
-        }, {
-          value: '选项2',
-          label: '退款'
-        }],
-        options4: [{
-          value: '选项1',
-          label: '未采购'
-        }, {
-          value: '选项2',
-          label: '待发货'
-        }, {
-          value: '选项3',
-          label: '待签收'
-        }, {
-          value: '选项4',
-          label: '已签收'
-        }],
-        options5: [{
-          value: '选项1',
-          label: '未发货'
-        }, {
-          value: '选项2',
-          label: '已发货'
-        }, {
-          value: '选项3',
-          label: '已签收'
-        }],
-        options6: [{
-          value: '选项1',
-          label: '搁置订单'
-        }, {
-          value: '选项2',
-          label: '问题件'
-        }],
-        value1: '',
-        value2: '',
-        value3: '',
-        value4: '',
-        value5: '',
-        value6: '',
+        options1: [],
         value_time:'',
         innerVisible: false,
         num:'2',
         isAdd:false,
         isDetil:false,
-        radio:1
+        radio:1,
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        }
       }
     },
     methods: {
@@ -764,28 +682,9 @@
     margin-top: 13px;
     margin-bottom: 10px;
   }
-
-  .search-radio{
-    /*height:30px;
-    width: 680px;
-    line-height: 30px;
-    padding-left: 15px;
-    border:1px solid #ebeef5;
-    border-radius: 5px 0 0 5px;
-    float: left;*/
+  .el-form-item{
+    margin-bottom: 0;
   }
-
-  .search-input{
-    /*width:200px;
-    height:30px;
-    float:left;
-    border:1px solid #ebeef5;
-    margin-left: -1px;
-    border-radius: 0 5px 5px 0;
-    padding:0 10px;*/
-
-  }
-
   .search-btn{
     margin-left: 20px;
   }
