@@ -80,7 +80,7 @@ export default  [
         "name": "审批记录",
       },
       {
-        "routerName": "withdrawing",
+        "routerName": "deductions_detail_admin",
         "name": "扣款明细",
         "icon": "",
       },

@@ -2,6 +2,19 @@
   <div >
 
         <div style="margin-bottom:5px">
+          <el-select
+        v-if="companylist&&companylist.length>0"
+        v-model="owner_company_id"
+        placeholder="请选择公司"
+        size="mini"
+        v-on:change="onCompanyChange()">
+        <el-option
+            v-for ="item in companylist"
+            :key="item.id"
+            :label="item.company_full_name"
+            :value="item.id">
+        </el-option>
+      </el-select>
           <el-select v-model="target_staff_id" placeholder="选择员工" size="mini" @change="target_staff_Change">
             <el-option
               v-for="(item,index) in staff_list"
@@ -167,6 +180,12 @@
       }
     },
     methods: {
+     onCompanyChange(){
+         this.currentPage = 1;
+             this.company_staff_list();
+            this.company_shop_list();
+            this.cost_statistics_logistics_paging();
+      },
       search: function(){
           this.currentPage = 1;
           this.cost_statistics_logistics_paging()
@@ -283,14 +302,22 @@
           },
     },
     mounted() {
-            this.owner_company_id = localStorage.getItem("owner_company_id")
-            this.owner_user_id = localStorage.getItem("owner_user_id")
+             this.owner_user_id = localStorage.getItem("owner_user_id")
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
-            this.company_staff_list();
+            if(this.companylist.length<=0){
+              this.owner_company_id = localStorage.getItem("owner_company_id")
+              this.company_staff_list();
             this.company_shop_list();
             this.cost_statistics_logistics_paging();
-    }
+            }
+    },
+     props:{
+          companylist:{
+          default:[],
+          type:Array,
+         }
+     }
   }
 </script>
 <style scoped>

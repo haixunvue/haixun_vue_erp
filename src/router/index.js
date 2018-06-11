@@ -63,6 +63,7 @@ const Cd_Preport = r => require.ensure([], () => r(require('../pages/commodity/P
 const Cd_Preport2 = r => require.ensure([], () => r(require('../pages/commodity/Preport2')), 'Cd_Preport2');
 const business_report = r => require.ensure([], () => r(require('../pages/financial_management/business_report')), 'business_report');
 const deductions_detail = r => require.ensure([], () => r(require('../pages/financial_management/deductions_detail')), 'deductions_detail');
+const deductions_detail_admin = r => require.ensure([], () => r(require('../pages/financial_management/deductions_detail_admin')), 'deductions_detail_admin');
 const Cd_User_edit = r => require.ensure([], () => r(require('../pages/commodity/User_edit')), 'Cd_User_edit');
 const Cd_User_edit2 = r => require.ensure([], () => r(require('../pages/commodity/User_edit2')), 'Cd_User_edit2');
 const Cd_User_edit3 = r => require.ensure([], () => r(require('../pages/commodity/User_edit3')), 'Cd_User_edit3');
@@ -133,8 +134,8 @@ export default new Router({
                    path: 'fbm_order_staff',
                    component: fbm_order_staff,
                 },{
-                   path: 'G_warehouse',
-                   component: G_warehouse,
+                   path: 'deductions_detail_admin',
+                   component: deductions_detail_admin,
                 },{
                    path: 'amazon_auth',
                    component: amazon_auth,
