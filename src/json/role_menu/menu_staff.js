@@ -10,11 +10,11 @@ export default  [
         "name": "我的产品",
         "list2": [
           {
-            "routerName": "pruduct_sum",
+            "routerName": "product_sum",
             "name": "商品总汇",
           },
           {
-            "routerName": "pruduct_sync",
+            "routerName": "product_sync",
             "name": "待同步产品",
           },
           {

@@ -18,6 +18,7 @@ const G_user_list = r => require.ensure([], () => r(require('../pages/Global/Use
 const user_edit = r => require.ensure([], () => r(require('../pages/account_management/User_edit')), 'user_edit');
 const company_management = r => require.ensure([], () => r(require('../pages/Global/company_management')), 'company_management');
 const staff_management = r => require.ensure([], () => r(require('../pages/Global/staff_management')), 'staff_management');
+const product_management = r => require.ensure([], () => r(require('../pages/Global/product_management')), 'product_management');
 const G_company_edit = r => require.ensure([], () => r(require('../pages/Global/Company_edit')), 'G_company_edit');
 const G_company_add = r => require.ensure([], () => r(require('../pages/Global/Company_add')), 'G_company_add');
 const corporate_finance = r => require.ensure([], () => r(require('../pages/financial_management/corporate_finance')), 'corporate_finance');
@@ -41,7 +42,7 @@ const company_info = r => require.ensure([], () => r(require('../pages/company/c
 const code_management = r => require.ensure([], () => r(require('../pages/system_management/code_management')), 'code_management');
 
 //commodity
-const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
+//const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
 const Cd_product_list1 = r => require.ensure([], () => r(require('../pages/commodity/Product_list1')), 'Cd_product_list1');
 const Cd_product_list2 = r => require.ensure([], () => r(require('../pages/commodity/Product_list2')), 'Cd_product_list2');
 const Cd_product_list3 = r => require.ensure([], () => r(require('../pages/commodity/Product_list3')), 'Cd_product_list3');
@@ -79,6 +80,9 @@ const Warehouse = r => require.ensure([], () => r(require('../pages/Warehouse'))
 const Company_add = r => require.ensure([], () => r(require('../pages/Company_add')), 'Company_add');
 const Message = r => require.ensure([], () => r(require('../pages/Message')), 'Message');
 
+//product_management 员工 产品管理
+const product_sum = r => require.ensure([], () => r(require('../pages/product_management/product_sum')), 'product_sum');
+
 export default new Router({
     routes: [
         {
@@ -109,6 +113,9 @@ export default new Router({
                 },{
                    path: 'staff_management',
                    component: staff_management,
+                },{
+                   path: 'product_management',
+                   component: product_management,
                 },{
                    path: 'G_company_add',
                    component: G_company_add,
@@ -159,8 +166,8 @@ export default new Router({
                   component: fbm_order,
                 },
                 {
-                   path: 'Cd_product_list',
-                   component: Cd_product_list,
+                   path: 'product_sum',
+                   component: product_sum,
                 },{
                    path: 'Cd_product_list1',
                    component: Cd_product_list1,
