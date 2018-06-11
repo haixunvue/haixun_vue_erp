@@ -1,11 +1,11 @@
-<template>  
+<template>
 <div class="content">
   <h1>{{title}}</h1>
   <div class="line" v-if="show_company_selector||show_staff_selector"></div>
-  <el-form ref="form" :model="form" label-width="80px" size="mini">
+  <el-form :inline="true" ref="form" :model="form" label-width="80px" size="mini">
      <el-form-item v-if="show_company_selector" label="公司" >
-      <el-select 
-        v-model="company_selected_id" 
+      <el-select
+        v-model="company_selected_id"
         placeholder="请选择公司"
         v-on:change="onCompanyChange()">
         <el-option
@@ -15,11 +15,10 @@
             :value="item.id">
         </el-option>
       </el-select>
-    </el-form-item> 
-    
+    </el-form-item>
     <el-form-item v-if="show_staff_selector" label="选择员工" >
-      <el-select 
-        v-model="staff_selected_id" 
+      <el-select
+        v-model="staff_selected_id"
         placeholder="请选择公司员工"
         v-on:change="onStaffChange()">
         <el-option
@@ -30,20 +29,6 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <div class="line" ></div>
-    <!-- <el-form-item label="店铺" style="margin-bottom:5px">
-      <el-select 
-        v-model="value" 
-        placeholder="选择店铺"
-        v-on:change="change(value)">
-        <el-option
-            v-for ="item in form.company"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-        </el-option>
-      </el-select>
-    </el-form-item> -->
     <el-form-item label="分类" style="margin-bottom:5px">
       <el-select v-model="form.inf2" placeholder="请选择">
         <el-option
@@ -54,35 +39,61 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="内容搜索" >
-      <el-row  >
-        <el-col :span="9" style="margin-right:10px">
-          <el-date-picker
-            v-model="form.infor2"
-            type="datetimerange"
-            :picker-options="form.pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            style="width:100%"
-            >
-          </el-date-picker>
-        </el-col>
-        <el-col :span="9" style="margin-right:10px">
-          <el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select" >
-            <el-select v-model="form.select1" slot="prepend" placeholder="请选择" style="width:120px">
-              <el-option label="标题" value="1" ></el-option>
-              <el-option label="SKU" value="2"></el-option>
-            </el-select>
-          </el-input>
-        </el-col>
-        <el-col :span="2"  >
-          <el-button type="primary">搜索产品</el-button>
-        </el-col>
-        
-      </el-row>
-      
+    <div class="" ></div>
+    <!-- <el-form-item label="店铺" style="margin-bottom:5px">
+      <el-select
+        v-model="value"
+        placeholder="选择店铺"
+        v-on:change="change(value)">
+        <el-option
+            v-for ="item in form.company"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
+    </el-form-item> -->
+    <el-form-item label="开始时间">
+      <el-date-picker
+        v-model="form.datetime_start"
+        @change=""
+        type="datetime"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        placeholder="选择开始日期时间"
+        align="right"
+        :picker-options="form.pickerOptions">
+      </el-date-picker>
     </el-form-item>
+    <el-form-item label="结束时间">
+      <el-date-picker
+        v-model="form.datetime_end"
+        @change=""
+        type="datetime"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        placeholder="选择结束日期时间"
+        align="right"
+        :picker-options="form.pickerOptions">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label="">
+      <el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select"></el-input>
+    </el-form-item>
+    <el-form-item label="">
+      <el-button type="primary">搜索产品</el-button>
+    </el-form-item>
+    <!--<el-row  >-->
+      <!--<el-col :span="9" style="margin-right:10px">-->
+        <!--<el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select" >-->
+          <!--<el-select v-model="form.select1" slot="prepend" placeholder="请选择" style="width:120px">-->
+            <!--<el-option label="标题" value="1" ></el-option>-->
+            <!--<el-option label="SKU" value="2"></el-option>-->
+          <!--</el-select>-->
+        <!--</el-input>-->
+      <!--</el-col>-->
+      <!--<el-col :span="2"  >-->
+        <!--<el-button type="primary">搜索产品</el-button>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
     <div class="line"></div>
     <el-form-item label="审核状态" style="margin-bottom:5px">
       <el-radio-group v-model="radio1" size="mini">
@@ -113,8 +124,8 @@
         <el-radio label="4" border >ERP产品库(0)</el-radio>
       </el-radio-group>
     </el-form-item>
-  </el-form> 
-  
+  </el-form>
+
   <div class="line" style="margin-bottom:5px"></div>
   <div class="search-result oh" style="margin-bottom:5px">
       <p class="search-result-text">符合查询条件的产品有<span> 6 </span>件</p>
@@ -131,9 +142,6 @@
         <el-button type="text" @click="product_edit" size="mini">批量编辑</el-button>
       </div>
   </div>
-  
-  
-  <!-- <div style="border-bottom:1px solid #ebeef5"></div> -->
   <el-table
       :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
       border
@@ -209,8 +217,8 @@
         width="75">
         <template slot-scope="scope">
           <!-- <el-button type="primary" icon="el-icon-edit" @click="product_edit" size="mini"></el-button> -->
-          
-          <el-button type="primary" @click="product_edit" size="mini">编辑</el-button> 
+
+          <el-button type="primary" @click="product_edit" size="mini">编辑</el-button>
           <!-- <el-button @click="product_del" type="text" style="color:#F56C6C" size="mini">删除</el-button> -->
         </template>
       </el-table-column>
@@ -232,7 +240,7 @@
     :total="totalItems"
     style="clear:both;text-align:center">
   </el-pagination>
- 
+
   <el-dialog title="批量编辑" :visible.sync="dialogTableVisible" width="60%">
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item label="标题">
@@ -268,7 +276,7 @@
           <el-select v-model="form.select1" placeholder="请选择">
             <el-option label="0" value="1" ></el-option>
             <el-option label="1" value="2"></el-option>
-            
+
           </el-select>
         </div>
         <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
@@ -280,8 +288,8 @@
       </el-form-item>
       <div class="line"></div>
       <el-form-item label="产品价格">
-        <el-radio-group 
-          v-model="radio1" 
+        <el-radio-group
+          v-model="radio1"
           size="mini"
           v-on:change="change2(radio1)"
           style="margin-bottom:10px">
@@ -318,8 +326,8 @@
       </el-form-item>
       <div class="line"></div>
       <el-form-item label="产品数量">
-        <el-radio-group 
-          v-model="radio2" 
+        <el-radio-group
+          v-model="radio2"
           size="mini"
           v-on:change="change3(radio2)"
           style="margin-bottom:10px">
@@ -371,8 +379,6 @@
       <el-button type="primary" @click="dialogTableVisible = false">确 定</el-button>
     </div>
   </el-dialog>
-
-  
 </div>
 </template>
 
@@ -487,7 +493,7 @@
               }).then((res)=>{
                 // console.log(res);
                 this.data = res.values;
-              })             
+              })
           },
           change2(val){
             if(val == 1){
@@ -539,7 +545,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           },
           handleSelectionChange(val) {
@@ -559,7 +565,7 @@
             // console.log("1")
             let from = (this.currentPage - 1) * this.pageSize;
             let to = this.currentPage * this.pageSize;
-                 
+
             for (; from < to; from++) {
               if (list[from]) {
                 this.data2.push(list[from]);
@@ -587,7 +593,7 @@
                 }).then((res)=>{
                   // console.log(res);
                   this.data = res.values;
-                  this.data2 = this.data.concat(); 
+                  this.data2 = this.data.concat();
                   this.totalItems = res.values.length;
                 })
               })
@@ -616,13 +622,13 @@
                   }).then((res)=>{
                     // console.log(res);
                     this.data = res.values;
-                    this.data2 = this.data.concat(); 
+                    this.data2 = this.data.concat();
                     this.totalItems = res.values.length;
                   })
                 }
               })
             }
-            
+
           },
           onCompanyChange(){
               this.company_staff_list();
@@ -663,16 +669,16 @@
             this.user_id = localStorage.getItem("user_id");
             if(this.companyId){
                this.show_company_selector= false;
-              this.company_selected_id =this.companyId  
+              this.company_selected_id =this.companyId
             }else{
               this.show_company_selector= true;
                 this.get_company_list()
-             
+
             }
             if(this.staffId){
               this.show_staff_selector= false;
               this.staff_selected_id =this.staffId
-              
+
             }else{
               this.show_staff_selector= true;
               this.company_staff_list()
