@@ -1,15 +1,8 @@
-<!--
-**************************************
-*   名称：一个demo
-*   作用：展示如何把页面嵌入框架
-*   作者：
-**************************************
--->
 <template>
 <div class="content">
   <h1>财务审批</h1>
   <div class="line"></div>
-  <el-form ref="form" :model="form" label-width="90px" size="mini">
+  <el-form label-width="90px" size="mini">
     <el-col :span="8">
     <el-form-item label="状态">
       <el-select v-model="search_form.process_status" placeholder="选择状态">
@@ -71,25 +64,25 @@
     :default-sort = "{prop: 'right', order: 'descending'}"
     >
     <el-table-column
-      prop="id"
+      prop="target_company_id"
       label="公司ID"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="admin"
+      prop="recharge_num"
       label="单据编号"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="right"
+      prop="company_contact_number"
       label="电话"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="money"
+      prop="money_number"
       label="充值金额"
       sortable
       >
@@ -101,13 +94,13 @@
       >
     </el-table-column>
     <el-table-column
-      prop="rcmoney"
+      prop="notes"
       label="备注"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="rcmoney"
+      prop="process_status"
       label="状态"
       sortable
       >
@@ -128,7 +121,7 @@
     >
     </el-table-column>
     <el-table-column
-      prop="rcmoney"
+      prop="_createTime"
       label="日期"
       sortable
     >
