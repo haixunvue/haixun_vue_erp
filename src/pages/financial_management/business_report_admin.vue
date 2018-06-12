@@ -555,7 +555,7 @@
         },
     props:{
          title:{
-          default:'推销商店业绩',
+          default:'业绩管理',
           type:String,
          },
          companyId:{
