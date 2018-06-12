@@ -72,7 +72,7 @@ const Cd_User_edit2 = r => require.ensure([], () => r(require('../pages/commodit
 const Cd_User_edit3 = r => require.ensure([], () => r(require('../pages/commodity/User_edit3')), 'Cd_User_edit3');
 
 //admin
-const Cd_Logistics = r => require.ensure([], () => r(require('../pages/commodity/Logistics')), 'Cd_Logistics');
+const logistics = r => require.ensure([], () => r(require('../pages/logistics_management/logistics')), 'logistics');
 const salesman_list = r => require.ensure([], () => r(require('../pages/account_management/salesman_list')), 'salesman_list');
 const Cd_product_list_admin = r => require.ensure([], () => r(require('../pages/commodity/Product_list_admin')), 'Cd_product_list_admin');
 const outside_user = r => require.ensure([], () => r(require('../pages/account_management/outside_user')), 'outside_user');
@@ -258,8 +258,8 @@ export default new Router({
                    path: 'Message',
                    component: Message,
                 },{
-                   path: 'Cd_Logistics',
-                   component: Cd_Logistics,
+                   path: 'logistics_management',
+                   component: logistics,
                 },{
                    path: 'salesman_list',
                    component: salesman_list,
