@@ -58,6 +58,8 @@ const api={
     'product_list':'/apis/v1807g/product/list/paging',   // 产品列表
     'examine_pass':'/apis/v1807g/company_money_recharge/examine_pass',   // 产品列表
     'examine_nopass':'/apis/v1807g/company_money_recharge/examine_nopass',   // 产品列表
+    'product_classification_list':'/apis/v1807g/product_classification/list',   // 产品分类
+    'product_listall_paging':'/apis/v1807g/product/listall/paging',   // 产品分类
 
 };
 export default api;

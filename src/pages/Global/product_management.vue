@@ -1,9 +1,9 @@
 <template>
 <div class="content">
   <h1>{{title}}</h1>
-  <div class="line" v-if="show_company_selector||show_staff_selector"></div>
+  <div class="line" ></div>
   <el-form :inline="true" ref="form" :model="form" label-width="80px" size="mini">
-     <el-form-item v-if="show_company_selector" label="公司" >
+     <el-form-item v-if="!companyId" label="公司" >
       <el-select
         v-model="company_selected_id"
         placeholder="请选择公司"
@@ -16,7 +16,7 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item v-if="show_staff_selector" label="选择员工" >
+    <el-form-item v-if="!staffId" label="选择员工" >
       <el-select
         v-model="staff_selected_id"
         placeholder="请选择公司员工"
@@ -30,12 +30,12 @@
       </el-select>
     </el-form-item>
     <el-form-item label="分类" style="margin-bottom:5px">
-      <el-select v-model="form.inf2" placeholder="请选择">
+      <el-select v-model="product_classify_selected" placeholder="请选择">
         <el-option
-          v-for="item in form.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          v-for="(item,index) in product_classify"
+          :key="index"
+          :label="item"
+          :value="item">
         </el-option>
       </el-select>
     </el-form-item>
@@ -55,31 +55,32 @@
     </el-form-item> -->
     <el-form-item label="开始时间">
       <el-date-picker
-        v-model="form.datetime_start"
-        @change=""
+        v-model="datetime_start"
+        @change="(val)=>{this.datetime_start=val}"
         type="datetime"
         value-format="yyyy-MM-dd hh:mm:ss"
         placeholder="选择开始日期时间"
         align="right"
-        :picker-options="form.pickerOptions">
+        :picker-options="pickerOptions">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="结束时间">
       <el-date-picker
-        v-model="form.datetime_end"
-        @change=""
+        v-model="datetime_end"
+        @change="(val)=>{this.datetime_end=val}"
         type="datetime"
         value-format="yyyy-MM-dd hh:mm:ss"
         placeholder="选择结束日期时间"
         align="right"
-        :picker-options="form.pickerOptions">
+        :picker-options="pickerOptions">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="">
-      <el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select"></el-input>
+      <el-input placeholder="请输入内容" v-model="search_text" class="input-with-select"></el-input>
     </el-form-item>
     <el-form-item label="">
-      <el-button type="primary">搜索产品</el-button>
+      <el-button type="primary" v-on:click="search">搜索产品</el-button>
+       <el-button type="primary" v-on:click="clearSearch">重置</el-button>
     </el-form-item>
     <!--<el-row  >-->
       <!--<el-col :span="9" style="margin-right:10px">-->
@@ -96,39 +97,25 @@
     <!--</el-row>-->
     <div class="line"></div>
     <el-form-item label="审核状态" style="margin-bottom:5px">
-      <el-radio-group v-model="radio1" size="mini">
-        <el-radio label="1" border>全部(53492)</el-radio>
-        <el-radio label="2" border >通过(50123)</el-radio>
-        <el-radio label="3" border >待审核(245)</el-radio>
-        <el-radio label="4" border >失效(1)</el-radio>
+      <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" size="mini">
+        <el-radio v-for="(item,index) in status_audit_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="上架状态" style="margin-bottom:5px">
-      <el-radio-group v-model="radio2" size="mini">
-        <el-radio label="1" border>全部(53492)</el-radio>
-        <el-radio label="2" border >上架(50123)</el-radio>
-        <el-radio label="3" border >下架(245)</el-radio>
-        <el-radio label="4" border >过滤(1)</el-radio>
-        <el-radio label="4" border >侵权(103)</el-radio>
-        <el-radio label="4" border >屏蔽(0)</el-radio>
+      <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" size="mini">
+        <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="产品类型">
-      <el-radio-group v-model="radio3" size="mini">
-        <el-radio label="1" border>全部(53492)</el-radio>
-        <el-radio label="2" border >重点(50123)</el-radio>
-        <el-radio label="3" border >原创(245)</el-radio>
-        <el-radio label="4" border >海外(1)</el-radio>
-        <el-radio label="4" border >抓取(103)</el-radio>
-        <el-radio label="4" border >其他(0)</el-radio>
-        <el-radio label="4" border >ERP产品库(0)</el-radio>
+      <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" size="mini">
+        <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
     </el-form-item>
   </el-form>
 
   <div class="line" style="margin-bottom:5px"></div>
   <div class="search-result oh" style="margin-bottom:5px">
-      <p class="search-result-text">符合查询条件的产品有<span> 6 </span>件</p>
+      <p class="search-result-text">符合查询条件的产品有<span>{{totalCount}}</span>件</p>
       <div class="left ">
         <el-select v-model="form.select1" size="mini" slot="prepend" placeholder="请选择" style="width:120px;">
           <el-option label="操作" value="1" ></el-option>
@@ -143,7 +130,7 @@
       </div>
   </div>
   <el-table
-      :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+      :data="product_list"
       border
       style="width: 100%"
       :default-sort = "{prop: 'order', order: 'descending'}"
@@ -237,7 +224,7 @@
     :page-sizes="[5, 20, 50, 100]"
     :page-size="pagesize"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="totalItems"
+    :total="totalCount"
     style="clear:both;text-align:center">
   </el-pagination>
 
@@ -384,42 +371,46 @@
 
 <script>
     import router from "../../router";
+    const status_audit_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
+    const status_shelf_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}, {name:'侵权',value:'tort'}, {name:'屏蔽',value:'shield'}];
+    const product_type_list = [{name:'全部',value:'all'},{name:'重点',value:'stress'}, {name:'原创',value:'original'}, {name:'海外',value:'overseas'}, {name:'抓取',value:'grab'}, {name:'其他',value:'other'}, {name:'ERP产品库',value:'erp_product_library'}];
+
+     
+
+
+
+
+   
+
+   
+
+
+
+
+
     export default {
         data() {
           return {
             company_list:[],
             company_selected_id:'',
-            show_company_selector:false,
             staff_list:[],
             staff_selected_id:'',
-            show_staff_selector:false,
-            infor:'',
-            radio1:'1',
-            radio2:'1',
-            radio3:'1',
-            checked1:true,
-            checked2:true,
-            checked3:true,
-            checked4:true,
-            form:{
-              company: [],
-              infor1:'',
-              select1:'1',
-              infor2:'',
-              options: [{
-                value: '1',
-                label: '鞋子'
-              }, {
-                value: '2',
-                label: '帽子'
-              }, {
-                value: '3',
-                label: '衣服'
-              }, {
-                value: '4',
-                label: '裤子'
-              }],
-              pickerOptions: {
+            product_classify:[],
+            product_classify_selected:'',
+            datetime_start:'',
+            datetime_end:'',
+            search_text:'',
+            status_audit_list:status_audit_list,
+            status_shelf_list:status_shelf_list,
+            product_type_list:product_type_list,
+            status_audit_selected:'all',
+            status_shelf_selected:'all',
+            product_type_selected:'all',
+            totalCount:0,
+            currentPage:1,
+            pagesize:5,
+            product_list:[],
+            pickerOptions: {
                 shortcuts: [{
                   text: '最近一周',
                   onClick(picker) {
@@ -445,80 +436,27 @@
                     picker.$emit('pick', [start, end]);
                   }
                 }]
-              }
-            },
-            dialogTableVisible:false,
-            dialogTableVisible1:false,
-            box1:true,
-            box2:false,
-            box3:false,
-            box2_1:true,
-            box2_2:false,
-            inf2:'',
-            activeName: 'second',
-            tableData1: [],
-            data: [],
-            checked: [],
-            total:0,//默认数据总数
-            pagesize:7,//每页的数据条数
-            currentPage:1,//默认开始页面
-            cid:'',
-            staffid:'',
-            value: '',
-            ifboos:false,
-            data: [],
-            data2:[],
-            data3:[],
-            totalItems:0,
-            currentPage:1,
-            pagesize:5,
-            schfilter:"",
+              },
+            form:{
+            }
           }
         },
         methods: {
-          open1(){
-            this.dialogTableVisible = true;
+          changeRadioValue(){
+          this.currentPage = 1;
+          this.product_listall_paging()
           },
-          change(val){
-              var tk = localStorage.getItem("token");
-              var uid = localStorage.getItem("uid");
-
-              this.cid = val;//把当前公司id
-
-
-              //列出公司里的产品
-              this.$http.post('/restful/list/company.'+this.cid+'/product',{
-                // user_token:tk,
-
-              }).then((res)=>{
-                // console.log(res);
-                this.data = res.values;
-              })
+          search: function(){
+          this.currentPage = 1;
+          this.product_listall_paging()
           },
-          change2(val){
-            if(val == 1){
-              this.box1 = true;
-              this.box2 = false;
-              this.box3 = false;
-            }else if(val == 2){
-              this.box1 = false;
-              this.box2 = true;
-              this.box3 = false;
-            }else if(val == 3){
-              this.box1 = false;
-              this.box2 = false;
-              this.box3 = true;
-            }
-          },
-          change3(val){
-            if(val == 1){
-              this.box2_1 = true;
-              this.box2_2 = false;
-
-            }else if(val == 2){
-              this.box2_1 = false;
-              this.box2_2 = true;
-            }
+          clearSearch: function(){
+            this.datetime_start=''
+            this.datetime_end=''
+            this.company_selected_id=''
+            this.staff_selected_id=''
+            this.product_classify_selected=''
+            this.search_text=''
           },
           current_change:function(currentPage){
             this.currentPage = currentPage;
@@ -663,28 +601,79 @@
               }
             })
           },
+          product_classification_list(){
+            this.$http.post(this.api.product_classification_list,{
+              user_token:this.user_token,
+              user_id:this.user_id,
+            }).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                this.product_classify = res.value;
+              }
+            })
+          },
+          product_listall_paging(){
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+            }
+            if(this.company_selected_id){
+              params.target_company_id = this.company_selected_id
+            }
+
+            if(this.staff_selected_id){
+              params.target_staff_id = this.staff_selected_id
+            }
+
+            if(this.datetime_start){
+                 params.product_updata_datetime_start=this.datetime_start;
+            }
+            if(this.datetime_end){
+                params.product_updata_datetime_end=this.datetime_end;
+            }
+            if(this.status_audit_selected&&this.status_audit_selected!='all'){
+                params.status_audit=this.status_audit_selected;
+            }
+            if(this.status_shelf_selected&&this.status_shelf_selected!='all'){
+                params.status_shelf=this.status_shelf_selected;
+            }
+            if(this.product_type_selected&&this.product_type_selected!='all'){
+                params.product_type=this.product_type_selected;
+            }
+
+
+            this.$http.post(this.api.product_listall_paging,params).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                    this.product_list = res.value.list;
+                  this.totalCount = res.value.totalCount;
+                }else{
+                     this.product_list=[];
+                }
+            })
+          },
+
         },
         created(){
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
+            this.product_classification_list()
             if(this.companyId){
-               this.show_company_selector= false;
               this.company_selected_id =this.companyId
             }else{
-              this.show_company_selector= true;
                 this.get_company_list()
 
             }
             if(this.staffId){
-              this.show_staff_selector= false;
               this.staff_selected_id =this.staffId
 
             }else{
-              this.show_staff_selector= true;
               this.company_staff_list()
             }
-            console.log('show_company_selector',this.show_company_selector)
-            console.log('show_staff_selector',this.show_staff_selector)
+            this.product_listall_paging();
+
         },
         props:{
          title:{
