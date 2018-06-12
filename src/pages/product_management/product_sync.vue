@@ -1,49 +1,19 @@
+
 <template>
 <div class="content">
-  <h1>{{title}}</h1>
-  <div class="line" ></div>
-  <el-form :inline="true" ref="form" :model="form" label-width="80px" size="mini">
-     <el-form-item v-if="!companyId" label="公司" >
-      <el-select
-        v-model="company_selected_id"
-        placeholder="请选择公司"
-        v-on:change="onCompanyChange()">
-        <el-option
-            v-for ="item in company_list"
-            :key="item.id"
-            :label="item.company_full_name"
-            :value="item.id">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item v-if="!staffId" label="选择员工" >
-      <el-select
-        v-model="staff_selected_id"
-        placeholder="请选择公司员工"
-        v-on:change="onStaffChange()">
-        <el-option
-            v-for ="item in staff_list"
-            :key="item.id"
-            :label="item.staff_name"
-            :value="item.id">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="分类" style="margin-bottom:5px">
-      <el-select v-model="product_classify_selected" placeholder="请选择">
-        <el-option
-          v-for="(item,index) in product_classify"
-          :key="index"
-          :label="item"
-          :value="item">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <div class="" ></div>
-    <!-- <el-form-item label="店铺" style="margin-bottom:5px">
+  <h1 style="margin-bottom:20px">待同步产品</h1>
+
+  <el-tabs v-model="activeName" type="card" >
+    <el-tab-pane label="待同步(2)" name="first"></el-tab-pane>
+    <el-tab-pane label="同步成功(1295)" name="second"></el-tab-pane>
+  </el-tabs>
+
+  <div class="line" v-show="ifboos"></div>
+  <el-form ref="form" :model="form" label-width="80px" size="mini">
+    <el-form-item label="公司" v-show="ifboos">
       <el-select
         v-model="value"
-        placeholder="选择店铺"
+        placeholder="请选择公司"
         v-on:change="change(value)">
         <el-option
             v-for ="item in form.company"
@@ -52,83 +22,53 @@
             :value="item.value">
         </el-option>
       </el-select>
-    </el-form-item> -->
-    <el-form-item label="开始时间">
-      <el-date-picker
-        v-model="datetime_start"
-        @change="(val)=>{this.datetime_start=val}"
-        type="datetime"
-        value-format="yyyy-MM-dd hh:mm:ss"
-        placeholder="选择开始日期时间"
-        align="right"
-        :picker-options="pickerOptions">
-      </el-date-picker>
     </el-form-item>
-    <el-form-item label="结束时间">
-      <el-date-picker
-        v-model="datetime_end"
-        @change="(val)=>{this.datetime_end=val}"
-        type="datetime"
-        value-format="yyyy-MM-dd hh:mm:ss"
-        placeholder="选择结束日期时间"
-        align="right"
-        :picker-options="pickerOptions">
-      </el-date-picker>
+    <!-- <div class="line"></div> -->
+    <el-form-item label="分类" style="margin-bottom:5px">
+      <el-select v-model="form.inf2" placeholder="请选择">
+        <el-option
+          v-for="item in form.options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </el-form-item>
-    <el-form-item label="" style="margin-left: 80px">
-      <el-input placeholder="请输入内容" style="padding-right: 15px;" v-model="search_text" class="input-with-select"></el-input>
+    <el-form-item label="内容搜索" >
+      <el-row  >
+        <el-col :span="9" style="margin-right:10px">
+          <el-date-picker
+            v-model="form.infor2"
+            type="datetimerange"
+            :picker-options="form.pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            style="width:100%"
+            >
+          </el-date-picker>
+        </el-col>
+        <el-col :span="9" style="margin-right:10px">
+          <el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select" >
+            <el-select v-model="form.select1" slot="prepend" placeholder="请选择" style="width:120px">
+              <el-option label="标题" value="1" ></el-option>
+              <el-option label="SKU" value="2"></el-option>
+            </el-select>
+          </el-input>
+        </el-col>
+        <el-col :span="2"  >
+          <el-button type="primary">搜索产品</el-button>
+        </el-col>
+
+      </el-row>
+
     </el-form-item>
-    <el-form-item label="">
-      <el-button type="primary" v-on:click="search">搜索产品</el-button>
-       <el-button type="primary" v-on:click="clearSearch">重置</el-button>
-    </el-form-item>
-    <!--<el-row  >-->
-      <!--<el-col :span="9" style="margin-right:10px">-->
-        <!--<el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select" >-->
-          <!--<el-select v-model="form.select1" slot="prepend" placeholder="请选择" style="width:120px">-->
-            <!--<el-option label="标题" value="1" ></el-option>-->
-            <!--<el-option label="SKU" value="2"></el-option>-->
-          <!--</el-select>-->
-        <!--</el-input>-->
-      <!--</el-col>-->
-      <!--<el-col :span="2"  >-->
-        <!--<el-button type="primary">搜索产品</el-button>-->
-      <!--</el-col>-->
-    <!--</el-row>-->
-    <div class="line"></div>
-    <el-row>
-      <el-col :span="24">
-    <el-form-item label="审核状态" style="margin-bottom:5px">
-      <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" size="mini">
-        <el-radio v-for="(item,index) in status_audit_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
-      </el-radio-group>
-    </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="24">
-    <el-form-item label="上架状态" style="margin-bottom:5px">
-      <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" size="mini">
-        <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
-      </el-radio-group>
-    </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="24">
-    <el-form-item label="产品类型">
-      <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" size="mini">
-        <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
-      </el-radio-group>
-    </el-form-item>
-    </el-col>
-    </el-row>
   </el-form>
 
   <div class="line" style="margin-bottom:5px"></div>
   <div class="search-result oh" style="margin-bottom:5px">
-      <p class="search-result-text">符合查询条件的产品有<span>{{totalCount}}</span>件</p>
-      <div class="left ">
+      <p class="search-result-text">符合查询条件的产品有<span> 6 </span>件</p>
+      <div class="left">
         <el-select v-model="form.select1" size="mini" slot="prepend" placeholder="请选择" style="width:120px;">
           <el-option label="操作" value="1" ></el-option>
           <el-option label="上架" value="2"></el-option>
@@ -137,12 +77,16 @@
           <el-option label="审核通过" value="2"></el-option>
         </el-select>
       </div>
-      <div class="right ">
-        <el-button type="text" @click="product_edit" size="mini">批量编辑</el-button>
+      <div class="right">
+        <el-button type="text" @click="open1" size="mini">批量编辑</el-button> |
+        <el-button type="text" @click="infor1" size="mini">批量删除</el-button> |
+        <el-button type="text" @click="open2" size="mini">批量翻译</el-button> |
+        <el-button type="text" @click="infor2" size="mini">批量同步</el-button> |
+        <el-button type="text" @click="infor3" size="mini">批量检测</el-button>
       </div>
   </div>
   <el-table
-      :data="product_list"
+      :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
       border
       style="width: 100%"
       :default-sort = "{prop: 'order', order: 'descending'}"
@@ -155,23 +99,17 @@
         width="35">
       </el-table-column>
       <el-table-column
-        prop="id"
-        label="产品ID"
+        fixed
+        prop="name"
+        label="产品"
         sortable
         width="120"
         >
       </el-table-column>
       <el-table-column
         prop="img"
-        label="主图"
-        sortable
-        >
-      </el-table-column>
-      <el-table-column
-        prop="name"
         label="标题"
         sortable
-        width="120"
         >
       </el-table-column>
       <el-table-column
@@ -213,21 +151,28 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="75">
+        width="181">
         <template slot-scope="scope">
-          <!-- <el-button type="primary" icon="el-icon-edit" @click="product_edit" size="mini"></el-button> -->
+          <el-button type="primary" icon="el-icon-edit" @click="product_edit" size="mini"></el-button>
+          <el-button type="success" icon="el-icon-upload2"  size="mini"></el-button>
+          <el-button type="danger" icon="el-icon-delete" @click="product_del" size="mini"></el-button>
 
-          <el-button type="primary" @click="product_edit" size="mini">编辑</el-button>
-          <!-- <el-button @click="product_del" type="text" style="color:#F56C6C" size="mini">删除</el-button> -->
+          <!-- <el-button @click="product_edit" type="text" size="mini">编辑</el-button>
+          <el-button @click="product_del" type="text" style="color:#F56C6C" size="mini">删除</el-button> -->
         </template>
       </el-table-column>
   </el-table>
   <div class="search-result oh" >
       <p class="search-result-text">已选择<span> 0 </span>件产品</p>
-      <div class="right ">
-        <el-button type="text" @click="product_edit" size="mini">批量编辑</el-button>
+      <div class="right">
+        <el-button type="text" @click="open1" size="mini">批量编辑</el-button> |
+        <el-button type="text" @click="infor1" size="mini">批量删除</el-button> |
+        <el-button type="text" @click="open2" size="mini">批量翻译</el-button> |
+        <el-button type="text" @click="infor2" size="mini">批量同步</el-button> |
+        <el-button type="text" @click="infor3" size="mini">批量检测</el-button>
       </div>
   </div>
+
   <div style="border-bottom:1px solid #ebeef5;clear:both;margin-bottom:20px"></div>
   <el-pagination
     @size-change="handleSizeChange"
@@ -236,7 +181,7 @@
     :page-sizes="[5, 20, 50, 100]"
     :page-size="pagesize"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="totalCount"
+    :total="totalItems"
     style="clear:both;text-align:center">
   </el-pagination>
 
@@ -378,51 +323,63 @@
       <el-button type="primary" @click="dialogTableVisible = false">确 定</el-button>
     </div>
   </el-dialog>
+  <el-dialog title="批量翻译" :visible.sync="dialogTableVisible1" width="60%">
+    <el-form>
+      <el-form-item label="翻译方式">
+        <el-select v-model="form.select1" placeholder="请选择">
+          <el-option label="一键从中文翻译" value="1" ></el-option>
+          <el-option label="一键从英文翻译" value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="翻译内容">
+        <el-checkbox v-model="checked1" label="产品标题" border></el-checkbox>
+        <el-checkbox v-model="checked2" label="产品亮点" border></el-checkbox>
+        <el-checkbox v-model="checked3" label="产品关键词" border></el-checkbox>
+        <el-checkbox v-model="checked4" label="产品描述" border></el-checkbox>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogTableVisible1 = false">取 消</el-button>
+      <el-button type="primary" @click="dialogTableVisible1 = false">确 定</el-button>
+    </div>
+  </el-dialog>
+
 </div>
 </template>
 
 <script>
     import router from "../../router";
-    const status_audit_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
-    const status_shelf_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}, {name:'侵权',value:'tort'}, {name:'屏蔽',value:'shield'}];
-    const product_type_list = [{name:'全部',value:'all'},{name:'重点',value:'stress'}, {name:'原创',value:'original'}, {name:'海外',value:'overseas'}, {name:'抓取',value:'grab'}, {name:'其他',value:'other'}, {name:'ERP产品库',value:'erp_product_library'}];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     export default {
         data() {
           return {
-            company_list:[],
-            company_selected_id:'',
-            staff_list:[],
-            staff_selected_id:'',
-            product_classify:[],
-            product_classify_selected:'',
-            datetime_start:'',
-            datetime_end:'',
-            search_text:'',
-            status_audit_list:status_audit_list,
-            status_shelf_list:status_shelf_list,
-            product_type_list:product_type_list,
-            status_audit_selected:'all',
-            status_shelf_selected:'all',
-            product_type_selected:'all',
-            totalCount:0,
-            currentPage:1,
-            pagesize:5,
-            product_list:[],
-            pickerOptions: {
+            activeName: 'first',
+            infor:'',
+            radio1:'1',
+            radio2:'1',
+            radio3:'1',
+            checked1:true,
+            checked2:true,
+            checked3:true,
+            checked4:true,
+            form:{
+              company: [],
+              infor1:'',
+              select1:'1',
+              infor2:'',
+              options: [{
+                value: '1',
+                label: '鞋子'
+              }, {
+                value: '2',
+                label: '帽子'
+              }, {
+                value: '3',
+                label: '衣服'
+              }, {
+                value: '4',
+                label: '裤子'
+              }],
+              pickerOptions: {
                 shortcuts: [{
                   text: '最近一周',
                   onClick(picker) {
@@ -448,27 +405,147 @@
                     picker.$emit('pick', [start, end]);
                   }
                 }]
-              },
-            form:{
-            }
+              }
+            },
+            dialogTableVisible:false,
+            dialogTableVisible1:false,
+            box1:true,
+            box2:false,
+            box3:false,
+            box2_1:true,
+            box2_2:false,
+            inf2:'',
+            tableData1: [],
+            data: [],
+            checked: [],
+            total:0,//默认数据总数
+            pagesize:7,//每页的数据条数
+            currentPage:1,//默认开始页面
+            cid:'',
+            staffid:'',
+            value: '',
+            ifboos:false,
+            data2:[],
+            data3:[],
+            totalItems:0,
+            schfilter:"",
           }
         },
         methods: {
-          changeRadioValue(){
-          this.currentPage = 1;
-          this.product_listall_paging()
+          open1(){
+            this.dialogTableVisible = true;
           },
-          search: function(){
-          this.currentPage = 1;
-          this.product_listall_paging()
+          open2(){
+            this.dialogTableVisible1 = true;
           },
-          clearSearch: function(){
-            this.datetime_start=''
-            this.datetime_end=''
-            this.company_selected_id=''
-            this.staff_selected_id=''
-            this.product_classify_selected=''
-            this.search_text=''
+          infor1(){
+            this.$confirm('确认要批量删除吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          },
+          infor2(){
+            this.$confirm('确认要批量同步吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '正在同步!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消同步'
+              });
+            });
+          },
+          infor3(){
+            this.$confirm('确认要批量检测吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '检测成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消检测'
+              });
+            });
+          },
+          infor4(){
+            this.$confirm('确认翻译吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          },
+          change(val){
+              var tk = localStorage.getItem("token");
+              var uid = localStorage.getItem("uid");
+
+              this.cid = val;//把当前公司id
+
+
+              //列出公司里的产品
+              this.$http.post('/restful/list/company.'+this.cid+'/product',{
+                // user_token:tk,
+
+              }).then((res)=>{
+                // console.log(res);
+                this.data = res.values;
+              })
+          },
+          change2(val){
+            if(val == 1){
+              this.box1 = true;
+              this.box2 = false;
+              this.box3 = false;
+            }else if(val == 2){
+              this.box1 = false;
+              this.box2 = true;
+              this.box3 = false;
+            }else if(val == 3){
+              this.box1 = false;
+              this.box2 = false;
+              this.box3 = true;
+            }
+          },
+          change3(val){
+            if(val == 1){
+              this.box2_1 = true;
+              this.box2_2 = false;
+
+            }else if(val == 2){
+              this.box2_1 = false;
+              this.box2_2 = true;
+            }
           },
           current_change:function(currentPage){
             this.currentPage = currentPage;
@@ -478,7 +555,7 @@
           },
           product_edit(data) {
             router.push({
-              path:'Cd_product_list1'
+              path:'Cd_product_add'
             })
           },
           product_del() {
@@ -579,135 +656,43 @@
               })
             }
 
-          },
-          onCompanyChange(){
-              this.company_staff_list();
-          },
-           onStaffChange(){
-           },
-           company_staff_list(){
-             let params = {
-              user_token:this.user_token,
-              user_id:this.user_id,
-            }
-            if(this.company_selected_id){
-              params.user_query=`owner_company_id=='${this.company_selected_id}'`;
-            }
+          }
+        },
+        mounted(){
+          this.getinfor();
+        },
+        watch: {
+           schfilter: function(val, oldVal){
+                // console.log(val)
+                if(val != ""){
 
-            //员工列表
-            this.$http.post(this.api.company_staff_list,params).then((res)=>{
-              console.log('company_staff_list',res);
-              if(res.is_success){
-                this.staff_list=res.value
-              }
-            })
-          },
-          get_company_list(){
-            this.$http.post(this.api.get_company_list,{
-              user_token:this.user_token,
-              user_id:this.user_id,
-            }).then((res)=>{
-              //console.log(res);
-              if(res.is_success){
-                this.company_list = res.value;
-              }
-            })
-          },
-          product_classification_list(){
-            this.$http.post(this.api.product_classification_list,{
-              user_token:this.user_token,
-              user_id:this.user_id,
-            }).then((res)=>{
-              //console.log(res);
-              if(res.is_success){
-                this.product_classify = res.value;
-              }
-            })
-          },
-          product_listall_paging(){
-            let params = {
-              user_token:this.user_token,
-              user_id:this.user_id,
-              page:this.currentPage-1,  //页码
-              pageSize:this.pagesize,
-            }
-            if(this.company_selected_id){
-              params.target_company_id = this.company_selected_id
-            }
-
-            if(this.staff_selected_id){
-              params.target_staff_id = this.staff_selected_id
-            }
-
-            if(this.datetime_start){
-                 params.product_updata_datetime_start=this.datetime_start;
-            }
-            if(this.datetime_end){
-                params.product_updata_datetime_end=this.datetime_end;
-            }
-            if(this.status_audit_selected&&this.status_audit_selected!='all'){
-                params.status_audit=this.status_audit_selected;
-            }
-            if(this.status_shelf_selected&&this.status_shelf_selected!='all'){
-                params.status_shelf=this.status_shelf_selected;
-            }
-            if(this.product_type_selected&&this.product_type_selected!='all'){
-                params.product_type=this.product_type_selected;
-            }
-
-
-            this.$http.post(this.api.product_listall_paging,params).then((res)=>{
-              //console.log(res);
-              if(res.is_success){
-                    this.product_list = res.value.list;
-                  this.totalCount = res.value.totalCount;
+                  this.data3 = [];
+                  this.data.length=0;
+                  for(var demokey of this.data2){
+                    if(demokey.name.indexOf(this.schfilter)>=0){
+                        this.data.push(demokey);
+                    }
+                  }
+                  this.currentPage = 1;
+                  this.totalItems = this.data.length;
+                  this.currentChangePage(this.data3)
                 }else{
-                     this.product_list=[];
+
+                  this.data.length=0;
+                  this.totalItems = this.data2.length;
+                  this.data = this.data2.concat();
                 }
-            })
-          },
 
-        },
-        created(){
-            this.user_token = localStorage.getItem("user_token");
-            this.user_id = localStorage.getItem("user_id");
-            this.product_classification_list()
-            if(this.companyId){
-              this.company_selected_id =this.companyId
-            }else{
-                this.get_company_list()
-
+                //this.data = this.otableData.filter( item => (~item.name.indexOf(val)));
             }
-            if(this.staffId){
-              this.staff_selected_id =this.staffId
-
-            }else{
-              this.company_staff_list()
-            }
-            this.product_listall_paging();
-
-        },
-        props:{
-         title:{
-          default:'商品管理',
-          type:String,
-         },
-         companyId:{
-           default:'',
-          type:String,
-         },
-         staffId:{
-           default:'',
-          type:String,
-         },
-      },
+        }
       }
 </script>
 <style scoped>
- /* .line{
+  .line{
     margin: 20px 0;
     border-top: 1px solid #dcdfe6;
-  }*/
+  }
   .sub_btn{
     margin-top: 20px;
   }
