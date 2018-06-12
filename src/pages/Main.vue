@@ -16,8 +16,8 @@
                 <!-- <aside-nav class="aside"></aside-nav> -->
                 <left-Nav></left-Nav>
             </el-aside>
-            <el-main>
-                 <router-view></router-view>
+             <el-main>
+                 <router-view v-if="isRouterAlive"></router-view>
             </el-main>
           </el-container>
         </el-container>
@@ -36,9 +36,26 @@
             // asideNav,
             headTop
         },
+        created(){
+             eventBus.$on('refreshView', this.refreshView)
+        },
+        beforeDestroy:function () {
+            eventBus.$off('refreshView', this.refreshView)
+        },
+        methods: {
+ 
+          refreshView(){
+            console.log('main refreshView')
+            this.isRouterAlive = false
+            //在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM
+            this.$nextTick(()=>{
+                this.isRouterAlive = true
+            })
+            }
+        },
         data() {
             return {
-
+                isRouterAlive:true,
             }
         },
     }
