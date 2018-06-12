@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="6">
+      <el-col :span="7">
         <div class="expand">
           <div>
             <el-form v-if="isGlobal" label-width="90px" size="mini">
@@ -25,8 +25,8 @@
           </div>
         </div>
       </el-col>
-      <div style="height: 100%;overflow: auto">
-        <el-col :span="18"  v-if ="staff_selected">
+      <el-col :span="17"  v-if ="staff_selected">
+        <div style="height: 100%;overflow: auto">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>关联账号:</span>
@@ -84,20 +84,18 @@
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>员工属性</span>
+              <el-button size="mini"style="margin-left: 10px;" type="primary" @click="editStaff">{{staffEdit}}</el-button>
+              <el-button size="mini" v-if="is_edit" @click="cancelEdit">取消</el-button>
             </div>
-            <el-form  label-width="80px">
-              <el-form-item label="名称">
+            <el-form class="staff-info" label-width="80px">
+              <el-form-item label="名称：">
                 <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_name"></el-input>
               </el-form-item>
-              <el-form-item label="部门">
+              <el-form-item label="部门：">
                 <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_department"></el-input>
               </el-form-item>
-              <el-form-item label="备注">
+              <el-form-item label="备注：">
                 <el-input name="staff" :class="input_disable" :disabled="!is_edit" v-model="staff_Info_form.staff_notes"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button size="mini" type="primary" @click="editStaff">{{staffEdit}}</el-button>
-                <el-button size="mini" v-if="is_edit" @click="cancelEdit">取消</el-button>
               </el-form-item>
             </el-form>
           </el-card>
@@ -107,7 +105,7 @@
               <el-button v-if="showSavePermissionBtn" style="margin-left: 10px;" size="mini" type="primary" @click="company_staff_set_permission">保存</el-button>
             </div>
             <el-form  label-width="80px">
-              <el-form-item>
+              <el-form-item label="请勾选：">
                 <el-checkbox-group @change="permissionChange" v-model="selected_permission">
                   <el-checkbox
                     v-for ="(item,index) in permissionList"
@@ -125,7 +123,7 @@
               <el-button v-if="showSave_shop_list_Btn" style="margin-left: 10px;" size="mini" type="primary" @click="company_staff_set_Shop">保存</el-button>
             </div>
             <el-form  label-width="80px">
-              <el-form-item>
+              <el-form-item label="请勾选：">
                 <el-checkbox-group @change="shop_list_selected_Change" v-model="shop_list_selected">
                   <el-checkbox
                     v-for ="(item,index) in shop_list"
@@ -136,8 +134,8 @@
               </el-form-item>
             </el-form>
           </el-card>
-        </el-col>
-      </div>
+        </div>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -202,7 +200,7 @@
 
       this.initExpand()
       if(this.isGlobal){
-         
+
        this.get_company_list();
       }else{
       this.company_staff_list();
@@ -213,7 +211,7 @@
 
     methods: {
       onCompanyChange(){
-        let company_info= this.company_list[this.company_selected_index] 
+        let company_info= this.company_list[this.company_selected_index]
         this.owner_company_id = company_info.id;
         this.owner_user_id = company_info.owner_user_id
         this.company_staff_list();
@@ -268,7 +266,7 @@
                   has_department_staffs[item.staff_department].children.push(item)
                 }
               })
-              
+
               for(var key in has_department_staffs){
                 result.push(has_department_staffs[key])
               }
@@ -280,9 +278,9 @@
             }else{
               this.staff_list = [{staff_name: '总部',children:result}]
             }
-            
 
-           
+
+
           }
         })
       },
@@ -660,5 +658,11 @@
     .custom-tree-node{
       display: none;
     }
+  }
+  .el-input.is-disabled .el-input__inner{
+    color: #606266;
+  }
+  .staff-info .el-input__inner{
+    width: 30%;
   }
 </style>
