@@ -113,15 +113,23 @@
                      return;
                    }
 
+                  
                   if(res.value.length>0){
-                    this.roleValue=0;
-                    this.updataIdInfo(res.value[0])
-                   this.updateMenu(res.value[0]._type);
+
+                    let roleValue=localStorage.getItem("roleValue_index");
+                    console.log('roleValue1', roleValue)
+                    if(!roleValue||isNaN(roleValue)||roleValue>=res.value.length){
+                       this.roleValue=0;
+                    }else{
+                      this.roleValue=Number(roleValue);
+                    }
+                    this.updataIdInfo(res.value[this.roleValue])
+                    this.updateMenu(res.value[this.roleValue]._type);
                    }else{
                      this.updateMenu('staff');
                    }
                    
-                   this.roleList = res.value;
+                    this.roleList = res.value;
                  
 
                 })
@@ -130,7 +138,8 @@
               let isBoss = role._type=='boss';
               localStorage.setItem('owner_user_id',role.owner_user_id)
               localStorage.setItem('owner_company_id',isBoss?role.id:role.owner_company_id)  
-              
+              localStorage.setItem('roleValue_index',this.roleValue)
+              console.log( this.roleValue)
               console.log('owner_user_id',role.owner_user_id)
               console.log('owner_company_id:',isBoss?role.id:role.owner_company_id)
             },
