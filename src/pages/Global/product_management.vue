@@ -642,7 +642,9 @@
             if(this.product_type_selected&&this.product_type_selected!='all'){
                 params.product_type=this.product_type_selected;
             }
-
+            if(this.search_text){
+                params.search_text=this.search_text;
+            }
 
             this.$http.post(this.api.product_listall_paging,params).then((res)=>{
               //console.log(res);

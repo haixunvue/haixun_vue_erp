@@ -60,6 +60,7 @@ const api={
     'examine_nopass':'/apis/v1807g/company_money_recharge/examine_nopass',   // 产品列表
     'product_classification_list':'/apis/v1807g/product_classification/list',   // 产品分类
     'product_listall_paging':'/apis/v1807g/product/listall/paging',   // 产品分类
+    'order_listall_paging':'/apis/v1807g/order/listall/paging',   // 产品分类
 
 };
 export default api;

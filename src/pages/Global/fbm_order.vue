@@ -130,7 +130,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="input" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
+            <el-input v-model="search_text" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">搜索</el-button>
@@ -148,7 +148,7 @@
       <el-button type="primary" size="mini" class="search-btn right">同步订单</el-button>
     </div>
     <el-table
-      :data="tableData"
+      :data="order_list"
       border
       style="width: 100%;margin-bottom:20px"
       :default-sort = "{prop: 'cname', order: 'descending'}"
@@ -277,7 +277,7 @@
       :page-sizes="[5, 20, 50, 100]"
       :page-size="pagesize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="totalItems"
+      :total="totalCount"
       style="clear:both;text-align:center">
     </el-pagination>
     <!--弹窗区域-->
@@ -508,19 +508,25 @@
   export default {
     data() {
       return {
-         company_list:[],
-        options:[],
-        value:'',
+        order_list:[],
+        company_list:[],
+        company_selected_id:'',
+        staff_list:[],
+        staff_selected_id:'',
         datetime_start:'',
         datetime_end:'',
-            company_selected_id:'',
-            staff_list:[],
-            staff_selected_id:'',
-        input:'',
-        total:0,//默认数据总数
         pagesize:5,//每页的数据条数
         currentPage:1,//默认开始页面
-        totalItems:1,
+        totalCount:0,
+        search_text:'',
+
+        options:[],
+        value:'',
+
+
+        input:'',
+        total:0,//默认数据总数
+
         tableData: [],
         dialogTableVisible:false,
         isEdit:false,
@@ -629,6 +635,43 @@
               }
             })
           },
+          order_listall_paging(){
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+            }
+            if(this.company_selected_id){
+              params.target_company_id = this.company_selected_id
+            }
+
+            if(this.staff_selected_id){
+              params.target_staff_id = this.staff_selected_id
+            }
+
+            if(this.datetime_start){
+                 params.order_create_datetime_start=this.datetime_start;
+            }
+            if(this.datetime_end){
+                params.order_create__datetime_end=this.datetime_end;
+            }
+            if(this.search_text){
+                params.search_text=this.search_text;
+            }
+           
+
+
+            this.$http.post(this.api.order_listall_paging,params).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                    this.order_list = res.value.list;
+                  this.totalCount = res.value.totalCount;
+                }else{
+                     this.order_list=[];
+                }
+            })
+          },
 
     },
     created(){
@@ -645,8 +688,7 @@
             }else{
               this.company_staff_list()
             }
-            console.log('show_company_selector',this.show_company_selector)
-            console.log('show_staff_selector',this.show_staff_selector)
+            this.order_listall_paging();
         },
     props:{
          title:{
