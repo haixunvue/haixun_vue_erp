@@ -16,7 +16,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">登录</el-button>
-          
+             <el-button class="right" type="text" @click="go_login">去登录前台</el-button>
           </el-form-item>
         </el-form>
     </div>
@@ -72,9 +72,9 @@
               
             })
           },
-          zhuce(){
+          go_login(){
             router.push({
-              path:'/registered'
+              path:'/'
             })
           }
         }

@@ -101,6 +101,7 @@
             let role_item = this.roleList[Number(this.roleValue)]
             this.updataIdInfo(role_item)
             this.updateMenu(role_item._type)
+            eventBus.$emit('refreshView', 'refreshView')
           },
              get_account_role(){
                 this.$http.post(this.api.account_role,{

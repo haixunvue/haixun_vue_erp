@@ -311,7 +311,7 @@
     },
      props:{
           companylist:{
-          default:[],
+          default:()=>[],
           type:Array,
          }
      }
