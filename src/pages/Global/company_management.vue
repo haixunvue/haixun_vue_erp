@@ -29,7 +29,6 @@
       prop="id"
       label="id"
       sortable
-      width="130"
       size="mini"
       >
     </el-table-column>
@@ -37,7 +36,6 @@
            prop="company_full_name"
             label="公司全称"
       sortable
-      width="130"
       >
     </el-table-column>
     <el-table-column
@@ -51,35 +49,30 @@
       prop="company_address"
       label="注册地点"
       sortable
-      width="110"
       >
     </el-table-column>
     <el-table-column
       prop="legal_person"
       label="法人名称"
       sortable
-      width="110"
       >
     </el-table-column>
     <el-table-column
       prop="scope_operation"
       label="经营范围"
       sortable
-      width="110"
       >
     </el-table-column>
     <el-table-column
       prop="company_address"
       label="办公地址"
       sortable
-      width="300"
       >
     </el-table-column>
     <el-table-column
       prop="company_contact_number"
       label="电话"
       sortable
-      width="110"
       >
     </el-table-column>
     <el-table-column
@@ -90,8 +83,7 @@
     </el-table-column>
     <el-table-column
       fixed="right"
-      label="操作"
-      width="125">
+      label="操作">
       <template slot-scope="scope">
         <el-button type="primary" icon="el-icon-edit" @click="company_edit(scope.row.id)" size="small"></el-button>
         <el-button type="danger" icon="el-icon-delete" @click="company_del(scope.row.id)" size="small"></el-button>
@@ -136,7 +128,7 @@
           handleSizeChange: function (size) {
                    this.currentPage = 1;
             this.pagesize = size;
-            this.company_list_paging();         
+            this.company_list_paging();
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
@@ -161,7 +153,7 @@
               }
             })
           },
-   
+
           company_edit(company_id){
             router.push({
               path:'company_info',
@@ -181,7 +173,7 @@
               this.$message({
                 type: 'info',
                 message: '已取消删除'
-              });          
+              });
             });
           },
           deleteCompany(company_id){
@@ -204,7 +196,7 @@
         this.user_id = localStorage.getItem("user_id");
           this.company_list_paging();
         },
-       
+
       }
 </script>
 <style scoped>

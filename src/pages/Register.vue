@@ -15,13 +15,13 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="身份证号" prop="idcardnum">
-            <el-input v-model="form.idcardnum"></el-input>
+          <el-form-item label="姓名" prop="nickname">
+            <el-input v-model="form.nickname"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="称呼" prop="nickname">
-            <el-input v-model="form.nickname"></el-input>
+          <el-form-item label="身份证号" prop="idcardnum">
+            <el-input v-model="form.idcardnum"></el-input>
           </el-form-item>
         </el-col>
       </el-row>

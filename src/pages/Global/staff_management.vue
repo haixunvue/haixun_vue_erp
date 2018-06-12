@@ -8,7 +8,6 @@
 
 <script>
     import tree from '../../components/tree';
-    import router from "../../router";
     import Qs from 'qs';
 
     export default {
@@ -21,11 +20,11 @@
             }
         },
         methods:{
-           
-          
+
+
         },
         mounted() {
-          
+
         },
 
     }
