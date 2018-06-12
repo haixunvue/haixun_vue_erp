@@ -181,9 +181,4 @@
       margin: 20px 0;
       border-top: 1px solid #dcdfe6;
     }
-   .el-pagination{
-     position: absolute;
-     bottom: 50px;
-     right: 100px;
-   }
 </style>

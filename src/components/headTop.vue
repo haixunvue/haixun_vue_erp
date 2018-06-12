@@ -99,7 +99,7 @@
         methods:{
           changeValue(){
             let role_item = this.roleList[Number(this.roleValue)]
-            this.updataIdInfo(role_item)         
+            this.updataIdInfo(role_item)
             this.updateMenu(role_item._type)
           },
              get_account_role(){
@@ -113,7 +113,7 @@
                      return;
                    }
 
-                  
+
                   if(res.value.length>0){
 
                     let roleValue=localStorage.getItem("roleValue_index");
@@ -128,16 +128,16 @@
                    }else{
                      this.updateMenu('staff');
                    }
-                   
+
                     this.roleList = res.value;
-                 
+
 
                 })
             },
             updataIdInfo(role){
               let isBoss = role._type=='boss';
               localStorage.setItem('owner_user_id',role.owner_user_id)
-              localStorage.setItem('owner_company_id',isBoss?role.id:role.owner_company_id)  
+              localStorage.setItem('owner_company_id',isBoss?role.id:role.owner_company_id)
               localStorage.setItem('roleValue_index',this.roleValue)
               console.log( this.roleValue)
               console.log('owner_user_id',role.owner_user_id)
@@ -176,7 +176,7 @@
             if(!this.isFromBack){
                 this.get_account_role();
             }
-            
+
 
         }
     }
@@ -218,6 +218,6 @@
       border: 1px #eee solid;
      }
     .user{
-        float: right;
+        float: right !important;
     }
 </style>

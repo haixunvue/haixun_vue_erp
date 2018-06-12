@@ -273,10 +273,5 @@
         width:150px;
         text-align: right;
     }
-    .el-pagination{
-      position: absolute;
-      bottom: 50px;
-      right: 100px;
-    }
 
 </style>

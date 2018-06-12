@@ -1,10 +1,3 @@
-<!--
-**************************************
-*   名称：一个demo
-*   作用：展示如何把页面嵌入框架
-*   作者：
-**************************************
--->
 <template>
   <div class="content">
     <h1>外部员工</h1>
@@ -180,10 +173,5 @@
   .line{
     margin: 20px 0;
     border-top: 1px solid #dcdfe6;
-  }
-  .el-pagination{
-    position: absolute;
-    bottom: 50px;
-    right: 100px;
   }
 </style>
