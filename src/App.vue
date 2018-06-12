@@ -22,7 +22,7 @@ html {
 }
 .search-result-text{
   font-size: 14px;
-  color: #606266;    
+  color: #606266;
   padding:5px 0px;
   float:left;
   margin-right: 20px;
@@ -63,5 +63,11 @@ html {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100%;
+}
+.el-input--prefix .el-input__inner{
+  padding-right: 15px;
 }
 </style>
