@@ -129,12 +129,13 @@
   <div class="search-result oh" style="margin-bottom:5px">
       <p class="search-result-text">符合查询条件的产品有<span>{{totalCount}}</span>件</p>
       <div class="left ">
-        <el-select v-model="form.select1" size="mini" slot="prepend" placeholder="请选择" style="width:120px;">
-          <el-option label="操作" value="1" ></el-option>
-          <el-option label="上架" value="2"></el-option>
-          <el-option label="下架" value="2"></el-option>
-          <el-option label="待审核" value="2"></el-option>
-          <el-option label="审核通过" value="2"></el-option>
+        <el-select v-model="product_status_selected" size="mini" slot="prepend" placeholder="请选择" style="width:120px;" @change="changeRadioValue()">
+          <el-option
+            v-for ="(item,index) in product_status_list"
+            :key="index"
+            :label="item.name"
+            :value="item.value">
+        </el-option>
         </el-select>
       </div>
       <div class="right ">
@@ -382,10 +383,11 @@
 </template>
 
 <script>
-    import router from "../../router";
+    import router from "../../router";      
     const status_audit_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
     const status_shelf_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}, {name:'侵权',value:'tort'}, {name:'屏蔽',value:'shield'}];
     const product_type_list = [{name:'全部',value:'all'},{name:'重点',value:'stress'}, {name:'原创',value:'original'}, {name:'海外',value:'overseas'}, {name:'抓取',value:'grab'}, {name:'其他',value:'other'}, {name:'ERP产品库',value:'erp_product_library'}];
+    const product_status_list = [{name:'初始',value:'new'},{name:'等待上传',value:'wait_async'}, {name:'在线',value:'online'}];
 
 
 
@@ -418,6 +420,8 @@
             status_audit_selected:'all',
             status_shelf_selected:'all',
             product_type_selected:'all',
+            product_status_list:product_status_list,
+            product_status_selected:'',
             totalCount:0,
             currentPage:1,
             pagesize:5,
@@ -662,6 +666,9 @@
             }
             if(this.search_text){
                 params.search_text=this.search_text;
+            }
+            if(this.product_status_selected){
+                params.status=this.product_status_selected;
             }
 
             this.$http.post(this.api.product_listall_paging,params).then((res)=>{
