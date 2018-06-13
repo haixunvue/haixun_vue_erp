@@ -35,7 +35,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="false">
             <el-select v-model="country_selected_id" placeholder="选择国家" size="mini">
               <el-option
                 v-for="item in country_list"
@@ -45,6 +45,17 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item>
+              <el-select v-model="shop_selected_id" placeholder="选择店铺"  style="margin-bottom:5px" size="mini">
+              <el-option
+              v-for="(item,index) in shop_list"
+              :key="index"
+              :label="item.shop_name"
+              :value="item.id">
+            </el-option>
+      </el-select> 
+             </el-form-item>
+           
           <el-form-item>
             <el-select v-model="status_amazion_selected_id" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
               <el-option
@@ -70,31 +81,31 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="value4" placeholder="国内物流状态" size="mini">
+            <el-select v-model="state_logistics_domestic_selected_id" placeholder="国内物流状态" size="mini">
               <el-option
-                v-for="item in options4"
+                v-for="item in state_logistics_domestic_list"
                 :key="item.value"
-                :label="item.label"
+                :label="item.name"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="value5" placeholder="国际物流状态" size="mini">
+            <el-select v-model="state_logistics_international_selected_id" placeholder="国际物流状态" size="mini">
               <el-option
-                v-for="item in options5"
+                v-for="item in state_logistics_international_list"
                 :key="item.value"
-                :label="item.label"
+                :label="item.name"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="value6" placeholder="异常状态" size="mini">
+            <el-select v-model="state_error_selected_id" placeholder="异常状态" size="mini">
               <el-option
-                v-for="item in options6"
+                v-for="item in state_error_list"
                 :key="item.value"
-                :label="item.label"
+                :label="item.name"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -494,7 +505,20 @@
 <script>
   import site from '@/json/site';
   const status_amazion_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
-  const status_payment_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}];
+  const status_payment_list = [{name:'全部',value:'all'},{name:'已支付',value:'already_paid'}, {name:'退款',value:'refund'}];
+  const state_logistics_domestic_list = [{name:'全部',value:'all'},{name:'未采购',value:'not_purchase'}, {name:'待发货',value:'pending_delivery'}, {name:'待签收',value:'wait_sign'}, {name:'已签收',value:'after_sign'}];
+  const state_logistics_international_list = [{name:'全部',value:'all'},{name:'未发货',value:'unshipped'}, {name:'已签收',value:'shipped'}, {name:'已签收',value:'after_sign'}];
+  const state_error_list = [{name:'搁置订单',value:'shelving_order'}, {name:'问题件',value:'problem_order'}];
+
+
+
+
+
+
+
+
+
+
 
   export default {
     data() {
@@ -504,6 +528,8 @@
         company_selected_id:'',
         staff_list:[],
         staff_selected_id:'',
+        shop_list:[],
+        shop_selected_id:'',
         datetime_start:'',
         datetime_end:'',
         pagesize:5,//每页的数据条数
@@ -516,6 +542,12 @@
         status_amazion_selected_id:'',
         status_payment_list:status_payment_list,
         status_payment_selected_id:'',
+        state_logistics_domestic_list:state_logistics_domestic_list,
+        state_logistics_domestic_selected_id:'',
+        state_logistics_international_list:state_logistics_international_list,
+        state_logistics_international_selected_id:'',
+        state_error_list:state_error_list,
+        state_error_selected_id:'',
 
         pickerOptions: {
           shortcuts: [{
@@ -629,8 +661,35 @@
               this.order_listall_paging();
           },
            onStaffChange(){
+            this.company_shop_list()
              this.order_listall_paging();
            },
+           company_shop_list(){
+
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              user_id:this.user_id,
+              target_company_id:this.company_selected_id,
+              page:0,  //页码
+              pageSize:1000,
+            }
+
+             if(this.staff_selected_id){
+                params.target_staff_id=this.staff_selected_id;
+              }
+
+            this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
+                console.log('company_shop_list',res);
+                if(res.is_success){
+                    this.shop_list =  res.value.list;
+                }else{
+                     this.shop_list=[];
+                }
+
+
+            })
+          },
            company_staff_list(){
              let params = {
               user_token:this.user_token,
@@ -674,6 +733,9 @@
             if(this.staff_selected_id){
               params.target_staff_id = this.staff_selected_id
             }
+            if(this.shop_selected_id){
+              params.order_shop_id = this.shop_selected_id
+            }
 
             if(this.datetime_start){
                  params.order_create_datetime_start=this.datetime_start;
@@ -681,11 +743,27 @@
             if(this.datetime_end){
                 params.order_create__datetime_end=this.datetime_end;
             }
+            if(this.country_selected_id){
+                params.country=this.country_selected_id;
+            }
+            if(this.status_amazion_selected_id){
+                params.status_amazion=this.status_amazion_selected_id;
+            }
+            if(this.status_payment_selected_id){
+                params.status_payment=this.status_payment_selected_id;
+            }
+            if(this.state_logistics_domestic_selected_id){
+                params.state_logistics_domestic=this.state_logistics_domestic_selected_id;
+            }
+            if(this.state_logistics_international_selected_id){
+                params.state_logistics_international=this.state_logistics_international_selected_id;
+            }
+            if(this.state_error_selected_id){
+                params.state_error=this.state_error_selected_id;
+            }
             if(this.search_text){
                 params.search_text=this.search_text;
             }
-
-
 
             this.$http.post(this.api.order_listall_paging,params).then((res)=>{
               //console.log(res);

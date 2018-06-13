@@ -33,7 +33,17 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+         <el-form-item>
+              <el-select v-model="shop_selected_id" placeholder="选择店铺"  style="margin-bottom:5px" size="mini">
+              <el-option
+              v-for="(item,index) in shop_list"
+              :key="index"
+              :label="item.shop_name"
+              :value="item.id">
+            </el-option>
+      </el-select> 
+             </el-form-item>
+        <el-form-item v-if="false">
          <el-select v-model="country_selected_id" placeholder="选择国家" size="mini">
               <el-option
                 v-for="item in country_list"
@@ -81,7 +91,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="input" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
+          <el-input v-model="search_text" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="search">搜索</el-button>
@@ -293,6 +303,8 @@
             company_selected_id:'',
             staff_list:[],
             staff_selected_id:'',
+            shop_list:[],
+            shop_selected_id:'',
             datetime_start:'',
             datetime_end:'',
             pagesize:5,//每页的数据条数
@@ -457,8 +469,35 @@
               this.order_listall_paging();
           },
            onStaffChange(){
+                this.company_shop_list()
                this.order_listall_paging();
            },
+            company_shop_list(){
+
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              user_id:this.user_id,
+              target_company_id:this.company_selected_id,
+              page:0,  //页码
+              pageSize:1000,
+            }
+
+             if(this.staff_selected_id){
+                params.target_staff_id=this.staff_selected_id;
+              }
+
+            this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
+                console.log('company_shop_list',res);
+                if(res.is_success){
+                    this.shop_list =  res.value.list;
+                }else{
+                     this.shop_list=[];
+                }
+
+
+            })
+          },
            company_staff_list(){
              let params = {
               user_token:this.user_token,
@@ -502,6 +541,9 @@
             if(this.staff_selected_id){
               params.target_staff_id = this.staff_selected_id
             }
+            if(this.shop_selected_id){
+              params.order_shop_id = this.shop_selected_id
+            }
 
             if(this.datetime_start){
                  params.order_create_datetime_start=this.datetime_start;
@@ -511,6 +553,12 @@
             }
             if(this.search_text){
                 params.search_text=this.search_text;
+            }
+            if(this.status_order_selected_id){
+                params.status=this.status_order_selected_id;
+            }
+            if(this.country_selected_id){
+                params.country=this.country_selected_id;
             }
 
             this.$http.post(this.api.order_listall_paging,params).then((res)=>{
