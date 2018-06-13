@@ -51,7 +51,7 @@ const Cd_product_list3 = r => require.ensure([], () => r(require('../pages/commo
 const Cd_product_list4 = r => require.ensure([], () => r(require('../pages/commodity/Product_list4')), 'Cd_product_list4');
 const Cd_product_list5 = r => require.ensure([], () => r(require('../pages/commodity/Product_list5')), 'Cd_product_list5');
 const Cd_product_edit = r => require.ensure([], () => r(require('../pages/commodity/Product_edit')), 'Cd_product_edit');
-const Cd_product_add = r => require.ensure([], () => r(require('../pages/commodity/Product_add')), 'Cd_product_add');
+const product_add = r => require.ensure([], () => r(require('../pages/product_management/product_add')), 'product_add');
 const Cd_order_list = r => require.ensure([], () => r(require('../pages/commodity/Order_list')), 'Cd_order_list');
 const Cd_order_list2 = r => require.ensure([], () => r(require('../pages/commodity/Order_list2')), 'Cd_order_list2');
 const Cd_order_list_boss = r => require.ensure([], () => r(require('../pages/commodity/Order_list_boss')), 'Cd_order_list_boss');
@@ -195,8 +195,8 @@ export default new Router({
                    path: 'Cd_product_edit',
                    component: Cd_product_edit,
                 },{
-                   path: 'Cd_product_add',
-                   component: Cd_product_add,
+                   path: 'product_add',
+                   component: product_add,
                 },{
                    path: 'Cd_order_list',
                    component: Cd_order_list,
