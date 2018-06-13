@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-
+   import router from "../router";
 
   //以下是新菜单
   import menu_staff from '@/json/role_menu/menu_staff';
@@ -81,14 +81,21 @@
           },
           onUpdateMenu(e){
             console.log('onUpdateMenu', e)
-            this.menutype = e.menutype
+            
             if(e.menutype){
                 this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;           
             }else{
                 this.total_menu=[]
             }
-            
             this.update_menu();
+            if(this.menutype == e.menutype){
+              eventBus.$emit('refreshView', 'refreshView')
+            }else{
+                 router.push({
+                        path:'/main/'
+                 }) 
+            }
+            this.menutype = e.menutype
             
           } 
     }

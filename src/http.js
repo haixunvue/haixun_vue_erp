@@ -20,9 +20,12 @@ axios.interceptors.request.use(config => {
 });
 axios.interceptors.response.use(data => {
   loadinginstace.close();
-  Message.success({
-    message: data.data.message
-  });
+  if(!data.data.is_success){
+    Message.success({
+      message: data.data.message
+    });
+  }
+
   return data.data
 }, error => {
   loadinginstace.close();
