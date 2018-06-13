@@ -23,10 +23,13 @@
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :limit="9"
+                drag
+                multiple
                 :file-list="fileList"
                 list-type="picture-card"
                 :on-success="uploadSuccess">
-                <i class="el-icon-plus"></i>
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                 <!-- <el-button size="small" type="primary">本地图片选取</el-button>
                 <el-button size="small" type="primary">图片空间选取</el-button> -->
                 <div slot="tip" class="el-upload__tip">
