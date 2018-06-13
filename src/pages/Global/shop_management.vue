@@ -175,8 +175,10 @@
           },
           onCompanyChange(){
               this.company_staff_list();
+              this.company_shop_list()
           },
            onStaffChange(){
+             this.company_shop_list()
            },
            company_staff_list(){
              let params = {

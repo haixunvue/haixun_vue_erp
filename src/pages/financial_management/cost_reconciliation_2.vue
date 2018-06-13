@@ -445,7 +445,7 @@
               target_company_id: this.owner_company_id,   		//目标公司
               target_company_full_name: this.companyInfo.company_full_name,   		//目标公司
               recharge_num:this.addForm.recharge_num,
-              money_number:this.addForm.money_number,//				金钱
+              money_number:isNaN(this.addForm.money_number)?0:Number(this.addForm.money_number),//				金钱
               notes:this.addForm.notes,//						备注
               proof_document:this.addForm.proof_document,//			证明文件
               bank_name_receive:bank_name_receive_info[1],//收款银行名称
