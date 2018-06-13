@@ -133,10 +133,10 @@
             <el-input v-model="search_text" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">搜索</el-button>
+            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="search">搜索</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">重置</el-button>
+            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="clearSearch">重置</el-button>
           </el-form-item>
         </el-col>
         </el-row>
@@ -144,7 +144,7 @@
     </div>
     <div class="line" style="margin-bottom:5px"></div>
     <div class="search-result oh" style="margin-bottom:5px">
-      <p class="search-result-text">符合条件的订单共有<span> 6 </span>个</p>
+      <p class="search-result-text">符合条件的订单共有<span>{{totalCount}}</span>个</p>
       <el-button type="primary" size="mini" class="search-btn right">同步订单</el-button>
     </div>
     <el-table
@@ -519,6 +519,40 @@
         status_payment_list:status_payment_list,
         status_payment_selected_id:'',
 
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick:(picker)=> {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+            }
+          }, {
+            text: '最近一个月',
+            onClick:(picker)=> {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+            }
+          }, {
+            text: '最近三个月',
+            onClick:(picker)=> {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')               
+            }
+          }]
+        },
+
         options:[],
         value:'',
 
@@ -540,41 +574,32 @@
         isAdd:false,
         isDetil:false,
         radio:1,
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        }
+        
       }
     },
     methods: {
+         search: function(){
+          this.currentPage = 1;
+           this.order_listall_paging();
+          },
+          clearSearch: function(){
+        this.company_selected_id=''
+        this.staff_selected_id=''
+        this.datetime_start=''
+        this.datetime_end=''
+        this.search_text=''
+        this.country_selected_id=''
+        this.status_amazion_selected_id=''
+        this.status_payment_selected_id=''
+         },
       handleSizeChange:function(size) {
+         this.currentPage = 1;
         this.pagesize = size;
+         this.order_listall_paging();
       },
       handleCurrentChange:function(currentPage) {
         this.currentPage = currentPage;
+         this.order_listall_paging();
       },
       handleClick:function(){
 
@@ -642,6 +667,7 @@
               user_id:this.user_id,
               page:this.currentPage-1,  //页码
               pageSize:this.pagesize,
+              order_amazion_type:'fbm',
             }
             if(this.company_selected_id){
               params.target_company_id = this.company_selected_id
