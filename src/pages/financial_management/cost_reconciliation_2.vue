@@ -315,7 +315,7 @@
             }).then((res)=>{
                 console.log('company_money_recharge_channel_list_paging',res);
                 if(res.is_success){
-                    this.options1 = res.value;
+                    this.options1 = res.value.list;
                 }else{
                      this.options1=[];
                 }
