@@ -6,9 +6,8 @@
       <el-form :inline="true" label-width="80px">
         <el-row>
         <el-col :span="24">
-          <el-form-item>
+          <el-form-item v-if="!companyId">
             <el-select
-              v-if="!companyId"
               v-model="company_selected_id"
               placeholder="请选择公司"
               size="mini"
@@ -21,9 +20,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="!staffId">
             <el-select
-              v-if="!staffId"
               v-model="staff_selected_id"
               placeholder="请选择公司员工"
               size="mini"
@@ -527,8 +525,8 @@
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit('pick', [start, end]);
-              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
             }
           }, {
             text: '最近一个月',
@@ -537,8 +535,8 @@
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit('pick', [start, end]);
-              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
             }
           }, {
             text: '最近三个月',
@@ -547,8 +545,8 @@
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit('pick', [start, end]);
-              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')               
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
             }
           }]
         },
@@ -574,7 +572,7 @@
         isAdd:false,
         isDetil:false,
         radio:1,
-        
+
       }
     },
     methods: {

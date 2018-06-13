@@ -23,7 +23,7 @@ export default  [
         "list2": [
           {
             "routerName": "fbm_order_boss",
-            "name": "FMB订单",
+            "name": "FBM订单",
           },
           {
             "routerName": "fba_order_boss",

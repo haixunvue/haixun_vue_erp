@@ -5,9 +5,8 @@
   <el-form :inline="true" label-width="80px">
     <el-row>
       <el-col :span="24">
-        <el-form-item>
+        <el-form-item  v-if="!companyId">
           <el-select
-            v-if="!companyId"
             v-model="company_selected_id"
             placeholder="请选择公司"
             size="mini"
@@ -20,9 +19,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item  v-if="!staffId">
           <el-select
-            v-if="!staffId"
             v-model="staff_selected_id"
             placeholder="请选择公司员工"
             size="mini"
@@ -282,8 +280,8 @@
     import router from "../../router";
      import site from '@/json/site';
     const status_order_list = [{name:'全部',value:'all'},{name:'创建',value:'new'}, {name:'未确认',value:'pending'}, {name:'未发货',value:'unshipped'}, {name:'已发货',value:'shipped'}];
-	    
-   
+
+
 
 
 
@@ -313,8 +311,8 @@
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit('pick', [start, end]);
-              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
             }
           }, {
             text: '最近一个月',
@@ -323,8 +321,8 @@
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit('pick', [start, end]);
-              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
             }
           }, {
             text: '最近三个月',
@@ -333,8 +331,8 @@
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit('pick', [start, end]);
-              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')               
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
             }
           }]
         },
@@ -356,7 +354,7 @@
                     value: '4',
                     label: '裤子'
                   }],
-                 
+
                 },
                 input:'',
                 employeesValue:'',
