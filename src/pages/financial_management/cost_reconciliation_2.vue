@@ -5,43 +5,46 @@
           <el-row>
             <el-col :span="20">
               <div class="header-top">
-                <!--<el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="制单开始日期" end-placeholder="制单结束日期" size="mini"></el-date-picker>-->
-                <div class="start-date-time">
-                  <span class="demonstration">开始时间：</span>
-                  <el-date-picker
-                    v-model="datetime_start"
-                    size="mini"
-                    @change="(val)=>{this.datetime_start=val}"
-                    type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="选择开始日期时间"
-                    align="right"
-                    :picker-options="pickerOptions1">
-                  </el-date-picker>
-                </div>
-                <div class="end-date-time">
-                  <span class="demonstration">结束时间：</span>
-                  <el-date-picker
-                    v-model="datetime_end"
-                    size="mini"
-                    @change="(val)=>{this.datetime_end=val}"
-                    type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="选择结束日期时间"
-                    align="right"
-                    :picker-options="pickerOptions1">
-                  </el-date-picker>
-                </div>
-              </div>
-              <div class="header-top">
-                <el-select v-model="bank_card_number" placeholder="账户" size="mini" class="header-bottom-select">
-                  <el-option v-for="(item,index) in options1" :key="index" :label="item.account_num" :value="item.account_num"></el-option>
-                </el-select>
-                <el-select v-model="process_status" placeholder="审核标识" size="mini" class="header-bottom-select">
-                  <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-                <el-button type="primary" size="mini" v-on:click="search">查询</el-button>
-                <el-button type="primary" size="mini"  v-on:click="clearSearch">重置</el-button>
+                <el-form :inline="true" label-width="80px" size="mini">
+                  <el-form-item label="账户">
+                    <el-select v-model="bank_card_number" placeholder="账户" size="mini" class="header-bottom-select">
+                      <el-option v-for="(item,index) in options1" :key="index" :label="item.account_num" :value="item.account_num"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="审核标识">
+                    <el-select v-model="process_status" placeholder="审核标识" size="mini" class="header-bottom-select">
+                      <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="开始时间">
+                    <el-date-picker
+                      v-model="datetime_start"
+                      size="mini"
+                      @change="(val)=>{this.datetime_start=val}"
+                      type="datetime"
+                      value-format="yyyy-MM-dd hh:mm:ss"
+                      placeholder="选择开始日期时间"
+                      align="right"
+                      :picker-options="pickerOptions1">
+                    </el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="结束时间">
+                    <el-date-picker
+                      v-model="datetime_end"
+                      size="mini"
+                      @change="(val)=>{this.datetime_end=val}"
+                      type="datetime"
+                      value-format="yyyy-MM-dd hh:mm:ss"
+                      placeholder="选择结束日期时间"
+                      align="right"
+                      :picker-options="pickerOptions1">
+                    </el-date-picker>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="mini" v-on:click="search" >查询</el-button>
+                    <el-button type="primary" size="mini" v-on:click="clearSearch">重置</el-button>
+                  </el-form-item>
+                </el-form>
               </div>
             </el-col>
             <el-col :span="4">

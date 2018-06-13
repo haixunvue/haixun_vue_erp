@@ -4,36 +4,36 @@
           <el-row>
             <el-col :span="20">
               <div class="header-top">
-                <!--<el-date-picker v-model="value" type="datetimerange" range-separator="至" start-placeholder="制单开始日期" end-placeholder="制单结束日期" size="mini"></el-date-picker>-->
-
-                <div class="start-date-time">
-                  <span class="demonstration">开始时间：</span>
-                  <el-date-picker
-                    v-model="datetime_start"
-                    size="mini"
-                    @change="(val)=>{this.datetime_start=val}"
-                    type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="选择开始日期时间"
-                    align="right"
-                    :picker-options="pickerOptions1">
-                  </el-date-picker>
-                </div>
-                <div class="end-date-time">
-                  <span class="demonstration">结束时间：</span>
-                  <el-date-picker
-                    v-model="datetime_end"
-                    size="mini"
-                     @change="(val)=>{this.datetime_end=val}"
-                    type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="选择结束日期时间"
-                    align="right"
-                    :picker-options="pickerOptions1">
-                  </el-date-picker>
-                </div>
-                 <el-button type="primary" size="mini" v-on:click="search" >查询</el-button>
-                <el-button type="primary" size="mini" v-on:click="clearSearch">重置</el-button>
+                <el-form :inline="true" label-width="80px" size="mini">
+                  <el-form-item label="开始时间">
+                    <el-date-picker
+                      v-model="datetime_start"
+                      size="mini"
+                      @change="(val)=>{this.datetime_start=val}"
+                      type="datetime"
+                      value-format="yyyy-MM-dd hh:mm:ss"
+                      placeholder="选择开始日期时间"
+                      align="right"
+                      :picker-options="pickerOptions1">
+                    </el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="结束时间">
+                    <el-date-picker
+                      v-model="datetime_end"
+                      size="mini"
+                      @change="(val)=>{this.datetime_end=val}"
+                      type="datetime"
+                      value-format="yyyy-MM-dd hh:mm:ss"
+                      placeholder="选择结束日期时间"
+                      align="right"
+                      :picker-options="pickerOptions1">
+                    </el-date-picker>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="mini" v-on:click="search" >查询</el-button>
+                    <el-button type="primary" size="mini" v-on:click="clearSearch">重置</el-button>
+                  </el-form-item>
+                </el-form>
               </div>
             </el-col>
           </el-row>
