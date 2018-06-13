@@ -244,20 +244,20 @@
   <el-dialog title="批量编辑" :visible.sync="dialogTableVisible" width="60%">
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item label="标题">
-        <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="请输入内容" style="margin-bottom:5px">
           <template slot="prepend">开头添加</template>
         </el-input>
-        <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="请输入内容" style="margin-bottom:5px">
           <template slot="prepend">结尾添加</template>
         </el-input>
         <el-row  class="mt10">
           <el-col :span="11">
-            <el-input placeholder="请输入内容" v-model="infor">
+            <el-input placeholder="请输入内容">
               <template slot="prepend">将标题中的</template>
             </el-input>
           </el-col>
           <el-col :span="11" :offset="2">
-            <el-input placeholder="请输入内容" v-model="infor">
+            <el-input placeholder="请输入内容">
               <template slot="prepend">替换为</template>
             </el-input>
           </el-col>
@@ -265,10 +265,10 @@
       </el-form-item>
       <div class="line"></div>
       <el-form-item label="生成SKU">
-        <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="请输入内容" style="margin-bottom:5px">
           <template slot="prepend">前缀</template>
         </el-input>
-        <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="请输入内容" style="margin-bottom:5px">
           <template slot="prepend">后缀</template>
         </el-input>
         <div style="margin-bottom:5px">
@@ -279,17 +279,16 @@
 
           </el-select>
         </div>
-        <el-input placeholder="请输入内容" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="请输入内容" style="margin-bottom:5px">
           <template slot="prepend">起始数字</template>
         </el-input>
-        <el-input placeholder="请输入内容" v-model="infor" :disabled="true" style="margin-bottom:5px">
+        <el-input placeholder="请输入内容" :disabled="true" style="margin-bottom:5px">
           <template slot="prepend">生成示例</template>
         </el-input>
       </el-form-item>
       <div class="line"></div>
       <el-form-item label="产品价格">
         <el-radio-group
-          v-model="radio1"
           size="mini"
           v-on:change="change2(radio1)"
           style="margin-bottom:10px">
@@ -299,7 +298,7 @@
         </el-radio-group>
         <div class="box1" v-show="box1">
           <!-- 金额: -->
-          <el-input placeholder="请输入内容" v-model="infor" >
+          <el-input placeholder="请输入内容" >
             <template slot="prepend"> + </template>
           </el-input>
           <span style="color:#E6A23C">
@@ -308,7 +307,7 @@
         </div>
         <div class="box2" v-show="box2">
           <!-- 比例: -->
-          <el-input placeholder="请输入内容" v-model="infor" >
+          <el-input placeholder="请输入内容" >
             <template slot="prepend"> x </template>
           </el-input>
           <span style="color:#E6A23C">
@@ -317,7 +316,7 @@
         </div>
         <div class="box3" v-show="box3">
           <!-- 设置: -->
-          <el-input placeholder="请输入内容" v-model="infor" >
+          <el-input placeholder="请输入内容" >
           </el-input>
           <span style="color:#E6A23C">
             将价格统一设置为一个值
@@ -336,7 +335,7 @@
         </el-radio-group>
         <div class="box1" v-show="box2_1">
           <!-- 金额: -->
-          <el-input placeholder="请输入内容" v-model="infor" >
+          <el-input placeholder="请输入内容" >
             <template slot="prepend"> + </template>
           </el-input>
           <span style="color:#E6A23C">
@@ -345,7 +344,7 @@
         </div>
         <div class="box2" v-show="box2_2">
           <!-- 比例: -->
-          <el-input placeholder="请输入内容" v-model="infor" >
+          <el-input placeholder="请输入内容" >
           </el-input>
           <span style="color:#E6A23C">
             将库存统一设置为一个值
@@ -354,23 +353,23 @@
       </el-form-item>
       <div class="line"></div>
       <el-form-item label="品牌名称">
-        <el-input placeholder="品牌名称" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="品牌名称" style="margin-bottom:5px">
         </el-input>
       </el-form-item>
       <el-form-item label="厂商名称">
-        <el-input placeholder="厂商名称" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="厂商名称" style="margin-bottom:5px">
         </el-input>
       </el-form-item>
       <el-form-item label="产品关键词">
-        <el-input placeholder="关键词" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="关键词" style="margin-bottom:5px">
         </el-input>
-        <el-input placeholder="关键词" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="关键词" style="margin-bottom:5px">
         </el-input>
-        <el-input placeholder="关键词" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="关键词" style="margin-bottom:5px">
         </el-input>
-        <el-input placeholder="关键词" v-model="infor" style="margin-bottom:5px">
+        <el-input placeholder="关键词" style="margin-bottom:5px">
         </el-input>
-        <el-input placeholder="关键词" v-model="infor">
+        <el-input placeholder="关键词">
         </el-input>
       </el-form-item>
     </el-form>
@@ -383,28 +382,15 @@
 </template>
 
 <script>
-    import router from "../../router";      
+    import router from "../../router";
     const status_audit_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
     const status_shelf_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}, {name:'侵权',value:'tort'}, {name:'屏蔽',value:'shield'}];
     const product_type_list = [{name:'全部',value:'all'},{name:'重点',value:'stress'}, {name:'原创',value:'original'}, {name:'海外',value:'overseas'}, {name:'抓取',value:'grab'}, {name:'其他',value:'other'}, {name:'ERP产品库',value:'erp_product_library'}];
     const product_status_list = [{name:'初始',value:'new'},{name:'等待上传',value:'wait_async'}, {name:'在线',value:'online'}];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     export default {
         data() {
           return {
+            dialogTableVisible:false,
             company_list:[],
             company_selected_id:'',
             staff_list:[],
@@ -434,8 +420,8 @@
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
                     picker.$emit('pick', [start, end]);
-                    this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-                    this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+                    this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+                    this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
                   }
                 }, {
                   text: '最近一个月',
@@ -444,8 +430,8 @@
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
                     picker.$emit('pick', [start, end]);
-                    this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-                    this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+                    this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+                    this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
                   }
                 }, {
                   text: '最近三个月',
@@ -454,8 +440,8 @@
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
                     picker.$emit('pick', [start, end]);
-                    this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
-                    this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+                    this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+                    this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
                   }
                 }]
               },
