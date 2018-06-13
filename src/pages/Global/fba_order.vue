@@ -281,7 +281,11 @@
 <script>
     import router from "../../router";
      import site from '@/json/site';
-    const status_order_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}];
+    const status_order_list = [{name:'全部',value:'all'},{name:'创建',value:'new'}, {name:'未确认',value:'pending'}, {name:'未发货',value:'unshipped'}, {name:'已发货',value:'shipped'}];
+	    
+   
+
+
 
 
     export default {
