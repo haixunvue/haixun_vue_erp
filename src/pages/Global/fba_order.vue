@@ -31,29 +31,27 @@
               v-for ="item in staff_list"
               :key="item.id"
               :label="item.staff_name"
-
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-select
-            v-model="value"
-            placeholder="选择国家"
-            v-on:change="change(value)"
-            size="mini">
-            <el-option
-              v-for ="item in form.company"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+         <el-select v-model="country_selected_id" placeholder="选择国家" size="mini">
+              <el-option
+                v-for="item in country_list"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+              </el-option>
+            </el-select>
         </el-form-item>
         <el-form-item>
-          <el-select v-model="orderValue" placeholder="订单状态" size="mini">
-            <el-option v-for="item in orderOptions" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
+          <el-select v-model="status_order_selected_id" placeholder="订单状态" size="mini">
+             <el-option
+                v-for="item in status_order_list"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"/>
           </el-select>
         </el-form-item>
       </el-col>
@@ -88,22 +86,22 @@
           <el-input v-model="input" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">搜索</el-button>
+          <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="search">搜索</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn">重置</el-button>
+          <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="clearSearch">重置</el-button>
         </el-form-item>
       </el-col>
     </el-row>
   </el-form>
     <div class="line" style="margin-bottom:5px"></div>
     <div class="search-result oh" style="margin-bottom:5px;margin-top:5px">
-        <p class="search-result-text">符合条件的订单共有<span> 6 </span>个</p>
+        <p class="search-result-text">符合条件的订单共有<span>{{totalCount}}</span>个</p>
         <el-button type="primary" size="mini" class="search-btn right">同步订单</el-button>
     </div>
     <div class="table">
         <el-table
-            :data="data.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+            :data="order_list"
             border
             style="width: 100%;margin-bottom:20px"
             :default-sort = "{prop: 'right', order: 'descending'}"
@@ -151,7 +149,7 @@
             :page-sizes="[5, 20, 50, 100]"
             :page-size="pagesize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="totalItems"
+            :total="totalCount"
              style="clear:both;text-align:center">
         </el-pagination>
     </div>
@@ -282,14 +280,61 @@
 
 <script>
     import router from "../../router";
+     import site from '@/json/site';
+    const status_order_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}];
+
+
     export default {
         data() {
             return {
-             company_list:[],
+            company_list:[],
             company_selected_id:'',
             staff_list:[],
             staff_selected_id:'',
-                form:{
+            datetime_start:'',
+            datetime_end:'',
+            pagesize:5,//每页的数据条数
+            currentPage:1,//默认开始页面
+            totalCount:0,
+            search_text:'',
+            country_list:site,
+            country_selected_id:'',
+            status_order_list:status_order_list,
+            status_order_selected_id:'',
+            pickerOptions: {
+             shortcuts: [{
+            text: '最近一周',
+            onClick:(picker)=> {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+            }
+          }, {
+            text: '最近一个月',
+            onClick:(picker)=> {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss') 
+            }
+          }, {
+            text: '最近三个月',
+            onClick:(picker)=> {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+              this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss') 
+              this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')               
+            }
+          }]
+        },
+        form:{
                   company: [],
                   infor1:'',
                   select1:'1',
@@ -307,33 +352,7 @@
                     value: '4',
                     label: '裤子'
                   }],
-                  pickerOptions: {
-                    shortcuts: [{
-                      text: '最近一周',
-                      onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', [start, end]);
-                      }
-                    }, {
-                      text: '最近一个月',
-                      onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                        picker.$emit('pick', [start, end]);
-                      }
-                    }, {
-                      text: '最近三个月',
-                      onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                        picker.$emit('pick', [start, end]);
-                      }
-                    }]
-                  }
+                 
                 },
                 input:'',
                 employeesValue:'',
@@ -405,19 +424,38 @@
             }
         },
         methods: {
-            handleSizeChange: function (size) {
-                this.pagesize = size;
-            },
-            handleCurrentChange: function(currentPage){
-              this.currentPage = currentPage;
-            },
+        search: function(){
+          this.currentPage = 1;
+           this.order_listall_paging();
+          },
+          clearSearch: function(){
+                this.company_selected_id=''
+                this.staff_selected_id=''
+                this.datetime_start=''
+                this.datetime_end=''
+                this.search_text=''
+                this.country_selected_id=''
+                this.status_amazion_selected_id='';
+                this.status_payment_selected_id='';
+         },
+      handleSizeChange:function(size) {
+         this.currentPage = 1;
+        this.pagesize = size;
+         this.order_listall_paging();
+      },
+      handleCurrentChange:function(currentPage) {
+        this.currentPage = currentPage;
+         this.order_listall_paging();
+      },
             user_edit:function(){
                 this.dialogTableVisible = true;
             },
              onCompanyChange(){
               this.company_staff_list();
+              this.order_listall_paging();
           },
            onStaffChange(){
+               this.order_listall_paging();
            },
            company_staff_list(){
              let params = {
@@ -447,6 +485,42 @@
               }
             })
           },
+          order_listall_paging(){
+            let params = {
+              user_token:this.user_token,
+              user_id:this.user_id,
+              page:this.currentPage-1,  //页码
+              pageSize:this.pagesize,
+              order_amazion_type:'fba',
+            }
+            if(this.company_selected_id){
+              params.target_company_id = this.company_selected_id
+            }
+
+            if(this.staff_selected_id){
+              params.target_staff_id = this.staff_selected_id
+            }
+
+            if(this.datetime_start){
+                 params.order_create_datetime_start=this.datetime_start;
+            }
+            if(this.datetime_end){
+                params.order_create__datetime_end=this.datetime_end;
+            }
+            if(this.search_text){
+                params.search_text=this.search_text;
+            }
+
+            this.$http.post(this.api.order_listall_paging,params).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                    this.order_list = res.value.list;
+                  this.totalCount = res.value.totalCount;
+                }else{
+                     this.order_list=[];
+                }
+            })
+          },
 
         },
         created(){
@@ -463,8 +537,7 @@
             }else{
               this.company_staff_list()
             }
-            console.log('show_company_selector',this.show_company_selector)
-            console.log('show_staff_selector',this.show_staff_selector)
+             this.order_listall_paging();
         },
         props:{
          title:{
