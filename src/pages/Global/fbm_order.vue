@@ -159,7 +159,6 @@
         fixed
         prop="id"
         label="订单ID/订单号"
-        width="220px"
       >
         <template slot-scope="scope">
           <div>
@@ -173,7 +172,6 @@
       <el-table-column
         prop="pic"
         label="产品信息"
-        width="300px"
       >
         <template slot-scope="scope">
           <div class="left" style="width:45px;height:45px;background:#ccc">
@@ -192,25 +190,21 @@
       <el-table-column
         prop="cost"
         label="成本(¥)"
-
       >
       </el-table-column>
       <el-table-column
         prop="profit"
         label="利润(¥)"
-
       >
       </el-table-column>
       <el-table-column
         prop="buy_data"
         label="下单时间"
-        width="155"
       >
       </el-table-column>
       <el-table-column
         prop="shop"
         label="店铺"
-        width="100"
       >
       </el-table-column>
       <el-table-column
@@ -221,7 +215,6 @@
       <el-table-column
         prop="international_order"
         label="国际运单"
-        width="200"
       >
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="right">
@@ -236,7 +229,6 @@
       <el-table-column
         prop="international_order"
         label="国内运单"
-        width="200"
       >
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="right">
@@ -251,19 +243,16 @@
       <el-table-column
         prop="count"
         label="数量"
-        width="50"
       >
       </el-table-column>
       <el-table-column
         prop="updata_data"
         label="更新时间"
-        width="155"
       >
       </el-table-column>
       <el-table-column
         fixed="right"
-        label="操作"
-        width="65">
+        label="操作">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="open" size="mini"></el-button>
           <!-- <el-button type="danger" icon="el-icon-delete"  size="mini"></el-button> -->
@@ -697,7 +686,7 @@
             if(this.search_text){
                 params.search_text=this.search_text;
             }
-           
+
 
 
             this.$http.post(this.api.order_listall_paging,params).then((res)=>{

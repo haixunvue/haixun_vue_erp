@@ -1,21 +1,22 @@
 <template>
   <div >
-
-        <div style="margin-bottom:5px">
-             <el-select
-        v-if="companylist&&companylist.length>0"
-        v-model="owner_company_id"
-        placeholder="请选择公司"
-        size="mini"
-        v-on:change="onCompanyChange()">
-        <el-option
-            v-for ="item in companylist"
-            :key="item.id"
-            :label="item.company_full_name"
-            :value="item.id">
-        </el-option>
-      </el-select>
-          <el-select v-model="target_staff_id" placeholder="选择员工" size="mini" @change="target_staff_Change">
+    <div style="margin-bottom:5px">
+      <el-form :inline="true" label-width="80px" size="mini">
+        <el-form-item v-if="companylist&&companylist.length>0" label="选择公司">
+          <el-select
+            v-model="owner_company_id"
+            placeholder="请选择公司"
+            v-on:change="onCompanyChange()">
+            <el-option
+              v-for ="item in companylist"
+              :key="item.id"
+              :label="item.company_full_name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择员工">
+          <el-select v-model="target_staff_id" placeholder="选择员工" @change="target_staff_Change">
             <el-option
               v-for="(item,index) in staff_list"
               :key="index"
@@ -23,7 +24,9 @@
               :value="item.id">
             </el-option>
           </el-select>
-            <el-select v-model="target_shop_id" placeholder="选择店铺" size="mini">
+        </el-form-item>
+        <el-form-item label="选择店铺">
+          <el-select v-model="target_shop_id" placeholder="选择店铺">
             <el-option
               v-for="(item,index) in shop_list"
               :key="index"
@@ -31,27 +34,31 @@
               :value="item.id">
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="开始时间">
           <el-date-picker
-                    v-model="datetime_start"
-                    @change="(val)=>{this.datetime_start=val}"
-                    type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="选择开始日期时间"
-                    align="right"
-                    size="mini"
-                    :picker-options="pickerOptions1">
-                  </el-date-picker>
-                  <el-date-picker
-                    v-model="datetime_end"
-                     @change="(val)=>{this.datetime_end=val}"
-                    type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="选择结束日期时间"
-                    align="right"
-                    size="mini"
-                    :picker-options="pickerOptions1">
-                  </el-date-picker>
-       </div>
+            v-model="datetime_start"
+            @change="(val)=>{this.datetime_start=val}"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            placeholder="选择开始日期时间"
+            align="right"
+            :picker-options="pickerOptions1">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间">
+          <el-date-picker
+            v-model="datetime_end"
+            @change="(val)=>{this.datetime_end=val}"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            placeholder="选择结束日期时间"
+            align="right"
+            :picker-options="pickerOptions1">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+    </div>
 
         <div class="middle">
           <div class="middle-top">

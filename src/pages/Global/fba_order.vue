@@ -107,7 +107,7 @@
             :default-sort = "{prop: 'right', order: 'descending'}"
             size="mini"
             >
-            <el-table-column prop="name" label="订单ID/订单号" width="220px">
+            <el-table-column prop="name" label="订单ID/订单号">
                 <template slot-scope="scope">
                   <div>
                     订单ID:{{ scope.row.id}}
@@ -117,7 +117,7 @@
                   </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="pic" label="产品信息" width="300px">
+            <el-table-column prop="pic" label="产品信息">
                 <template slot-scope="scope">
                   <div class="left" style="width:45px;height:45px;background:#ccc;margin-right:20px">
 
@@ -136,7 +136,7 @@
             </el-table-column>
             <el-table-column prop="tel" label="买家信息">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="65">
+            <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" @click="user_edit" size="mini"></el-button>
                 </template>

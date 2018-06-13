@@ -34,20 +34,30 @@
         </el-option>
       </el-select>
     </el-form-item>
+    <el-form-item label="开始时间">
+      <el-date-picker
+        v-model="datetime_start"
+        @change="(val)=>{this.datetime_start=val}"
+        type="datetime"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        placeholder="选择开始日期时间"
+        align="right"
+        :picker-options="pickerOptions">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label="结束时间">
+      <el-date-picker
+        v-model="datetime_end"
+        @change="(val)=>{this.datetime_end=val}"
+        type="datetime"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        placeholder="选择结束日期时间"
+        align="right"
+        :picker-options="pickerOptions">
+      </el-date-picker>
+    </el-form-item>
     <el-form-item label="内容搜索" >
       <el-row  >
-        <el-col :span="9" style="margin-right:10px">
-          <el-date-picker
-            v-model="form.infor2"
-            type="datetimerange"
-            :picker-options="form.pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            style="width:100%"
-            >
-          </el-date-picker>
-        </el-col>
         <el-col :span="9" style="margin-right:10px">
           <el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select" >
             <el-select v-model="form.select1" slot="prepend" placeholder="请选择" style="width:120px">

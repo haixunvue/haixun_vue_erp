@@ -1,20 +1,22 @@
 <template>
   <div >
-
-        <div style="margin-bottom:5px">
-       <el-select
-        v-if="companylist&&companylist.length>0"
+    <div style="margin-bottom:5px">
+      <el-form :inline="true" label-width="80px" size="mini">
+        <el-form-item v-if="companylist&&companylist.length>0" label="选择公司">
+          <el-select
         v-model="owner_company_id"
         placeholder="请选择公司"
         size="mini"
         v-on:change="onCompanyChange()">
-        <el-option
-            v-for ="item in companylist"
-            :key="item.id"
-            :label="item.company_full_name"
-            :value="item.id">
-        </el-option>
-      </el-select>
+          <el-option
+              v-for ="item in companylist"
+              :key="item.id"
+              :label="item.company_full_name"
+              :value="item.id">
+          </el-option>
+        </el-select>
+        </el-form-item>
+        <el-form-item label="选择员工">
           <el-select v-model="target_staff_id" placeholder="选择员工" size="mini" @change="target_staff_Change">
             <el-option
               v-for="(item,index) in staff_list"
@@ -23,7 +25,9 @@
               :value="item.id">
             </el-option>
           </el-select>
-            <el-select v-model="target_shop_id" placeholder="选择店铺" size="mini">
+        </el-form-item>
+        <el-form-item label="选择店铺">
+          <el-select v-model="target_shop_id" placeholder="选择店铺" size="mini">
             <el-option
               v-for="(item,index) in shop_list"
               :key="index"
@@ -31,6 +35,8 @@
               :value="item.id">
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="开始时间">
           <el-date-picker
                     v-model="datetime_start"
                     @change="(val)=>{this.datetime_start=val}"
@@ -41,7 +47,9 @@
                     size="mini"
                     :picker-options="pickerOptions1">
                   </el-date-picker>
-                  <el-date-picker
+        </el-form-item>
+        <el-form-item label="结束时间">
+          <el-date-picker
                     v-model="datetime_end"
                      @change="(val)=>{this.datetime_end=val}"
                     type="datetime"
@@ -51,9 +59,10 @@
                     size="mini"
                     :picker-options="pickerOptions1">
                   </el-date-picker>
-       </div>
-
-        <div class="middle">
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="middle">
           <div class="middle-top">
             <span class="left search-result-text">仓库位置：</span>
             <el-checkbox :indeterminate="all_warehouse_location_isIndeterminate" v-model="all_warehouse_location" @change="all_warehouse_location_Change" class="left" style="margin-right:30px">全选</el-checkbox>
@@ -297,7 +306,7 @@
           },
     },
     mounted() {
-            
+
             this.owner_user_id = localStorage.getItem("owner_user_id")
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
@@ -307,7 +316,7 @@
               this.company_shop_list();
               this.cost_statistics_paging();
             }
-  
+
     },
      props:{
           companylist:{
