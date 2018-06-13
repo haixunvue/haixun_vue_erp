@@ -38,21 +38,21 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="value2" placeholder="选择国家" size="mini">
+            <el-select v-model="country_selected_id" placeholder="选择国家" size="mini">
               <el-option
-                v-for="item in options2"
+                v-for="item in country_list"
                 :key="item.value"
-                :label="item.label"
+                :label="item.name"
                 :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="value2" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
+            <el-select v-model="status_amazion_selected_id" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
               <el-option
-                v-for="item in options2"
+                v-for="item in status_amazion_list"
                 :key="item.value"
-                :label="item.label"
+                :label="item.name"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -62,11 +62,11 @@
         <el-row>
         <el-col :span="24">
           <el-form-item>
-            <el-select v-model="value3" placeholder="支付状态" size="mini">
+            <el-select v-model="status_payment_selected_id" placeholder="支付状态" size="mini">
               <el-option
-                v-for="item in options3"
+                v-for="item in status_payment_list"
                 :key="item.value"
-                :label="item.label"
+                :label="item.name"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -505,6 +505,10 @@
 </template>
 
 <script>
+  import site from '@/json/site';
+  const status_amazion_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
+  const status_payment_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}];
+
   export default {
     data() {
       return {
@@ -519,6 +523,12 @@
         currentPage:1,//默认开始页面
         totalCount:0,
         search_text:'',
+        country_list:site,
+        country_selected_id:'',
+        status_amazion_list:status_amazion_list,
+        status_amazion_selected_id:'',
+        status_payment_list:status_payment_list,
+        status_payment_selected_id:'',
 
         options:[],
         value:'',
@@ -604,8 +614,10 @@
       },
           onCompanyChange(){
               this.company_staff_list();
+              this.order_listall_paging();
           },
            onStaffChange(){
+             this.order_listall_paging();
            },
            company_staff_list(){
              let params = {
