@@ -18,7 +18,7 @@
             <div class="line"></div>
             <el-form-item label="产品图片">
               <el-upload
-                class="upload-demo"
+                class="upload-demo prouduct-upload"
                 action="http://39.106.9.139/upload"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
@@ -29,9 +29,8 @@
                 list-type="picture-card"
                 :on-success="uploadSuccess">
                 <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                <!-- <el-button size="small" type="primary">本地图片选取</el-button>
-                <el-button size="small" type="primary">图片空间选取</el-button> -->
+                <div class="el-upload__text">将文件拖到此处，或
+                  <br/><em>点击上传</em></div>
                 <div slot="tip" class="el-upload__tip">
                   支持 jpg/tif 等格式图片，最长边大于500px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
                 </div>
@@ -55,21 +54,43 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="五大亮点">
-              <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[0]" class="mt10"></el-input>
-              <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[1]" class="mt10"></el-input>
-              <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[2]" class="mt10"></el-input>
-              <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[3]" class="mt10"></el-input>
-              <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[4]"></el-input>
-              <span style="color:#F56C6C">5个亮点不需要全部填写,可根据需求填写</span>
-            </el-form-item>
-            <el-form-item label="关键词">
-              <el-input placeholder="请输入关键词" v-model="form.keyWord[0]" class="mt10"></el-input>
-              <el-input placeholder="请输入关键词" v-model="form.keyWord[1]" class="mt10"></el-input>
-              <el-input placeholder="请输入关键词" v-model="form.keyWord[2]" class="mt10"></el-input>
-              <el-input placeholder="请输入关键词" v-model="form.keyWord[3]" class="mt10"></el-input>
-              <el-input placeholder="请输入关键词" v-model="form.keyWord[4]"></el-input>
-            </el-form-item>
+                <el-form-item label="五大亮点">
+                  <el-row>
+                    <el-col :span="20">
+                  <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[0]" class="mt10"></el-input>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-button type="info">删除</el-button>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="20">
+                  <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[0]" class="mt10"></el-input>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-button type="primary">添加</el-button>
+                    </el-col>
+                  </el-row>
+                    <span style="color:#F56C6C">5个亮点不需要全部填写,可根据需求填写</span>
+                </el-form-item>
+                <el-form-item label="关键词">
+                  <el-row>
+                    <el-col :span="20">
+                  <el-input placeholder="请输入关键词" v-model="form.keyWord[0]" class="mt10"></el-input>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-button type="info">删除</el-button>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="20">
+                  <el-input placeholder="请输入关键词" v-model="form.keyWord[0]" class="mt10"></el-input>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-button type="primary">添加</el-button>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
             <el-form-item label="描述">
               <el-input type="textarea" placeholder="请输入描述" v-model="form.describe">
               </el-input>
@@ -98,7 +119,7 @@
                   </el-input>
                 </el-col>
               </el-row>
-     
+
               <el-row  class="mt10">
                 <el-col :span="11">
                   <el-input placeholder="内部SKU" v-model="form.productInfo.fatherSku">
@@ -114,7 +135,7 @@
                   </el-input>
                 </el-col>
               </el-row>
-              
+
               <el-row  class="mt10">
                 <el-col :span="20">
                   <el-input placeholder="来源网址" v-model="form.productInfo.sourceWebsite">
@@ -128,7 +149,7 @@
                   <el-button type="primary">访问连接</el-button>
                 </el-col>
               </el-row>
-              
+
               <el-row  class="mt10">
                 <el-input placeholder="备注" v-model="form.productInfo.remarks">
                   <template slot="prepend">备注</template>
@@ -196,15 +217,15 @@
                 <el-radio-button label="2">藏青波点-预定18个工作日发货</el-radio-button>
                 <el-radio-button label="3">黑白波点-预定18个工作日发货</el-radio-button>
                 <el-radio-button label="4">红白波点-预定20个工作日发货</el-radio-button>
-              </el-radio-group> 
+              </el-radio-group>
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="变体">
-              
+
               <div>
                 <el-button @click="dialogVariantVisible = true" style="margin-bottom:20px">添加变体</el-button>
               </div>
-              
+
               <div class="mt20">
                 <template v-for="(tag,index) in variantBtnList">
                   <el-button @click="changeDataList(index)">
@@ -221,7 +242,7 @@
                   </el-tag>
                 </template>
               </div>
-              
+
               <el-table
                 ref="singleTable"
                 :data="tableData1"
@@ -297,7 +318,7 @@
               </el-table>
             </el-form-item>
             <div class="line"></div>
-            
+
             <div class="oh">
               <el-button type="primary" class="right ml10">下一个</el-button>
               <el-button type="success" class="right" @click="addProducts">保存至待同步</el-button>
@@ -321,7 +342,7 @@
         <el-tab-pane label="澳洲" name="11">澳洲</el-tab-pane>
       </el-tabs>
     </template>
-    
+
 
 
     <!--弹窗区域-->
@@ -368,7 +389,7 @@
             </el-input>
           </el-col>
         </el-row>
-        
+
         <table class="el-table__header" border="0" cellpadding="3" cellspacing="0"  >
               <thead class="has-gutter">
               <tr>
@@ -743,7 +764,7 @@
             sourceWebsite:'',//来源网址
             remarks:'',//备注
             stock:'',//库存
-            preprocessing:'',//预处理         
+            preprocessing:'',//预处理
           },
           examine:'', //审核状态
           shelf:'', //上下架
@@ -972,7 +993,7 @@
     }
   }
 </script>
-<style scoped >
+<style  >
   table{
     margin-bottom: 20px;
   }
@@ -1022,5 +1043,24 @@
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+  }
+  .el-upload--picture-card .el-upload-dragger{
+    width: 148px;
+    height: 148px;
+    background-color: transparent;
+  }
+  .el-upload__text{
+    position: absolute;
+    top: 24px;
+    left: 9px;
+    height: 28px;
+  }
+  .el-upload-dragger .el-icon-upload {
+    margin: 17px 0 16px;
+  }
+  .el-upload-dragger .el-upload__text em {
+    position: absolute;
+    top: 21px;
+    left: 35px;
   }
 </style>
