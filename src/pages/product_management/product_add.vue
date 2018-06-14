@@ -53,7 +53,7 @@
                 <div class="el-upload__text">将文件拖到此处，或
                   <br/><em>点击上传</em></div>
                 <div slot="tip" class="el-upload__tip">
-                  支持 jpg/tif 等格式图片，最长边大于500px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
+                  只支持 jpg/tif/gif 等格式图片，图片尺寸必须500x1000px以上,最长边不得超过10,000px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
                 </div>
               </el-upload>
             </el-form-item>
