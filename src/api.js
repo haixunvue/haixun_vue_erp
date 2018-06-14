@@ -62,6 +62,7 @@ const api={
     'product_listall_paging':'/apis/v1807g/product/listall/paging',   // 产品分类
     'order_listall_paging':'/apis/v1807g/order/listall/paging',   // 产品分类
     'product_add':'/apis/v1807g/product/add',   // 产品分类
+    'product_set_infos':'/apis/v1807g/product/set_infos',   // 产品分类
 
 };
 export default api;

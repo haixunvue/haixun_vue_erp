@@ -7,7 +7,7 @@
           <el-form ref="form" :model="form" label-width="80px">
             <div class="oh">
               <el-button type="primary" class="right ml10">下一个</el-button>
-              <el-button type="success" class="right" @click="addProducts">保存至待同步</el-button>
+              <el-button type="success" class="right" @click="product_sync">保存至待同步</el-button>
               <el-button type="primary" class="right">一键从英文翻译</el-button>
               <el-button type="primary" class="right">一键从中文翻译</el-button>
             </div>
@@ -45,7 +45,7 @@
                 class="upload-demo prouduct-upload"
                 action="http://39.106.9.139/upload"
                 :on-preview="handlePreview"
-                :on-remove="handleRemove"
+                :on-remove="handleImagesRemove"
                 :limit="9"
                 drag
                 multiple
@@ -324,7 +324,7 @@
 
             <div class="oh">
               <el-button type="primary" class="right ml10">下一个</el-button>
-              <el-button type="success" class="right" @click="addProducts">保存至待同步</el-button>
+              <el-button type="success" class="right" @click="product_sync">保存至待同步</el-button>
               <el-button type="primary" class="right">一键从英文翻译</el-button>
               <el-button type="primary" class="right">一键从中文翻译</el-button>
             </div>
@@ -539,6 +539,7 @@
         brief_introduction:'',
         blue_point:[''],
         keyword:[''],
+        productPicUrl:[], //商品图片路径
         brand:'',
         weight:'',
         volume:'',
@@ -793,16 +794,6 @@
           keyWord:[],  //关键词
           describe:'', //描述
           status:'',  //状态
-          productInfo:{
-            brand:'',//品牌名称
-            manufacturer:'',//厂商名称
-            fatherSku:'',//父SKU
-            ean:'',//EAN
-            sourceWebsite:'',//来源网址
-            remarks:'',//备注
-            stock:'',//库存
-            preprocessing:'',//预处理
-          },
           examine:'', //审核状态
           shelf:'', //上下架
           projectType:'', //产品类型
@@ -948,6 +939,13 @@
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
+      handleImagesRemove(file, fileList) {
+        this.productPicUrl= this.productPicUrl.filter((url)=>{
+            return url!=file.response;
+        })
+
+        console.log(file, fileList);
+      },
       handlePreview(file) {
         console.log('handlePreview',file);
         this.dialogImageUrl = file.url;
@@ -1025,9 +1023,8 @@
         this.variantTagId = index;
         this.tableData1 = this.variantArr[index].data
       },
-      //添加方法
-      addProducts(){
-        let params = {
+      getParams(){
+          let params = {
            user_token:this.user_token,
            user_id:this.user_id,
            owner_company_id:this.owner_company_id,
@@ -1051,13 +1048,10 @@
         if(this.product_classify_selected){
           params.classification = this.product_classify_selected
         }
-        if(this.images_fileList&&this.images_fileList.length>0){
-          
-          let images = [];
-          this.images_fileList.map((item)=>{
-            images.push(item.response)
-          })
-          params.images = JSON.stringify(images)
+        if(this.productPicUrl&&this.productPicUrl.length>0){
+          params.images = JSON.stringify(this.productPicUrl.filter((item)=>{
+              return item;
+          }))
         }
         if(this.blue_point&&this.blue_point.length>0){
           params.blue_point = JSON.stringify(this.blue_point.filter((item)=>{
@@ -1086,8 +1080,36 @@
         if(this.product_type_selected ){
           params.product_type = this.product_type_selected
         }
+        return params;
+      },
+
+      product_sync(){
+          if(!this.productInfo){
+            this.addProducts(this.getParams());
+          }else{
+            let params=this.getParams();
+            params.target_id = this.productInfo.id;
+            this.editProducts(params)
+          }
+      },
+      editProducts(params){
+        this.$http.post(this.api.product_set_infos,params).then(res => {
+            if(res.is_success){
+              this.productInfo=res.value;
+              this.id=res.value.id;
+            }
+            console.log(res);
+        });
+      },
+      //添加方法
+      addProducts(params){
+        
 
         this.$http.post(this.api.product_add,params).then(res => {
+            if(res.is_success){
+              this.productInfo=res.value;
+              this.id=res.value.id;
+            }
             console.log(res);
         });
 
@@ -1098,7 +1120,7 @@
       },
       //上传成功钩子函数
       uploadSuccess(response){
-        console.log('uploadSuccess--',response)
+        this.productPicUrl.push(response);
       },
       uploadImageMainSuccess(response){
             this.image_main = response;
