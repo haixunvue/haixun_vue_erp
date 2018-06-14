@@ -211,12 +211,12 @@
           <span class="left" style="margin-right:55px">上传凭证</span>
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://39.106.9.139/upload"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :before-remove="beforeRemove"
-            multiple
             :limit="3"
+            :on-success="uploadSuccess"
             :on-exceed="handleExceed"
             :file-list="fileList">
             <el-button size="mini" type="primary" >点击上传</el-button>
@@ -325,6 +325,10 @@
 
 
             })
+      },
+      uploadSuccess(response){
+        this.addForm.proof_document= response;
+           console.log('uploadSuccess',response)
       },
       handleSizeChange: function (size) {
         this.currentPage = 1;
