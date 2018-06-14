@@ -96,12 +96,12 @@
             <el-form-item label="产品信息">
               <el-row  class="mt10">
                 <el-col :span="11">
-                  <el-input placeholder="品牌名称" v-model="form.productInfo.brand">
+                  <el-input placeholder="品牌名称" v-model="brand">
                     <template slot="prepend">品牌名称</template>
                   </el-input>
                 </el-col>
                 <el-col :span="11" :offset="2">
-                  <el-input placeholder="厂商编号" v-model="form.productInfo.manufacturer">
+                  <el-input placeholder="厂商编号" v-model="manufacturer">
                     <template slot="prepend">厂商名称</template>
                   </el-input>
                 </el-col>
@@ -109,15 +109,18 @@
 
               <el-row  class="mt10">
                 <el-col :span="11">
-                  <el-input placeholder="内部SKU" v-model="form.productInfo.fatherSku">
+                  <el-input placeholder="内部SKU" v-model="sku">
                     <template slot="prepend">父SKU</template>
                   </el-input>
                 </el-col>
                 <el-col :span="11" :offset="2">
-                  <el-input placeholder="请输入内容" v-model="form.productInfo.ean" class="input-with-select" >
-                    <el-select v-model="form.select1" slot="prepend" placeholder="请选择" style="width:120px">
-                      <el-option label="EAN" value="1" ></el-option>
-                      <el-option label="UPC" value="2"></el-option>
+                  <el-input placeholder="请输入内容" v-model="ean_upc_value" class="input-with-select" >
+                    <el-select v-model="ean_upc_selected" slot="prepend" placeholder="请选择" style="width:120px">
+                      <el-option
+                        v-for ="(item,index) in ean_upc_list"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.value"/>
                     </el-select>
                   </el-input>
                 </el-col>
@@ -125,7 +128,7 @@
 
               <el-row  class="mt10">
                 <el-col :span="20">
-                  <el-input placeholder="来源网址" v-model="form.productInfo.sourceWebsite">
+                  <el-input placeholder="来源网址" v-model="sourceWebsite">
                     <template slot="prepend">来源网址</template>
                   </el-input>
                 </el-col>
@@ -133,24 +136,24 @@
                   <!-- <el-input placeholder="产品来源" v-model="form.infor.input6">
                     <template slot="prepend">产品来源</template>
                   </el-input> -->
-                  <el-button type="primary">访问连接</el-button>
+                  <el-button type="primary" v-if="sourceWebsite"  @click="goSite()">访问连接</el-button>
                 </el-col>
               </el-row>
 
               <el-row  class="mt10">
-                <el-input placeholder="备注" v-model="form.productInfo.remarks">
+                <el-input placeholder="备注" v-model="remarks">
                   <template slot="prepend">备注</template>
                 </el-input>
               </el-row>
 
               <el-row class="">
                 <el-col :span="11" >
-                  <el-input placeholder="0"  v-model="form.productInfo.stock">
+                  <el-input placeholder="0"  v-model="stock">
                     <template slot="prepend">库存数量</template>
                   </el-input>
                 </el-col>
                 <el-col :span="11" :offset="2">
-                  <el-input placeholder="1"  v-model="form.productInfo.preprocessing">
+                  <el-input placeholder="1"  v-model="preprocessing">
                     <template slot="prepend">预处理时间</template>
                     <template slot="append">天(现货填1)</template>
                   </el-input>
@@ -163,17 +166,17 @@
             </el-form-item>
             <el-form-item label="审核状态">
              <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" >
-        <el-radio v-for="(item,index) in status_audit_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+        <el-radio v-for="(item,index) in status_audit_list" :key="index" v-if="item.value!='all'" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
             </el-form-item>
             <el-form-item label="上下架">
                 <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" >
-        <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+        <el-radio v-for="(item,index) in status_shelf_list" :key="index"  v-if="item.value!='all'" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
             </el-form-item>
             <el-form-item label="产品类型">
                  <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" >
-        <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+        <el-radio v-for="(item,index) in product_type_list" :key="index" v-if="item.value!='all'" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
             </el-form-item>
             <div class="line"></div>
@@ -491,7 +494,7 @@
     import status_audit_list from '../../json/product_status_audit';
     import status_shelf_list from '../../json/product_status_shelf';
     import product_type_list from '../../json/product_type';
-
+    const ean_upc_list=[{name:'EAN',value:'code_ean'},{name:'UPC',value:'code_upc'}];
   export default {
     data() {
       return {
@@ -500,9 +503,9 @@
         status_audit_list:status_audit_list,
         status_shelf_list:status_shelf_list,
         product_type_list:product_type_list,
-        status_audit_selected:'all',
-        status_shelf_selected:'all',
-        product_type_selected:'all',
+        status_audit_selected:'',
+        status_shelf_selected:'',
+        product_type_selected:'',
         product_status_list:product_status_list,
         product_status_selected:'',
         dialogImageUrl: '',
@@ -512,7 +515,18 @@
         blue_point:[''],
         keyword:[''],
         productPicUrl:[], //商品图片路径
-
+        brand:'',
+        weight:'',
+        volume:'',
+        manufacturer:'',
+        sku:'',
+        ean_upc_list:ean_upc_list,
+        ean_upc_selected:'code_ean',
+        ean_upc_value:'',
+        sourceWebsite:'',
+        remarks:'',
+        stock:'',
+        preprocessing:'',
 
         country:'1',
         num8:'1',
@@ -846,6 +860,9 @@
       }
     },
     methods: {
+      goSite(){
+              window.open(this.sourceWebsite)
+      },
       edit_blue_point(index,method){
         if(method){
           this.blue_point =  this.blue_point.filter((item,i)=>{
@@ -986,6 +1003,18 @@
            owner_staff_id:this.user_id,
            title:this.title,
            brief_introduction:this.brief_introduction,
+           brand:this.brand,
+           weight:this.weight,
+           volume:this.volume,
+           manufacturer:this.manufacturer,
+           sku:this.sku,
+            sourceWebsite:this.sourceWebsite,
+            remarks:this.remarks,
+            stock:this.stock,
+            preprocessing:this.preprocessing,
+        }
+        if(this.ean_upc_value){
+          params[this.ean_upc_selected]= this.ean_upc_value
         }
         if(this.product_classify_selected){
           params.classification = this.product_classify_selected
@@ -1006,26 +1035,24 @@
           }))
         }
      
-
-
-        let params3 = {
-            productPicUrl:JSON.stringify(this.form.productPicUrl),
-            title:JSON.stringify(this.form.title),
-            classification :JSON.stringify(this.form.classification),
-            brightSpot:JSON.stringify(this.form.brightSpot),
-            keyWord:JSON.stringify(this.form.keyWord),
-            status:JSON.stringify(this.form.status),
-            productInfo:JSON.stringify(this.form.productInfo),
-            examine:JSON.stringify(this.form.examine),
-            shelf:JSON.stringify(this.form.shelf),
-            projectType:JSON.stringify(this.form.projectType),
-            size:JSON.stringify(this.form.size),
-            colour:JSON.stringify(this.form.colour),
-            variant:JSON.stringify(this.form.variant)
+        if(this.product_status_selected){
+          params.status = this.product_status_selected
         }
-        this.$http.post(this.api.product_add,
-            params
-        ).then(res => {
+
+        if(this.product_status_selected){
+          params.status = this.product_status_selected
+        }
+        if(this.status_audit_selected ){
+          params.status_audit = this.status_audit_selected
+        }
+        if(this.status_shelf_selected ){
+          params.status_shelf = this.status_shelf_selected
+        }
+        if(this.product_type_selected ){
+          params.product_type = this.product_type_selected
+        }
+
+        this.$http.post(this.api.product_add,params).then(res => {
             console.log(res);
         });
 
