@@ -61,6 +61,7 @@ const api={
     'product_classification_list':'/apis/v1807g/product_classification/list',   // 产品分类
     'product_listall_paging':'/apis/v1807g/product/listall/paging',   // 产品分类
     'order_listall_paging':'/apis/v1807g/order/listall/paging',   // 产品分类
+    'product_add':'/apis/v1807g/product/add',   // 产品分类
 
 };
 export default api;

@@ -383,10 +383,11 @@
 
 <script>
     import router from "../../router";
-    const status_audit_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
-    const status_shelf_list = [{name:'全部',value:'all'},{name:'上架',value:'on_shelf'}, {name:'下架',value:'down_shelf'}, {name:'过滤',value:'filter'}, {name:'侵权',value:'tort'}, {name:'屏蔽',value:'shield'}];
-    const product_type_list = [{name:'全部',value:'all'},{name:'重点',value:'stress'}, {name:'原创',value:'original'}, {name:'海外',value:'overseas'}, {name:'抓取',value:'grab'}, {name:'其他',value:'other'}, {name:'ERP产品库',value:'erp_product_library'}];
-    const product_status_list = [{name:'初始',value:'new'},{name:'等待上传',value:'wait_async'}, {name:'在线',value:'online'}];
+    import product_status_list from '../../json/product_status';
+    import status_audit_list from '../../json/product_status_audit';
+    import status_shelf_list from '../../json/product_status_shelf';
+    import product_type_list from '../../json/product_type';
+
     export default {
         data() {
           return {

@@ -41,67 +41,54 @@
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="标题">
-              <el-input  placeholder="标题长度不超过200个字符" maxlength="200" v-model="form.title">
+              <el-input  placeholder="标题长度不超过200个字符" maxlength="200" v-model="title">
               </el-input>
             </el-form-item>
             <el-form-item label="分类">
-              <el-select v-model="form.classification" placeholder="请选择">
+              <el-select v-model="product_classify_selected" placeholder="请选择">
                 <el-option
-                  v-for="item in form.options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                v-for="(item,index) in product_classify"
+                :key="index"
+                :label="item"
+                :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
                 <el-form-item label="五大亮点">
-                  <el-row>
+                  <el-row  v-for="(item,index) in blue_point"  :key="index">
                     <el-col :span="20">
-                  <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[0]" class="mt10"></el-input>
+                    <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="blue_point[index]" class="mt10"></el-input>
                     </el-col>
-                    <el-col :span="4">
-                      <el-button type="info">删除</el-button>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="20">
-                  <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="form.brightSpot[0]" class="mt10"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                      <el-button type="primary">添加</el-button>
+                    <el-col :span="4">    
+                      <el-button  v-if="(index+1)==blue_point.length&&blue_point.length!=5" type="primary" @click="edit_blue_point(index,false)">添加亮点</el-button>
+                      <el-button v-else  @click="edit_blue_point(index,true)" type="info">删除</el-button>
                     </el-col>
                   </el-row>
                     <span style="color:#F56C6C">5个亮点不需要全部填写,可根据需求填写</span>
                 </el-form-item>
                 <el-form-item label="关键词">
-                  <el-row>
+                  <el-row  v-for="(item,index) in keyword"  :key="index">
                     <el-col :span="20">
-                  <el-input placeholder="请输入关键词" v-model="form.keyWord[0]" class="mt10"></el-input>
+                    <el-input placeholder="" maxlength="50" v-model="blue_point[index]" class="mt10"></el-input>
                     </el-col>
-                    <el-col :span="4">
-                      <el-button type="info">删除</el-button>
+                    <el-col :span="4">    
+                      <el-button  v-if="(index+1)==keyword.length&&keyword.length!=5" type="primary" @click="edit_keyword(index,false)">添加</el-button>
+                      <el-button v-else  @click="edit_keyword(index,true)" type="info">删除</el-button>
                     </el-col>
                   </el-row>
-                  <el-row>
-                    <el-col :span="20">
-                  <el-input placeholder="请输入关键词" v-model="form.keyWord[0]" class="mt10"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                      <el-button type="primary">添加</el-button>
-                    </el-col>
-                  </el-row>
+
                 </el-form-item>
             <el-form-item label="描述">
-              <el-input type="textarea" placeholder="请输入描述" v-model="form.describe">
+              <el-input type="textarea" placeholder="请输入描述" v-model="brief_introduction">
               </el-input>
             </el-form-item>
             <el-form-item label="状态">
-              <el-select v-model="form.detail.status" placeholder="请选择">
-                <el-option
-                  v-for="item in form.options2"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+              <el-select v-model="product_status_selected" placeholder="请选择">
+                   <el-option
+            v-for ="(item,index) in product_status_list"
+            :key="index"
+            :label="item.name"
+            :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -175,30 +162,19 @@
               <el-button type="primary" size="small" @click="open">一键定价</el-button>
             </el-form-item>
             <el-form-item label="审核状态">
-              <el-radio-group v-model="form.examine">
-                <el-radio label="1" border>通过</el-radio>
-                <el-radio label="2" border>待审核</el-radio>
-                <el-radio label="3" border>失效</el-radio>
-              </el-radio-group>
+             <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" >
+        <el-radio v-for="(item,index) in status_audit_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+      </el-radio-group>
             </el-form-item>
             <el-form-item label="上下架">
-              <el-radio-group v-model="form.shelf">
-                <el-radio label="1" border>上架</el-radio>
-                <el-radio label="2" border>下架</el-radio>
-                <el-radio label="3" border>过滤</el-radio>
-                <el-radio label="4" border>侵权</el-radio>
-                <el-radio label="5" border>屏蔽</el-radio>
-              </el-radio-group>
+                <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" >
+        <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+      </el-radio-group>
             </el-form-item>
             <el-form-item label="产品类型">
-              <el-radio-group v-model="form.projectType">
-                <el-radio label="1" border>重点</el-radio>
-                <el-radio label="2" border>原创</el-radio>
-                <el-radio label="3" border>海外</el-radio>
-                <el-radio label="4" border>抓取</el-radio>
-                <el-radio label="5" border>其它</el-radio>
-                <el-radio label="6" border>产品库</el-radio>
-              </el-radio-group>
+                 <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" >
+        <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+      </el-radio-group>
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="参考价格">
@@ -511,12 +487,33 @@
 </template>
 <script>
   // import router from "../router";
+      import product_status_list from '../../json/product_status';
+    import status_audit_list from '../../json/product_status_audit';
+    import status_shelf_list from '../../json/product_status_shelf';
+    import product_type_list from '../../json/product_type';
 
   export default {
     data() {
       return {
+        product_classify:[],
+        product_classify_selected:'',
+        status_audit_list:status_audit_list,
+        status_shelf_list:status_shelf_list,
+        product_type_list:product_type_list,
+        status_audit_selected:'all',
+        status_shelf_selected:'all',
+        product_type_selected:'all',
+        product_status_list:product_status_list,
+        product_status_selected:'',
         dialogImageUrl: '',
         dialogVisible: false,
+        title:'',
+        brief_introduction:'',
+        blue_point:[''],
+        keyword:[''],
+        productPicUrl:[], //商品图片路径
+
+
         country:'1',
         num8:'1',
         variantOptionList: [
@@ -736,7 +733,6 @@
         tableData1:[],
         form: {
           id:'0000001',
-          productPicUrl:[], //商品图片路径
           title:'', //标题
           classification:'', //分类
           options: [{
@@ -850,6 +846,31 @@
       }
     },
     methods: {
+      edit_blue_point(index,method){
+        if(method){
+          this.blue_point =  this.blue_point.filter((item,i)=>{
+              return i!=index
+          })
+        }else{
+          if(this.blue_point.length<5){
+            this.blue_point.push('')
+          }         
+        }
+
+      },
+      edit_keyword(index,method){
+        if(method){
+          this.keyword =  this.keyword.filter((item,i)=>{
+              return i!=index
+          })
+        }else{
+          if(this.keyword.length<5){
+            this.keyword.push('')
+          }         
+        }
+
+      },
+      changeRadioValue(){},
       open:function(){
         this.dialogTableVisible = true;
       },
@@ -959,6 +980,35 @@
       //添加方法
       addProducts(){
         let params = {
+           user_token:this.user_token,
+           user_id:this.user_id,
+           owner_company_id:this.owner_company_id,
+           owner_staff_id:this.user_id,
+           title:this.title,
+           brief_introduction:this.brief_introduction,
+        }
+        if(this.product_classify_selected){
+          params.classification = this.product_classify_selected
+        }
+        if(this.productPicUrl&&this.productPicUrl.length>0){
+          params.images = JSON.stringify(this.productPicUrl.filter((item)=>{
+              return item;
+          }))
+        }
+        if(this.blue_point&&this.blue_point.length>0){
+          params.blue_point = JSON.stringify(this.blue_point.filter((item)=>{
+              return item;
+          }))
+        }
+        if(this.keyword&&this.keyword.length>0){
+          params.keyword = JSON.stringify(this.keyword.filter((item)=>{
+              return item;
+          }))
+        }
+     
+
+
+        let params3 = {
             productPicUrl:JSON.stringify(this.form.productPicUrl),
             title:JSON.stringify(this.form.title),
             classification :JSON.stringify(this.form.classification),
@@ -973,7 +1023,7 @@
             colour:JSON.stringify(this.form.colour),
             variant:JSON.stringify(this.form.variant)
         }
-        this.$http.post(`/restful/add/company_company_${localStorage.getItem("companyId")}/product`,
+        this.$http.post(this.api.product_add,
             params
         ).then(res => {
             console.log(res);
@@ -987,9 +1037,25 @@
       //上传成功钩子函数
       uploadSuccess(response){
         this.form.productPicUrl.push(response);
-      }
+      },
+       product_classification_list(){
+            this.$http.post(this.api.product_classification_list,{
+              user_token:this.user_token,
+              user_id:this.user_id,
+            }).then((res)=>{
+              //console.log(res);
+              if(res.is_success){
+                this.product_classify = res.value;
+              }
+            })
+          },
     },
     mounted(){
+            this.owner_company_id = localStorage.getItem("owner_company_id")
+            this.owner_user_id = localStorage.getItem("owner_user_id")
+            this.user_token = localStorage.getItem("user_token");
+            this.user_id = localStorage.getItem("user_id");
+            this.product_classification_list()
     }
   }
 </script>
