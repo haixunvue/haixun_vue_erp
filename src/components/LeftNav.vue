@@ -88,13 +88,16 @@
                 this.total_menu=[]
             }
             this.update_menu();
-            if(this.menutype == e.menutype){
-              eventBus.$emit('refreshView', 'refreshView')
-            }else{
-                 router.push({
-                        path:'/main/'
-                 }) 
+            if(e.fromSelect){
+                  if(this.menutype == e.menutype){
+                  eventBus.$emit('refreshView', 'refreshView')
+                 }else{
+                    router.push({
+                            path:'/main/'
+                    }) 
+                }
             }
+            
             this.menutype = e.menutype
             
           } 
