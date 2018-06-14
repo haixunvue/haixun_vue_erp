@@ -1059,7 +1059,7 @@
     }
   }
 </script>
-<style  >
+<style scoped >
   table{
     margin-bottom: 20px;
   }
@@ -1107,6 +1107,8 @@
   .el-select .el-input {
     width: 130px;
   }
+</style>
+<style>
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
   }

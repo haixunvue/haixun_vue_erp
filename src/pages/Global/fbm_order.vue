@@ -3,14 +3,11 @@
     <h1>FBM订单</h1>
     <div class="line"></div>
     <div class="select-box">
-      <el-form :inline="true" label-width="80px">
-        <el-row>
-        <el-col :span="24">
-          <el-form-item v-if="!companyId">
+      <el-form :inline="true" size="mini" label-width="80px">
+          <el-form-item v-if="!companyId" label="选择公司">
             <el-select
               v-model="company_selected_id"
               placeholder="请选择公司"
-              size="mini"
               v-on:change="onCompanyChange()">
               <el-option
                 v-for ="item in company_list"
@@ -20,11 +17,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item v-if="!staffId">
+          <el-form-item v-if="!staffId" label="选择员工">
             <el-select
               v-model="staff_selected_id"
               placeholder="请选择公司员工"
-              size="mini"
               v-on:change="onStaffChange()">
               <el-option
                 v-for ="item in staff_list"
@@ -35,8 +31,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item v-if="false">
-            <el-select v-model="country_selected_id" placeholder="选择国家" size="mini">
+          <el-form-item v-if="false" label="选择国家">
+            <el-select v-model="country_selected_id" placeholder="选择国家">
               <el-option
                 v-for="item in country_list"
                 :key="item.value"
@@ -45,19 +41,18 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-              <el-select v-model="shop_selected_id" placeholder="选择店铺"  style="margin-bottom:5px" size="mini">
+          <el-form-item label="选择店铺">
+              <el-select v-model="shop_selected_id" placeholder="选择店铺"  style="margin-bottom:5px">
               <el-option
               v-for="(item,index) in shop_list"
               :key="index"
               :label="item.shop_name"
               :value="item.id">
             </el-option>
-      </el-select> 
+      </el-select>
              </el-form-item>
-           
-          <el-form-item>
-            <el-select v-model="status_amazion_selected_id" placeholder="Amazon订单状态" style="margin-bottom:5px" size="mini">
+          <el-form-item label="订单状态">
+            <el-select v-model="status_amazion_selected_id" placeholder="Amazon订单状态" style="margin-bottom:5px">
               <el-option
                 v-for="item in status_amazion_list"
                 :key="item.value"
@@ -66,12 +61,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        </el-row>
-        <el-row>
-        <el-col :span="24">
-          <el-form-item>
-            <el-select v-model="status_payment_selected_id" placeholder="支付状态" size="mini">
+          <el-form-item label="支付状态">
+            <el-select v-model="status_payment_selected_id" placeholder="支付状态">
               <el-option
                 v-for="item in status_payment_list"
                 :key="item.value"
@@ -80,8 +71,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-            <el-select v-model="state_logistics_domestic_selected_id" placeholder="国内物流状态" size="mini">
+          <el-form-item label="国内物流" style="margin-bottom:5px">
+            <el-select v-model="state_logistics_domestic_selected_id" placeholder="国内物流状态">
               <el-option
                 v-for="item in state_logistics_domestic_list"
                 :key="item.value"
@@ -90,8 +81,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-            <el-select v-model="state_logistics_international_selected_id" placeholder="国际物流状态" size="mini">
+          <el-form-item label="国际物流">
+            <el-select v-model="state_logistics_international_selected_id" placeholder="国际物流状态">
               <el-option
                 v-for="item in state_logistics_international_list"
                 :key="item.value"
@@ -100,8 +91,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-            <el-select v-model="state_error_selected_id" placeholder="异常状态" size="mini">
+          <el-form-item label="异常状态">
+            <el-select v-model="state_error_selected_id" placeholder="异常状态">
               <el-option
                 v-for="item in state_error_list"
                 :key="item.value"
@@ -110,14 +101,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        </el-row>
-        <el-row>
-        <el-col :span="24">
-          <el-form-item>
+          <el-form-item label="开始时间" style="margin-bottom:5px">
             <el-date-picker
               v-model="datetime_start"
-              size="mini"
+
               @change=""
               type="datetime"
               value-format="yyyy-MM-dd hh:mm:ss"
@@ -126,10 +113,9 @@
               :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
-          <el-form-item>
+          <el-form-item label="结束时间">
             <el-date-picker
               v-model="datetime_end"
-              size="mini"
               @change=""
               type="datetime"
               value-format="yyyy-MM-dd hh:mm:ss"
@@ -139,16 +125,14 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="search_text" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
+            <el-input v-model="search_text" style="margin-right:0;width: 400px;" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="search">搜索</el-button>
+            <el-button type="primary" style="margin-left:5px;" class="search-btn" @click="search">搜索</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="clearSearch">重置</el-button>
+            <el-button type="primary" style="margin-left:5px;" class="search-btn" @click="clearSearch">重置</el-button>
           </el-form-item>
-        </el-col>
-        </el-row>
       </el-form>
     </div>
     <div class="line" style="margin-bottom:5px"></div>
@@ -908,9 +892,9 @@
     float:right;
   }
 
-  .el-input{
-    width:200px;
-  }
+  /*.el-input{*/
+    /*width:200px;*/
+  /*}*/
 
   .address{
     margin-top:10px;
