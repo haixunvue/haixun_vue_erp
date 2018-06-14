@@ -3,7 +3,7 @@
   <h1>店铺管理</h1>
   <div class="line"></div>
   <el-form :inline="true" label-width="80px" size="mini">
-    <el-form-item>
+    <el-form-item label="选择公司">
       <el-select
         v-model="company_selected_id"
         placeholder="请选择公司"
@@ -17,7 +17,7 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-if="false" label="选择员工">
       <el-select
         v-model="staff_selected_id"
         placeholder="请选择公司员工"
@@ -27,10 +27,31 @@
           v-for ="item in staff_list"
           :key="item.id"
           :label="item.staff_name"
-
           :value="item.id">
         </el-option>
       </el-select>
+    </el-form-item>
+    <el-form-item label="开始时间">
+      <el-date-picker
+        v-model="datetime_start"
+        @change=""
+        type="datetime"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        placeholder="选择开始日期时间"
+        align="right"
+        :picker-options="pickerOptions">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label="结束时间">
+      <el-date-picker
+        v-model="datetime_end"
+        @change=""
+        type="datetime"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        placeholder="选择结束日期时间"
+        align="right"
+        :picker-options="pickerOptions">
+      </el-date-picker>
     </el-form-item>
     <el-form-item>
       <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">
@@ -49,26 +70,33 @@
     >
     <el-table-column
       fixed
+      prop="id"
+      label="公司ID"
+      sortable
+      >
+    </el-table-column>
+    <el-table-column
+      fixed
       prop="shop_name"
       label="店铺名"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="name"
-      label="所属公司"
+      prop="region_name"
+      label="授权国家"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="regmoney"
-      label="绑定员工数"
+      prop="amazion_account"
+      label="代理邮箱"
       sortable
       >
     </el-table-column>
     <el-table-column
-      prop="reg_address"
-      label="产品个数"
+      prop="_createTime"
+      label="授权时间"
       sortable
       >
     </el-table-column>
@@ -78,8 +106,9 @@
       label="操作"
       width="125">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" @click="shop_edit" size="small"></el-button>
-        <el-button type="danger" icon="el-icon-delete" @click="shop_del" size="small"></el-button>
+        <el-button type="primary" @click="shop_edit" size="small">修改名字</el-button>
+        <el-button type="danger" @click="shop_del" size="small">重新授权</el-button>
+        <el-button type="danger" @click="shop_del" size="small">解除授权</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -111,6 +140,41 @@
             currentPage:1,
             pagesize:5,
             shop_list: [],
+            datetime_start:'',
+            datetime_end:'',
+            pickerOptions: {
+              shortcuts: [{
+                text: '最近一周',
+                onClick:(picker)=> {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                  this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+                  this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
+                }
+              }, {
+                text: '最近一个月',
+                onClick:(picker)=> {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                  this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+                  this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
+                }
+              }, {
+                text: '最近三个月',
+                onClick:(picker)=> {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                  picker.$emit('pick', [start, end]);
+                  this.datetime_end= moment(end).format('YYYY-MM-DD HH:mm:ss')
+                  this.datetime_start= moment(start).format('YYYY-MM-DD HH:mm:ss')
+                }
+              }]
+            },
           }
         },
         methods: {
