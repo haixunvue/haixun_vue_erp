@@ -95,7 +95,7 @@
       sortable
       >
       <template slot-scope="scope">
-        <img v-if="scope.row.proof_document" class="image-main" @click="" :src="scope.row.proof_document"/>
+        <img v-if="scope.row.proof_document" class="image-main" @click="handlePreview(scope.row.proof_document)" :src="scope.row.proof_document"/>
       </template>
     </el-table-column>
     <el-table-column
@@ -151,6 +151,9 @@
     :total="totalCount"
     style="clear:both;text-align:center">
   </el-pagination>
+     <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+  </el-dialog>
 </div>
 </template>
 
@@ -171,6 +174,8 @@
               datetime_start:'',
               datetime_end:'',
             },
+            dialogImageUrl: '',
+            dialogVisible: false,
             pickerOptions: {
               shortcuts: [{
                 text: '今天',
@@ -196,6 +201,10 @@
           }
         },
         methods: {
+                    handlePreview(url) {
+            this.dialogImageUrl = url;
+            this.dialogVisible = true;
+          },
            handleSizeChange: function (size) {
             this.currentPage = 1;
             this.pagesize = size;
