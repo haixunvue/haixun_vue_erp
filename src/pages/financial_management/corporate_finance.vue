@@ -94,6 +94,9 @@
       label="凭证图片"
       sortable
       >
+      <template slot-scope="scope">
+        <img v-if="scope.row.proof_document" class="image-main" @click="" :src="scope.row.proof_document"/>
+      </template>
     </el-table-column>
     <el-table-column
       prop="notes"
@@ -337,4 +340,12 @@
   .inline{
     display: inline-block;
   }
+   .image-main{
+     width: 80px;
+     height: 80px;
+     display: block;
+     margin: 0 auto;
+     border: 1px solid #eee;
+     border-radius: 2px;
+   }
 </style>
