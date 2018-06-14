@@ -83,7 +83,7 @@
                     <el-col :span="20">
                     <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="blue_point[index]" class="mt10"></el-input>
                     </el-col>
-                    <el-col :span="4">    
+                    <el-col :span="4">
                       <el-button  v-if="(index+1)==blue_point.length&&blue_point.length!=5" type="primary" @click="edit_blue_point(index,false)">添加亮点</el-button>
                       <el-button v-else  @click="edit_blue_point(index,true)" type="info">删除</el-button>
                     </el-col>
@@ -95,7 +95,7 @@
                     <el-col :span="20">
                     <el-input placeholder="" maxlength="50" v-model="keyword[index]" class="mt10"></el-input>
                     </el-col>
-                    <el-col :span="4">    
+                    <el-col :span="4">
                       <el-button  v-if="(index+1)==keyword.length&&keyword.length!=5" type="primary" @click="edit_keyword(index,false)">添加</el-button>
                       <el-button v-else  @click="edit_keyword(index,true)" type="info">删除</el-button>
                     </el-col>
@@ -892,7 +892,7 @@
         }else{
           if(this.blue_point.length<5){
             this.blue_point.push('')
-          }         
+          }
         }
 
       },
@@ -904,7 +904,7 @@
         }else{
           if(this.keyword.length<5){
             this.keyword.push('')
-          }         
+          }
         }
 
       },
@@ -1063,7 +1063,7 @@
               return item;
           }))
         }
-     
+
         if(this.product_status_selected){
           params.status = this.product_status_selected
         }
@@ -1103,7 +1103,7 @@
       },
       //添加方法
       addProducts(params){
-        
+
 
         this.$http.post(this.api.product_add,params).then(res => {
             if(res.is_success){
@@ -1218,6 +1218,9 @@
     top: 21px;
     left: 35px;
   }
+  .prouduct-upload >div >div{
+    width: 180px;
+  }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -1236,9 +1239,16 @@
     line-height: 178px;
     text-align: center;
   }
+  .avatar-uploader-icon .el-upload__text{
+    top:26px;
+    left: 25px;
+  }
   .avatar {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .el-upload--text .el-upload-dragger{
+    width: 178px;
   }
 </style>

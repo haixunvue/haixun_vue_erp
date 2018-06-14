@@ -82,6 +82,21 @@
         <el-button type="primary" v-on:click="search">搜索</el-button>
         <el-button type="primary" v-on:click="clearSearch">重置</el-button>
       </el-form-item>
+      <el-form-item label="审核状态" style="margin-bottom:5px">
+        <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" size="mini">
+          <el-radio v-for="(item,index) in status_audit_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="上架状态" style="margin-bottom:5px">
+        <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" size="mini">
+          <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="产品类型">
+        <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" size="mini">
+          <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <!--<el-row  >-->
       <!--<el-col :span="9" style="margin-right:10px">-->
       <!--<el-input placeholder="请输入内容" v-model="form.infor1" class="input-with-select" >-->
@@ -95,34 +110,6 @@
       <!--<el-button type="primary">搜索产品</el-button>-->
       <!--</el-col>-->
       <!--</el-row>-->
-      <div class="line"></div>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="审核状态" style="margin-bottom:5px">
-            <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" size="mini">
-              <el-radio v-for="(item,index) in status_audit_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="上架状态" style="margin-bottom:5px">
-            <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" size="mini">
-              <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="产品类型">
-            <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" size="mini">
-              <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
     </el-form>
 
     <div class="line" style="margin-bottom:5px"></div>

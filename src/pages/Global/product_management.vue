@@ -39,7 +39,6 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <div class="" ></div>
     <!-- <el-form-item label="店铺" style="margin-bottom:5px">
       <el-select
         v-model="value"
@@ -76,7 +75,7 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item label="" style="margin-left: 80px">
-      <el-input placeholder="请输入内容" style="padding-right: 15px;" v-model="search_text" class="input-with-select"></el-input>
+      <el-input placeholder="标题、SKU" style="padding-right: 15px;" v-model="search_text" class="input-with-select"></el-input>
     </el-form-item>
     <el-form-item label="">
       <el-button type="primary" v-on:click="search">搜索</el-button>
