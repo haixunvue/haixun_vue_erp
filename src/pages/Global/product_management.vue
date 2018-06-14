@@ -502,10 +502,13 @@
             console.log("发布了")
           },
           handleSizeChange(size) {
+            this.currentPage = 1;
             this.pagesize = size;
+            this.product_listall_paging();
           },
           handleCurrentChange(currentPage) {
             this.currentPage = currentPage;
+             this.product_listall_paging();
           },
           currentChangePage(list) {
             // console.log("1")
