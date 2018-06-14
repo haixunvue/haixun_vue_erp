@@ -7,10 +7,9 @@
     <el-tab-pane label="待同步(2)" name="first"></el-tab-pane>
     <el-tab-pane label="同步成功(1295)" name="second"></el-tab-pane>
   </el-tabs>
-
   <div class="line" v-show="ifboos"></div>
   <el-form :inline="true" ref="form" :model="form" label-width="80px" size="mini">
-    <el-form-item label="公司" v-show="ifboos">
+    <el-form-item label="选择公司" v-show="ifboos">
       <el-select
         v-model="value"
         placeholder="请选择公司"
@@ -24,7 +23,7 @@
       </el-select>
     </el-form-item>
     <!-- <div class="line"></div> -->
-    <el-form-item label="分类" style="margin-bottom:5px">
+    <el-form-item label="选择分类" style="margin-bottom:5px">
       <el-select v-model="form.inf2" placeholder="请选择">
         <el-option
           v-for="item in form.options"
@@ -57,13 +56,13 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item>
-          <el-input style="margin-left: 80px" placeholder="标题、SKU" v-model="form.infor1" class="input-with-select" ></el-input>
+          <el-input style="margin-right:0;width: 300px;" placeholder="标题、SKU" v-model="form.infor1"></el-input>
     </el-form-item>
     <el-form-item>
-          <el-button style="margin-left: 95px" type="primary">搜索产品</el-button>
+          <el-button style="margin-left:5px;" type="primary">搜索</el-button>
     </el-form-item>
     <el-form-item>
-          <el-button type="primary" v-on:click="clearSearch">重置</el-button>
+          <el-button style="margin-left:5px;" type="primary" v-on:click="clearSearch">重置</el-button>
     </el-form-item>
   </el-form>
 
@@ -692,7 +691,7 @@
 </script>
 <style scoped>
   .line{
-    margin: 20px 0;
+    margin: 10px 0;
     border-top: 1px solid #dcdfe6;
   }
   .sub_btn{
