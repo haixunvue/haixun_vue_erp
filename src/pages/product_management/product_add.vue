@@ -15,8 +15,8 @@
             <el-form-item label="产品编号">
               {{id}}
             </el-form-item>
-            <div class="line"></div>
-             <el-form-item label="产品主图">
+            <div class="line" v-if="false"></div>
+             <el-form-item  v-if="false" label="产品主图">
               <el-upload
                 class="avatar-uploader"
                 action="http://39.106.9.139/upload"
@@ -35,9 +35,6 @@
                   支持 jpg/tif 等格式图片，最长边大于500px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
                 </div>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt="">
-              </el-dialog>
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="产品图片">
@@ -59,9 +56,6 @@
                   支持 jpg/tif 等格式图片，最长边大于500px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
                 </div>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt="">
-              </el-dialog>
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="标题">
@@ -510,6 +504,9 @@
         <el-button type="primary" @click="saveSelectVariant(dialogTableVisible4 = false)">确 定</el-button>
       </div>
     </el-dialog>
+      <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="">
+     </el-dialog>
   </div>
 </template>
 <script>
@@ -1040,8 +1037,11 @@
            remarks:this.remarks,
            stock:this.stock,
            preprocessing:this.preprocessing,
-           image_main:this.image_main,
         }
+        if(this.image_main){
+          params.image_main= this.image_main
+        }
+
         if(this.ean_upc_value){
           params[this.ean_upc_selected]= this.ean_upc_value
         }
