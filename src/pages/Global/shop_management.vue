@@ -54,7 +54,7 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item>
-      <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">
+      <el-input placeholder="店铺名" icon="search" v-model="search_text" class="search-input">
       </el-input>
     </el-form-item>
     <el-form-item>
@@ -103,11 +103,10 @@
 
     <el-table-column
       fixed="right"
-      label="操作"
-      width="125">
+      width="290">
       <template slot-scope="scope">
         <el-button type="primary" @click="shop_edit" size="small">修改名字</el-button>
-        <el-button type="danger" @click="shop_del" size="small">重新授权</el-button>
+        <el-button type="success" @click="shop_del" size="small">重新授权</el-button>
         <el-button type="danger" @click="shop_del" size="small">解除授权</el-button>
       </template>
     </el-table-column>
