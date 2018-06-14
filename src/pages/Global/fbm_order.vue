@@ -3,7 +3,7 @@
     <h1>FBM订单</h1>
     <div class="line"></div>
     <div class="select-box">
-      <el-form :inline="true" size="mini" label-width="80px">
+      <el-form :inline="true" size="mini" label-width="120px">
           <el-form-item v-if="!companyId" label="选择公司">
             <el-select
               v-model="company_selected_id"
@@ -51,7 +51,7 @@
             </el-option>
       </el-select>
              </el-form-item>
-          <el-form-item label="订单状态">
+          <el-form-item label="Amazon订单状态">
             <el-select v-model="status_amazion_selected_id" placeholder="Amazon订单状态" style="margin-bottom:5px">
               <el-option
                 v-for="item in status_amazion_list"
@@ -488,10 +488,10 @@
 
 <script>
   import site from '@/json/site';
-  const status_amazion_list = [{name:'全部',value:'all'},{name:'未审核',value:'none'}, {name:'通过',value:'pass'}, {name:'失败',value:'nopass'}];
+  const status_amazion_list = [{name:'全部',value:'all'},{name:'已取消',value:'cancelled'}, {name:'等待中',value:'waiting'}, {name:'未发货',value:'unshipped'}, {name:'已发货',value:'shipped'}];
   const status_payment_list = [{name:'全部',value:'all'},{name:'已支付',value:'already_paid'}, {name:'退款',value:'refund'}];
   const state_logistics_domestic_list = [{name:'全部',value:'all'},{name:'未采购',value:'not_purchase'}, {name:'待发货',value:'pending_delivery'}, {name:'待签收',value:'wait_sign'}, {name:'已签收',value:'after_sign'}];
-  const state_logistics_international_list = [{name:'全部',value:'all'},{name:'未发货',value:'unshipped'}, {name:'已签收',value:'shipped'}, {name:'已签收',value:'after_sign'}];
+  const state_logistics_international_list = [{name:'全部',value:'all'},{name:'未发货',value:'unshipped'}, {name:'已发货',value:'shipped'}, {name:'已签收',value:'after_sign'}];
   const state_error_list = [{name:'搁置订单',value:'shelving_order'}, {name:'问题件',value:'problem_order'}];
 
 
