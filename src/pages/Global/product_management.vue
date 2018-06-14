@@ -166,7 +166,7 @@
         sortable
         >
         <template slot-scope="scope">
-          <img v-if="scope.row.image_main" class="image-main" @click="handlePreview(scope.row.image_main)" :src="scope.row.image_main"/>
+          <img v-if="scope.row.imagesArr&&scope.row.imagesArr.length>0" class="image-main" @click="handlePreview(scope.row.imagesArr[0])" :src="scope.row.imagesArr[0]"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -675,7 +675,12 @@
             this.$http.post(this.api.product_listall_paging,params).then((res)=>{
               //console.log(res);
               if(res.is_success){
-                    this.product_list = res.value.list;
+                    this.product_list = res.value.list.map((item)=>{
+                        if(item.images){
+                          item.imagesArr=JSON.parse(item.images)
+                        }
+                        return item;
+                    });
                   this.totalCount = res.value.totalCount;
                 }else{
                      this.product_list=[];
