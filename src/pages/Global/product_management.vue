@@ -79,7 +79,7 @@
       <el-input placeholder="请输入内容" style="padding-right: 15px;" v-model="search_text" class="input-with-select"></el-input>
     </el-form-item>
     <el-form-item label="">
-      <el-button type="primary" v-on:click="search">搜索产品</el-button>
+      <el-button type="primary" v-on:click="search">搜索</el-button>
        <el-button type="primary" v-on:click="clearSearch">重置</el-button>
     </el-form-item>
     <!--<el-row  >-->
