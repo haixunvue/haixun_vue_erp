@@ -13,7 +13,7 @@
             </div>
             <div class="line"></div>
             <el-form-item label="产品编号">
-              {{form.id}}
+              {{id}}
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="产品图片">
@@ -498,6 +498,7 @@
   export default {
     data() {
       return {
+        id:'--',
         product_classify:[],
         product_classify_selected:'',
         status_audit_list:status_audit_list,
