@@ -189,9 +189,11 @@
          },
           handleSizeChange: function (size) {
               this.pagesize = size;
+              this.company_shop_list()
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
+            this.company_shop_list()
           },
           currentChangePage(list) {
             // console.log("1")
@@ -204,25 +206,6 @@
               }
             }
           },
-          company_edit(shopId) {
-            router.push({
-              path:'G_company_edit'
-            })
-          },
-          shop_del(shopId) {
-            this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.company_shop_delete(shopId)
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              });
-            });
-          },
           company_shop_delete(shopId){
             this.$http.post(this.api.company_shop_delete,{
             user_token:this.user_token,
@@ -232,8 +215,6 @@
                 if(res.is_success){
                     this.company_shop_list();
                 }
-                console.log('company_shop_list',res);
-
             })
           },
           onCompanyChange(){
