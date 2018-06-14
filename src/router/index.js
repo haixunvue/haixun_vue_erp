@@ -46,7 +46,7 @@ const fbm_order_staff = r => require.ensure([], () => r(require('../pages/order_
 //commodity
 //const Cd_product_list = r => require.ensure([], () => r(require('../pages/commodity/Product_list')), 'Cd_product_list');
 const product_sync = r => require.ensure([], () => r(require('../pages/product_management/product_sync')), 'product_sync');
-const Cd_product_list2 = r => require.ensure([], () => r(require('../pages/commodity/Product_list2')), 'Cd_product_list2');
+const product_recycle = r => require.ensure([], () => r(require('../pages/product_management/product_recycle')), 'product_recycle');
 const Cd_product_list3 = r => require.ensure([], () => r(require('../pages/commodity/Product_list3')), 'Cd_product_list3');
 const Cd_product_list4 = r => require.ensure([], () => r(require('../pages/commodity/Product_list4')), 'Cd_product_list4');
 const Cd_product_list5 = r => require.ensure([], () => r(require('../pages/commodity/Product_list5')), 'Cd_product_list5');
@@ -180,8 +180,8 @@ export default new Router({
                    path: 'product_sync',
                    component: product_sync,
                 },{
-                   path: 'Cd_product_list2',
-                   component: Cd_product_list2,
+                   path: 'product_recycle',
+                   component: product_recycle,
                 },{
                    path: 'Cd_product_list3',
                    component: Cd_product_list3,
