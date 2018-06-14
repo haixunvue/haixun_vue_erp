@@ -109,7 +109,7 @@
 
               <el-row  class="mt10">
                 <el-col :span="11">
-                  <el-input placeholder="内部SKU" v-model="sku">
+                  <el-input placeholder="内部SKU" v-model="fatherSku">
                     <template slot="prepend">父SKU</template>
                   </el-input>
                 </el-col>
@@ -520,6 +520,7 @@
         weight:'',
         volume:'',
         manufacturer:'',
+        fatherSku:'',//父SKU:'',
         sku:'',
         ean_upc_list:ean_upc_list,
         ean_upc_selected:'code_ean',
@@ -1011,11 +1012,11 @@
            weight:this.weight,
            volume:this.volume,
            manufacturer:this.manufacturer,
-           sku:this.sku,
-            sourceWebsite:this.sourceWebsite,
-            remarks:this.remarks,
-            stock:this.stock,
-            preprocessing:this.preprocessing,
+           fatherSku:this.fatherSku,
+           sourceWebsite:this.sourceWebsite,
+           remarks:this.remarks,
+           stock:this.stock,
+           preprocessing:this.preprocessing,
         }
         if(this.ean_upc_value){
           params[this.ean_upc_selected]= this.ean_upc_value
