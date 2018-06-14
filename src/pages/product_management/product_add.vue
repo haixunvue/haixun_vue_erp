@@ -16,6 +16,30 @@
               {{id}}
             </el-form-item>
             <div class="line"></div>
+             <el-form-item label="产品主图">
+              <el-upload
+                class="avatar-uploader"
+                action="http://39.106.9.139/upload"
+                :show-file-list="false"
+                :on-preview="handlePreview"
+                drag
+                :on-success="uploadImageMainSuccess"
+                :on-remove="handleRemove">
+                <img v-if="image_main" :src="image_main" class="avatar">
+                <div v-else class="avatar-uploader-icon">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或
+                  <br/><em>点击上传</em></div>
+                </div>
+                <div slot="tip" class="el-upload__tip">
+                  支持 jpg/tif 等格式图片，最长边大于500px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
+                </div>
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="">
+              </el-dialog>
+            </el-form-item>
+            <div class="line"></div>
             <el-form-item label="产品图片">
               <el-upload
                 class="upload-demo prouduct-upload"
@@ -25,7 +49,7 @@
                 :limit="9"
                 drag
                 multiple
-                :file-list="fileList"
+                :file-list="images_fileList"
                 list-type="picture-card"
                 :on-success="uploadSuccess">
                 <i class="el-icon-upload"></i>
@@ -515,7 +539,6 @@
         brief_introduction:'',
         blue_point:[''],
         keyword:[''],
-        productPicUrl:[], //商品图片路径
         brand:'',
         weight:'',
         volume:'',
@@ -529,6 +552,9 @@
         remarks:'',
         stock:'',
         preprocessing:'',
+        image_main:'',
+        images_fileList:[],
+
 
         country:'1',
         num8:'1',
@@ -715,7 +741,6 @@
         activeLabel: '',
         dialogFormVisible: false,
         dialogVariantVisible: false,
-        fileList: [],
         tableData: {
           x: ['[CNY]', '[USD]', '[CAD]', '[MXN]', '[GBP]', '[EUR]', '[EUR]', '[EUR]', '[EUR]','[JPY]','[AUD]'],
           city: ['中国', '美国', '加拿大', '墨西哥', '英国', '法国', '德国', '意大利', '西班牙','日本','澳洲'],
@@ -924,6 +949,7 @@
         console.log(file, fileList);
       },
       handlePreview(file) {
+        console.log('handlePreview',file);
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
@@ -1017,6 +1043,7 @@
            remarks:this.remarks,
            stock:this.stock,
            preprocessing:this.preprocessing,
+           image_main:this.image_main,
         }
         if(this.ean_upc_value){
           params[this.ean_upc_selected]= this.ean_upc_value
@@ -1024,10 +1051,13 @@
         if(this.product_classify_selected){
           params.classification = this.product_classify_selected
         }
-        if(this.productPicUrl&&this.productPicUrl.length>0){
-          params.images = JSON.stringify(this.productPicUrl.filter((item)=>{
-              return item;
-          }))
+        if(this.images_fileList&&this.images_fileList.length>0){
+          
+          let images = [];
+          this.images_fileList.map((item)=>{
+            images.push(item.response)
+          })
+          params.images = JSON.stringify(images)
         }
         if(this.blue_point&&this.blue_point.length>0){
           params.blue_point = JSON.stringify(this.blue_point.filter((item)=>{
@@ -1068,7 +1098,10 @@
       },
       //上传成功钩子函数
       uploadSuccess(response){
-        this.productPicUrl.push(response);
+        console.log('uploadSuccess--',response)
+      },
+      uploadImageMainSuccess(response){
+            this.image_main = response;
       },
        product_classification_list(){
             this.$http.post(this.api.product_classification_list,{
@@ -1162,5 +1195,28 @@
     position: absolute;
     top: 21px;
     left: 35px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>
