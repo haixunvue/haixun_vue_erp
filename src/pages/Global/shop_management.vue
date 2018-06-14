@@ -221,6 +221,9 @@
             if(this.staff_selected_id){
               params.target_staff_id = this.staff_selected_id
             }
+            if(this.search_text){
+              params.search_text=this.search_text
+            }
 
             this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
                 console.log('company_shop_list',res);
