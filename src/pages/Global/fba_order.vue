@@ -3,9 +3,7 @@
     <h1>FBA订单</h1>
     <div class="line"></div>
   <el-form :inline="true" label-width="80px">
-    <el-row>
-      <el-col :span="24">
-        <el-form-item  v-if="!companyId">
+        <el-form-item  v-if="!companyId" label="选择公司">
           <el-select
             v-model="company_selected_id"
             placeholder="请选择公司"
@@ -19,7 +17,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item  v-if="!staffId">
+        <el-form-item  v-if="!staffId" label="选择员工">
           <el-select
             v-model="staff_selected_id"
             placeholder="请选择公司员工"
@@ -33,7 +31,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-         <el-form-item>
+         <el-form-item label="选择店铺">
               <el-select v-model="shop_selected_id" placeholder="选择店铺"  style="margin-bottom:5px" size="mini">
               <el-option
               v-for="(item,index) in shop_list"
@@ -41,9 +39,9 @@
               :label="item.shop_name"
               :value="item.id">
             </el-option>
-      </el-select> 
+      </el-select>
              </el-form-item>
-        <el-form-item v-if="false">
+        <el-form-item v-if="false" label="选择国家">
          <el-select v-model="country_selected_id" placeholder="选择国家" size="mini">
               <el-option
                 v-for="item in country_list"
@@ -53,7 +51,7 @@
               </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="订单状态">
           <el-select v-model="status_order_selected_id" placeholder="订单状态" size="mini">
              <el-option
                 v-for="item in status_order_list"
@@ -62,11 +60,7 @@
                 :value="item.value"/>
           </el-select>
         </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="24">
-        <el-form-item>
+        <el-form-item label="开始时间">
           <el-date-picker
             v-model="datetime_start"
             size="mini"
@@ -78,7 +72,7 @@
             :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="结束时间">
           <el-date-picker
             v-model="datetime_end"
             size="mini"
@@ -91,7 +85,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="search_text" style="margin-right:0;width: 400px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
+          <el-input v-model="search_text" style="margin-right:0;width: 320px" placeholder="订单ID、订单号、产品SKU、国内运单、国际运单、国际追踪号" size="mini"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="search">搜索</el-button>
@@ -99,8 +93,6 @@
         <el-form-item>
           <el-button type="primary" style="margin-left:5px" size="mini" class="search-btn" @click="clearSearch">重置</el-button>
         </el-form-item>
-      </el-col>
-    </el-row>
   </el-form>
     <div class="line" style="margin-bottom:5px"></div>
     <div class="search-result oh" style="margin-bottom:5px;margin-top:5px">
@@ -289,6 +281,7 @@
 <script>
     import router from "../../router";
      import site from '@/json/site';
+    import ElRow from "element-ui/packages/row/src/row";
     const status_order_list = [{name:'全部',value:'all'},{name:'创建',value:'new'}, {name:'未确认',value:'pending'}, {name:'未发货',value:'unshipped'}, {name:'已发货',value:'shipped'}];
 
 
@@ -297,7 +290,8 @@
 
 
     export default {
-        data() {
+      components: {ElRow},
+      data() {
             return {
             company_list:[],
             company_selected_id:'',
