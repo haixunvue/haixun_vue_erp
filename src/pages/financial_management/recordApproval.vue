@@ -86,6 +86,9 @@
       label="凭证图片"
       sortable
       >
+      <template slot-scope="scope">
+        <img v-if="scope.row.proof_document" class="image-main" @click="handlePreview(scope.row.proof_document)" :src="scope.row.proof_document"/>
+      </template>
     </el-table-column>
     <el-table-column
       prop="notes"
@@ -136,6 +139,9 @@
     :total="totalCount"
     style="clear:both;text-align:center">
   </el-pagination>
+     <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+  </el-dialog>
 </div>
 </template>
 
@@ -156,6 +162,8 @@
               datetime_start:'',
               datetime_end:'',
             },
+           dialogImageUrl: '',
+            dialogVisible: false,
             pickerOptions: {
               shortcuts: [{
                 text: '今天',
@@ -181,6 +189,10 @@
           }
         },
         methods: {
+           handlePreview(url) {
+            this.dialogImageUrl = url;
+            this.dialogVisible = true;
+          },
            handleSizeChange: function (size) {
             this.currentPage = 1;
             this.pagesize = size;
@@ -271,4 +283,12 @@
   .inline{
     display: inline-block;
   }
+    .image-main{
+     width: 80px;
+     height: 80px;
+     display: block;
+     margin: 0 auto;
+     border: 1px solid #eee;
+     border-radius: 2px;
+   }
 </style>
