@@ -69,7 +69,7 @@
                 <el-form-item label="关键词">
                   <el-row  v-for="(item,index) in keyword"  :key="index">
                     <el-col :span="20">
-                    <el-input placeholder="" maxlength="50" v-model="blue_point[index]" class="mt10"></el-input>
+                    <el-input placeholder="" maxlength="50" v-model="keyword[index]" class="mt10"></el-input>
                     </el-col>
                     <el-col :span="4">    
                       <el-button  v-if="(index+1)==keyword.length&&keyword.length!=5" type="primary" @click="edit_keyword(index,false)">添加</el-button>
@@ -862,6 +862,9 @@
     },
     methods: {
       goSite(){
+        if(this.sourceWebsite.indexOf('http')!=0){
+          this.sourceWebsite= 'http://'+this.sourceWebsite
+        }
               window.open(this.sourceWebsite)
       },
       edit_blue_point(index,method){
@@ -1064,7 +1067,7 @@
       },
       //上传成功钩子函数
       uploadSuccess(response){
-        this.form.productPicUrl.push(response);
+        this.productPicUrl.push(response);
       },
        product_classification_list(){
             this.$http.post(this.api.product_classification_list,{
