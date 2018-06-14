@@ -162,26 +162,28 @@
         >
       </el-table-column>
       <el-table-column
-        prop="img"
         label="主图"
         sortable
         >
+        <template slot-scope="scope">
+          <img v-if="scope.row.image_main" class="image-main" @click="" :src="scope.row.image_main"/>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="title"
         label="标题"
         sortable
         width="120"
         >
       </el-table-column>
       <el-table-column
-        prop="SKU"
+        prop="fatherSku"
         label="父SKU"
         sortable
         >
       </el-table-column>
       <el-table-column
-        prop="SKU"
+        prop="sku"
         label="SKU"
         sortable
         >
@@ -193,13 +195,13 @@
         >
       </el-table-column>
       <el-table-column
-        prop="SKU"
+        prop="stock"
         label="库存"
         sortable
         >
       </el-table-column>
       <el-table-column
-        prop="SKU"
+        prop="_createTime"
         label="更新时间"
         sortable
         >
@@ -714,5 +716,13 @@
   }*/
   .sub_btn{
     margin-top: 20px;
+  }
+  .image-main{
+    width: 80px;
+    height: 80px;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #eee;
+    border-radius: 2px;
   }
 </style>
