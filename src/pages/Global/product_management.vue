@@ -166,7 +166,7 @@
         sortable
         >
         <template slot-scope="scope">
-          <img v-if="scope.row.image_main" class="image-main" @click="" :src="scope.row.image_main"/>
+          <img v-if="scope.row.image_main" class="image-main" @click="handlePreview(scope.row.image_main)" :src="scope.row.image_main"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -241,6 +241,10 @@
     :total="totalCount"
     style="clear:both;text-align:center">
   </el-pagination>
+
+   <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+  </el-dialog>
 
   <el-dialog title="批量编辑" :visible.sync="dialogTableVisible" width="60%">
     <el-form ref="form" :model="form" label-width="100px">
@@ -414,6 +418,8 @@
             currentPage:1,
             pagesize:5,
             product_list:[],
+            dialogImageUrl: '',
+            dialogVisible: false,
             pickerOptions: {
                 shortcuts: [{
                   text: '最近一周',
@@ -580,6 +586,10 @@
               })
             }
 
+          },
+          handlePreview(url) {
+            this.dialogImageUrl = url;
+            this.dialogVisible = true;
           },
           onCompanyChange(){
               this.company_staff_list();
