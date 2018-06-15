@@ -105,12 +105,30 @@
       fixed="right"
       width="290">
       <template slot-scope="scope">
-        <el-button type="primary" @click="shop_edit" size="small">修改名字</el-button>
-        <el-button type="success" @click="shop_del" size="small">重新授权</el-button>
-        <el-button type="danger" @click="shop_del" size="small">解除授权</el-button>
+        <el-button type="primary" @click="addAuthorization(scope.row, scope.$index)" size="small">修改名字</el-button>
+        <el-button type="success" @click="editAuthorization(scope.row, scope.$index)" size="small">重新授权</el-button>
+        <el-button type="danger" @click="company_shop_delete(scope.row, scope.$index)" size="small">解除授权</el-button>
       </template>
     </el-table-column>
   </el-table>
+  <!--弹框-->
+  <el-dialog :title="title" :visible.sync="dialogVisible" width="40%">
+    <div class="input"><span>店铺别名:</span><el-input v-model="shop_name" placeholder="请输入店铺别名" style="margin-top:5px"></el-input></div>
+    <div class="site-box clear" v-if="isEdit">
+      <div class="input"><span>Amazon账号:</span><el-input v-model="amazion_account" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
+      <div>
+        <span>开户站:</span><br />
+        <el-select v-model="siteIndex" @change="changeSite()" placeholder="请选择" style="margin-top:5px">
+          <el-option v-for="(item ,index) in site" :key="index" :label="item.name" :value="index">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
+    <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="isEdit?amazon_re_authorize():add_amazon_auth()">授 权</el-button>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+            </span>
+  </el-dialog>
   <el-pagination
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
@@ -120,16 +138,23 @@
     layout="total, sizes, prev, pager, next, jumper"
     :total="totalCount">
   </el-pagination>
+
 </div>
 </template>
 
 <script>
     import router from "../../router";
     import Qs from 'qs';
+    import site from '@/json/site';
 
     export default {
         data() {
           return {
+            dialogVisible:false,
+            isEdit:false,
+            shop_name:'',
+            title:'',
+            site: site,
               company_list:[],
             company_selected_id:'',
             staff_list:[],
@@ -177,6 +202,28 @@
           }
         },
         methods: {
+          addAuthorization(){
+            this.shop_name='';
+            this.dialogVisible = true;
+            this.title="修改名字";
+            this.isEdit = false;
+          },
+          editAuthorization(item,index){
+            console.log(item)
+            this.re_auth_data = item;
+            this.shop_name=item.shop_name;
+            this.amazion_account=item.amazion_account;
+            this.region=this.findSiteIdx(item.region);
+            this.dialogVisible = true;
+            this.title="修改Amazon权限";
+            this.isEdit = true;
+          },
+          findSiteIdx(value){
+            for(let i=0;i<site.length;i++){
+              if(site.value==value){return i;}
+            }
+            return '';
+          },
           search: function(){
           this.currentPage = 1;
           this.company_shop_list()

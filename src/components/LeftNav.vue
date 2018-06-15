@@ -63,27 +63,27 @@
         this.total_menu = this.menutype=='boss'?menu_boss:menu_staff;
       }
        this.update_menu();
-       
+
     },
     methods: {
           update_menu(){
               console.log('total_menu',this.total_menu)
               let show_menu =this.total_menu.filter((item)=>{
-                if(!item.permission){
-                  return item;//权限为空说明可以显示该菜单
-                }
-                return this.user_info[item.permission]=="true";
+//                if(!item.permission){
+//                  return item;//权限为空说明可以显示该菜单
+//                }
+//                return this.user_info[item.permission]=="true";
 
-               // return true;
+                return true;
               })
               this.menuList = show_menu;
               console.log('show_menu', show_menu)
           },
           onUpdateMenu(e){
             console.log('onUpdateMenu', e)
-            
+
             if(e.menutype){
-                this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;           
+                this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;
             }else{
                 this.total_menu=[]
             }
@@ -94,17 +94,17 @@
                  }else{
                     router.push({
                             path:'/main/'
-                    }) 
+                    })
                 }
             }
-            
+
             this.menutype = e.menutype
-            
-          } 
+
+          }
     }
 
   }
-  
+
 </script>
 <style scoped>
   .el-menu{
