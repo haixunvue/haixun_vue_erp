@@ -24,6 +24,7 @@ const api={
     'login':'/apis/v1807g/account/login',
     'account_role':'/apis/v1807g/account_role/list',
     'amazon_auth':'/apis/v1807g/company_shop/add',	//公司店铺添加，亚马逊授权
+    'amazon_auth_check_add':'/apis/v1807g/company_shop/check_add',	//公司店铺添加，亚马逊授权
     'amazon_re_authorize':'/apis/v1807g/company_shop/re_authorize',	//公司店铺添加，亚马逊授权
     'company_shop_set_infos':'/apis/v1807g/company_shop/set_infos',	
     'company_shop_list':'/apis/v1807g/company_shop/list',	//公司
@@ -49,6 +50,7 @@ const api={
     'company_list_paging':'/apis/v1807g/company/list/paging',
 
     'account_staff_list':'/apis/v1807g/account/list/paging',
+    'account_staff_list_inside':'/apis/v1807g/account_backstage/listall/paging',
     'get_company_list':'/apis/v1807g/company/list',
     'account_get_infos':'/apis/v1807g/account/get_infos',
     'account_set_infos':'/apis/v1807g/account/set_infos',

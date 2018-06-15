@@ -47,7 +47,7 @@
                     </el-option>
                 </el-select>
             </div>
-            <el-button type="text" v-if="isAdd" @click="goSite()">去站点</el-button>
+            <el-button type="text" v-if="isAdd&&this.siteIndex!==''" @click="goSite()">去站点</el-button>
             <div class="site-box clear" v-if="isAdd">
                 <div class="input">
                     <span class="input-label">Merchant ID:</span>
@@ -82,8 +82,6 @@
                 account_id:'',
                 access_key:'',
                 secret_key:'',
-                region:'',
-                region_name:'',
                 amazion_account:'',
                 siteIndex: '',
                 dialogVisible:false,
@@ -124,14 +122,14 @@
                 this.re_auth_data = item;
                 this.shop_name=item.shop_name;
                 this.amazion_account=item.amazion_account;
-                this.region=this.findSiteIdx(item.region);
+                this.siteIndex=this.findSiteIdx(item.region);
                 this.dialogVisible = true;
                 this.title="修改Amazon权限";
                 this.isAdd = false;
             },
              findSiteIdx(value){
                 for(let i=0;i<site.length;i++){
-                    if(site.value==value){return i;}
+                    if(site[i].value==value){return i;}
                 }
                 return '';
             },
@@ -143,18 +141,18 @@
                   return;
               }
           this.$http.post(this.api.amazon_re_authorize,{
-            owner_company_id: this.owner_company_id,
-            owner_user_id:this.owner_user_id,
             user_token:this.user_token,
             user_id:this.user_id,
+            owner_company_id: this.re_auth_data.owner_company_id,
+            owner_user_id:this.re_auth_data.owner_user_id,
             target_id:this.re_auth_data.id,
             shop_name:this.shop_name,
             amazion_account:this.amazion_account,
             account_id:this.re_auth_data.account_id,
             access_key:this.re_auth_data.access_key,
             secret_key:this.re_auth_data.secret_key,
-            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',
-            region_name:this.siteIndex?this.site[Number(this.siteIndex)].name:'',
+            region:this.siteIndex===''?'':this.site[Number(this.siteIndex)].value,
+            region_name:this.siteIndex===''?'':this.site[Number(this.siteIndex)].name,
             }).then((res)=>{
                 console.log('amazon_auth',res);
                 if(res.is_success){
@@ -221,7 +219,7 @@
           },
           add_amazon_auth(){
 
-          this.$http.post(this.api.amazon_auth,{
+          this.$http.post(this.api.amazon_auth_check_add,{
             owner_company_id: this.owner_company_id,
             owner_user_id:this.owner_user_id,
             user_token:this.user_token,
@@ -230,8 +228,8 @@
             account_id:this.account_id,
             access_key:this.access_key,
             secret_key:this.secret_key,
-            region:this.siteIndex?this.site[Number(this.siteIndex)].value:'',
-            region_name:this.siteIndex?this.site[Number(this.siteIndex)].name:'',
+            region:this.siteIndex===''?'':this.site[Number(this.siteIndex)].value,
+            region_name:this.siteIndex===''?'':this.site[Number(this.siteIndex)].name,
             amazion_account:this.amazion_account,
             }).then((res)=>{
                 console.log('amazon_auth',res);
@@ -244,6 +242,9 @@
             })
           },
           goSite(){
+              if(this.siteIndex===''){
+                  return;
+              }
               window.open(this.site[Number(this.siteIndex)].url)
           }
         }

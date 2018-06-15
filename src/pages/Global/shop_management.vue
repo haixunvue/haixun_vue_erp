@@ -105,9 +105,9 @@
       fixed="right"
       width="290">
       <template slot-scope="scope">
-        <el-button type="primary" @click="addAuthorization(scope.row, scope.$index)" size="small">修改名字</el-button>
+        <el-button type="primary" @click="edit_shop_name(scope.row, scope.$index)" size="small">修改名字</el-button>
         <el-button type="success" @click="editAuthorization(scope.row, scope.$index)" size="small">重新授权</el-button>
-        <el-button type="danger" @click="company_shop_delete(scope.row, scope.$index)" size="small">解除授权</el-button>
+        <el-button type="danger" @click="company_shop_delete_confirm(scope.row, scope.$index)" size="small">解除授权</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -118,14 +118,14 @@
       <div class="input"><span>Amazon账号:</span><el-input v-model="amazion_account" placeholder="请输入账号" style="margin-top:5px"></el-input></div>
       <div>
         <span>开户站:</span><br />
-        <el-select v-model="siteIndex" @change="changeSite()" placeholder="请选择" style="margin-top:5px">
+        <el-select v-model="siteIndex"  placeholder="请选择" style="margin-top:5px">
           <el-option v-for="(item ,index) in site" :key="index" :label="item.name" :value="index">
           </el-option>
         </el-select>
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="isEdit?amazon_re_authorize():add_amazon_auth()">授 权</el-button>
+                <el-button type="primary" @click="isEdit?amazon_re_authorize():save_shop_name()">{{isEdit?'授 权':'修 改'}}</el-button>
                 <el-button @click="dialogVisible = false">取 消</el-button>
             </span>
   </el-dialog>
@@ -151,16 +151,17 @@
         data() {
           return {
             dialogVisible:false,
+            siteIndex: '',
             isEdit:false,
             shop_name:'',
             title:'',
             site: site,
-              company_list:[],
+            company_list:[],
             company_selected_id:'',
             staff_list:[],
             staff_selected_id:'',
-             search_text:'',
-             totalCount:0,
+            search_text:'',
+            totalCount:0,
             currentPage:1,
             pagesize:5,
             shop_list: [],
@@ -202,8 +203,9 @@
           }
         },
         methods: {
-          addAuthorization(){
-            this.shop_name='';
+          edit_shop_name(item,index){
+            this.re_auth_data = item;
+            this.shop_name=item.shop_name;
             this.dialogVisible = true;
             this.title="修改名字";
             this.isEdit = false;
@@ -213,17 +215,68 @@
             this.re_auth_data = item;
             this.shop_name=item.shop_name;
             this.amazion_account=item.amazion_account;
-            this.region=this.findSiteIdx(item.region);
+            this.siteIndex=this.findSiteIdx(item.region);
             this.dialogVisible = true;
             this.title="修改Amazon权限";
             this.isEdit = true;
           },
-          findSiteIdx(value){
-            for(let i=0;i<site.length;i++){
-              if(site.value==value){return i;}
-            }
-            return '';
+          save_shop_name(){
+              if(!this.re_auth_data){
+                  return;
+              }
+            this.$http.post(this.api.company_shop_set_infos,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            owner_company_id: this.re_auth_data.owner_company_id,
+            owner_user_id:this.re_auth_data.owner_user_id,
+            target_id:this.re_auth_data.id,
+            shop_name:this.shop_name,
+            amazion_account:this.re_auth_data.amazion_account,
+            account_id:this.re_auth_data.account_id,
+            access_key:this.re_auth_data.access_key,
+            secret_key:this.re_auth_data.secret_key,
+            region:this.re_auth_data.region,
+            region_name:this.re_auth_data.region_name,
+            }).then((res)=>{
+                if(res.is_success){
+                    this.dialogVisible = false;
+                    this.company_shop_list();
+                }
+
+            })
           },
+          amazon_re_authorize(){
+              if(!this.re_auth_data){
+                  return;
+              }
+            this.$http.post(this.api.amazon_re_authorize,{
+            user_token:this.user_token,
+            user_id:this.user_id,
+            owner_company_id: this.re_auth_data.owner_company_id,
+            owner_user_id:this.re_auth_data.owner_user_id,
+            target_id:this.re_auth_data.id,
+            shop_name:this.shop_name,
+            amazion_account:this.amazion_account,
+            account_id:this.re_auth_data.account_id,
+            access_key:this.re_auth_data.access_key,
+            secret_key:this.re_auth_data.secret_key,
+            region:this.siteIndex===''?'':this.site[Number(this.siteIndex)].value,
+            region_name:this.siteIndex===''?'':this.site[Number(this.siteIndex)].name,
+            }).then((res)=>{
+                console.log('amazon_auth',res);
+                if(res.is_success){
+                    this.dialogVisible = false;
+                    this.company_shop_list();
+                }
+
+            })
+          },
+             findSiteIdx(value){
+                for(let i=0;i<site.length;i++){
+                    if(site[i].value==value){return i;}
+                }
+                return '';
+            },
           search: function(){
           this.currentPage = 1;
           this.company_shop_list()
@@ -232,40 +285,47 @@
         this.company_selected_id=''
         this.staff_selected_id=''
         this.search_text=''
-        this.company_shop_list(false)
+        this.company_shop_list()
          },
           handleSizeChange: function (size) {
-              this.pagesize = size;
-              this.company_shop_list()
+              this.currentPage = 1;
+            this.pagesize = size;
+            this.company_shop_list();
           },
           handleCurrentChange: function(currentPage){
               this.currentPage = currentPage;
             this.company_shop_list()
           },
-          currentChangePage(list) {
-            // console.log("1")
-            let from = (this.currentPage - 1) * this.pageSize;
-            let to = this.currentPage * this.pageSize;
-
-            for (; from < to; from++) {
-              if (list[from]) {
-                this.data2.push(list[from]);
-              }
-            }
+      
+           company_shop_delete_confirm(item,index) {
+            this.$confirm('确定要删除吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.company_shop_delete(item,index)
+            }).catch(() => {
+            });
           },
-          company_shop_delete(shopId){
+          company_shop_delete(item,index){
             this.$http.post(this.api.company_shop_delete,{
             user_token:this.user_token,
             user_id:this.user_id,
-            target_id:shopId,
+            target_id:item.id,
             }).then((res)=>{
                 if(res.is_success){
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
                     this.company_shop_list();
                 }
+                console.log('company_shop_list',res);
+
             })
           },
           onCompanyChange(){
-              this.company_staff_list();
+              //this.company_staff_list();
               this.company_shop_list()
           },
            onStaffChange(){
@@ -315,6 +375,12 @@
             if(this.search_text){
               params.search_text=this.search_text
             }
+            if(this.datetime_start){
+              params.datetime_start=this.datetime_start
+            }
+            if(this.datetime_end){
+              params.datetime_end=this.datetime_end
+            }
 
             this.$http.post(this.api.company_shop_list_paging,params).then((res)=>{
                 console.log('company_shop_list',res);
@@ -333,7 +399,7 @@
             this.user_token = localStorage.getItem("user_token");
             this.user_id = localStorage.getItem("user_id");
             this.get_company_list()
-            this.company_staff_list()
+           // this.company_staff_list()
             this.company_shop_list()
         },
 
