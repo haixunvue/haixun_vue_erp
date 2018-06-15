@@ -37,7 +37,7 @@
   import menu_staff from '@/json/role_menu/menu_staff';
   import menu_boss from '@/json/role_menu/menu_boss';
   import menu_admin from '@/json/role_menu/menu_admin';
-
+  import menu_register from '@/json/role_menu/menu_register';
 
 
 
@@ -45,8 +45,8 @@
     data() {
       return {
         menuList:[],
-        total_menu:[],
-        menutype:''
+        menutype:'',
+      
       }
     },
     created(){
@@ -58,38 +58,62 @@
     },
     mounted(){
       if(localStorage.getItem("login_type")=='back'){
-        this.total_menu=menu_admin//后台登录，显示后台菜单
-      }else if(this.menutype){
-        this.total_menu = this.menutype=='boss'?menu_boss:menu_staff;
+        this.show_menu_admin();
+      }else if(this.menutype=='boss'){
+        this.show_menu_boss();
+       
+      }else if(this.menutype=='staff'){
+        this.show_menu_staff();
+      }else{
+         this.menuList = menu_register
       }
-       this.update_menu();
-
+     
     },
     methods: {
-          update_menu(){
-              console.log('total_menu',this.total_menu)
-              let show_menu =this.total_menu.filter((item)=>{
-//                if(!item.permission){
-//                  return item;//权限为空说明可以显示该菜单
-//                }
-//                return this.user_info[item.permission]=="true";
+          show_menu_admin(){
+              this.menuList =menu_admin.filter((item)=>{
+               if(!item.permission){
+                 return item;//权限为空说明可以显示该菜单
+               }
+               return this.user_info[item.permission]=="true";
 
-                return true;
+               // return true;
               })
-              this.menuList = show_menu;
-              console.log('show_menu', show_menu)
           },
+          show_menu_boss(){
+              this.menuList =menu_boss.filter((item)=>{
+               if(!item.permission){
+                 return item;//权限为空说明可以显示该菜单
+               }
+               return this.user_info[item.permission]=="true";
+
+               // return true;
+              })
+          },
+          show_menu_staff(role){
+            this.menuList =menu_staff.filter((item)=>{
+               if(!item.permission){
+                 return item;//权限为空说明可以显示该菜单
+               }
+               return role[item.permission]=="true";
+
+               // return true;
+              })
+          },
+
+          
           onUpdateMenu(e){
             console.log('onUpdateMenu', e)
 
-            if(e.menutype){
-                this.total_menu = e.menutype=='boss'?menu_boss:menu_staff;
+            if(e.role._type=='staff'){
+                this.show_menu_staff(e.role)
+            }else if(e.role._type=='boss'){
+                this.show_menu_boss();
             }else{
-                this.total_menu=[]
+                 this.menuList = menu_register
             }
-            this.update_menu();
             if(e.fromSelect){
-                  if(this.menutype == e.menutype){
+                  if(this.menutype == e.role._type){
                   eventBus.$emit('refreshView', 'refreshView')
                  }else{
                     router.push({
@@ -98,7 +122,7 @@
                 }
             }
 
-            this.menutype = e.menutype
+            this.menutype = e.role._type
 
           }
     }
