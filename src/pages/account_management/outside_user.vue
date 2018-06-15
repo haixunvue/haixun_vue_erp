@@ -60,6 +60,13 @@
       >
       </el-table-column>
       <el-table-column
+        v-if="false"
+        prop="idcardnum"
+        label="资产信息"
+        sortable
+      >
+      </el-table-column>
+      <el-table-column
         fixed="right"
         label="操作"
         width="125">

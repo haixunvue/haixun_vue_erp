@@ -345,7 +345,7 @@
 
 
     <!--弹窗区域-->
-    <el-dialog title="" :visible.sync="dialogTableVisible" width="90%" >
+    <el-dialog title="" :visible.sync="dialogTableVisible" width="70%" >
       <!--内部弹窗区域-->
       <div style="overflow-x:scroll">
         <el-row  class="mt10">
@@ -1202,6 +1202,13 @@
   .el-select .el-input {
     width: 130px;
   }
+  .el-input-number{
+    width: 100px;
+    height: 28px;
+  }
+  .el-input__inner{
+    height: 28px;
+  }
 </style>
 <style>
   .input-with-select .el-input-group__prepend {
@@ -1259,4 +1266,5 @@
   .el-upload--text .el-upload-dragger{
     width: 178px;
   }
+
 </style>
