@@ -11,7 +11,7 @@
   <div class="line"></div>
   <el-form :inline="true" label-width="80px" size="mini">
     <el-form-item>
-      <el-input placeholder="请输入" icon="search" v-model="schfilter" class="search-input">
+      <el-input placeholder="请输入" icon="search" v-model="search_text" class="search-input">
       </el-input>
     </el-form-item>
     <el-form-item>
@@ -95,7 +95,6 @@
         data() {
           return {
             data: [],
-            schfilter:"",
             search_text:'',
             totalCount:0,
             currentPage:1,
@@ -118,7 +117,10 @@
               user_id:this.user_id,
               page:this.currentPage-1,  //页码
               pageSize:this.pagesize,
-              search_text:this.schfilter||''
+              
+            }
+            if(this.search_text){
+              params.search_text= this.search_text;
             }
             this.$http.post(this.api.account_staff_list_inside,params).then((res)=>{
               if(res.is_success){
@@ -156,7 +158,6 @@
             });
           },
           onSearch(){
-            this.search_text=this.schfilter
             this.getuserlist();
           }
         },
