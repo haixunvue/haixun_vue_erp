@@ -139,6 +139,7 @@
               this.$refs[ formName ].validate( async ( valid ) => {
                 if ( valid ) {
               //注册
+              localStorage.clear();
               this.$http.post(this.api.register,this.form).then((res)=>{
                 if(!res.is_success){
                   throw 'error';

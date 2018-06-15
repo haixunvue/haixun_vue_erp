@@ -45,6 +45,7 @@
               console.info(document.cookie);
           },
           onSubmit(){
+            localStorage.clear();
             this.$http.post(this.api.login,{
               username:this.form.username,
               password:this.form.password
