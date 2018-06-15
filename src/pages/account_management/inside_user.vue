@@ -31,7 +31,7 @@
     >
     </el-table-column>
     <el-table-column
-      prop="idcard_number"
+      prop="idcardnum"
       label="身份账号"
       sortable
     >
@@ -63,12 +63,6 @@
     <el-table-column
       prop="phone_number"
       label="手机号码"
-      sortable
-    >
-    </el-table-column>
-    <el-table-column
-      prop="idcardnum"
-      label="资产信息"
       sortable
     >
     </el-table-column>
