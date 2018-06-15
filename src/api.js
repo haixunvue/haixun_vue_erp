@@ -25,6 +25,7 @@ const api={
     'account_role':'/apis/v1807g/account_role/list',
     'amazon_auth':'/apis/v1807g/company_shop/add',	//公司店铺添加，亚马逊授权
     'amazon_re_authorize':'/apis/v1807g/company_shop/re_authorize',	//公司店铺添加，亚马逊授权
+    'company_shop_set_infos':'/apis/v1807g/company_shop/set_infos',	
     'company_shop_list':'/apis/v1807g/company_shop/list',	//公司
     'company_shop_list_paging':'/apis/v1807g/company_shop/list/paging',	//公司
     'company_shop_delete':'/apis/v1807g/company_shop/delete',	//公司店铺
@@ -36,6 +37,7 @@ const api={
     'company_staff_get_infos':'/apis/v1807g/company_staff/get_infos',
     'company_staff_linker_list':'/apis/v1807g/company_staff_linker/list',
     'company_staff_linker_add':'/apis/v1807g/company_staff_linker/add',
+    'company_staff_linker_check_add':'/apis/v1807g/company_staff_linker/check_add',
     'company_money_recharge_channel_list':'/apis/v1807g/company_money_recharge_channel/list',
     'company_money_recharge_channel_list_paging':'/apis/v1807g/company_money_recharge_channel/list/paging',
     'company_staff_linker_delete':'/apis/v1807g/company_staff_linker/delete',

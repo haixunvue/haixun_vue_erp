@@ -412,7 +412,7 @@
           return;
         }
 
-        this.$http.post(this.api.company_staff_linker_add,{
+        this.$http.post(this.api.company_staff_linker_check_add,{
           user_token:this.user_token,
           user_id:this.user_id,
           owner_company_id:this.owner_company_id,

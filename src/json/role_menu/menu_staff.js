@@ -1,4 +1,5 @@
-export default  [
+import menu_register from './menu_register';
+const menu = [
   {
     "routerName": "product_management",
     "name": "商品管理",
@@ -131,28 +132,10 @@ export default  [
         "name": "店铺业绩",
       }
     ]
-  },
-  {
-    "routerName": "user_center",
-    "name": "用户中心",
-    "permission":"",
-    "icon": "",
-    "list1": [
-      {
-        "routerName": "user_info",
-        "name": "个人信息",
-      },
-      {
-        "routerName": "asset_management",
-        "name": "资产管理",
-        "icon": "",
-      },
-    ]
-  },
-  {
-    "routerName": "help_center",
-    "permission":"",
-    "name": "帮助"
   }
 ];
+
+
+
+export default menu.concat(menu_register);
 

@@ -100,7 +100,7 @@
           changeValue(){
             let role_item = this.roleList[Number(this.roleValue)]
             this.updataIdInfo(role_item)
-            this.updateMenu(role_item._type,true)
+            this.updateMenu(role_item,true)
             
           },
              get_account_role(){
@@ -125,9 +125,7 @@
                       this.roleValue=Number(roleValue);
                     }
                     this.updataIdInfo(res.value[this.roleValue])
-                    this.updateMenu(res.value[this.roleValue]._type);
-                   }else{
-                     this.updateMenu('staff');
+                    this.updateMenu(res.value[this.roleValue]);
                    }
 
                     this.roleList = res.value;
@@ -148,9 +146,9 @@
               this.name = this.user_info.nickname;
 
             },
-            updateMenu(menutype,fromSelect){
-              console.log(menutype)
-              eventBus.$emit('updateMenu', {menutype:menutype,fromSelect:fromSelect})
+            updateMenu(role,fromSelect){
+              console.log(role)
+              eventBus.$emit('updateMenu', {role:role,fromSelect:fromSelect})
             },
             goOut(){
               localStorage.clear();

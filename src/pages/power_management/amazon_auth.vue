@@ -13,7 +13,7 @@
               <el-table-column prop="amount3" label="操作">
                   <template slot-scope="scope">
                       <el-button type="text" @click="editAuthorization(scope.row, scope.$index)">重新授权</el-button>
-                      <el-button type="text"  @click="company_shop_delete(scope.row, scope.$index)">删除</el-button>
+                      <el-button type="text"  @click="company_shop_delete_confirm(scope.row, scope.$index)">删除</el-button>
                   </template>
               </el-table-column>
             </el-table>
@@ -192,6 +192,16 @@
 
             })
           },
+           company_shop_delete_confirm(item,index) {
+            this.$confirm('确定要删除吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.company_shop_delete(item,index)
+            }).catch(() => {
+            });
+          },
           company_shop_delete(item,index){
             this.$http.post(this.api.company_shop_delete,{
             user_token:this.user_token,
@@ -199,6 +209,10 @@
             target_id:item.id,
             }).then((res)=>{
                 if(res.is_success){
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
                     this.company_shop_list();
                 }
                 console.log('company_shop_list',res);
