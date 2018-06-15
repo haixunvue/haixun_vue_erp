@@ -106,7 +106,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-    <el-form-item label="上架状态" style="margin-bottom:5px">
+    <el-form-item label="上架状态" style="margin-bottom:5px" v-if="false">
       <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" size="mini">
         <el-radio v-for="(item,index) in status_shelf_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
@@ -115,7 +115,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-    <el-form-item label="产品类型">
+    <el-form-item label="产品类型" v-if="false">
       <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" size="mini">
         <el-radio v-for="(item,index) in product_type_list" :key="index" :label="item.value" border>{{item.name}}</el-radio>
       </el-radio-group>
@@ -184,7 +184,7 @@
       </el-table-column>
       <el-table-column
         prop="sku"
-        label="SKU"
+        label="来源"
         sortable
         >
       </el-table-column>
@@ -196,7 +196,7 @@
       </el-table-column>
       <el-table-column
         prop="stock"
-        label="库存"
+        label="审核状态"
         sortable
         >
       </el-table-column>

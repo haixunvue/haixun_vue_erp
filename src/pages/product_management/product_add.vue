@@ -39,12 +39,16 @@
             <div class="line"></div>
             <el-form-item label="产品图片">
 
-              
+
             <draggable v-model="productPicUrl"  @update="datadragEnd" :options="{draggable:'.imageDiv'}">
               <transition-group>
 
               <div v-for="(element,i) in productPicUrl" :key="i" class='imageDiv'>
-                  {{productPicUrl[i]}}
+                  <img :src="productPicUrl[i]"/>
+                <span class="imageSpan">
+                  <i class="el-icon-zoom-in"></i>
+                  <i class="el-icon-delete image-icon-delete"></i>
+                </span>
               </div>
               <div class="uploaderImgBtn" key="100000" @click="uploaderImgDialog = true">
                 <i class="el-icon-plus"></i>
@@ -1187,7 +1191,7 @@
       handleSelectionChange(val){
         this.form.variant = val;
       },
- 
+
        product_classification_list(){
             this.$http.post(this.api.product_classification_list,{
               user_token:this.user_token,
@@ -1340,6 +1344,7 @@
   .uploaderImgBtn{
     width: 178px;
     height: 178px;
+    display: inline-block;
     background-color: #fbfdff;
     border: 1px dashed #c0ccda;
     border-radius: 6px;
@@ -1352,5 +1357,51 @@
   .uploaderImgBtn i {
     font-size: 40px;
     color: #8c939d;
+  }
+  .
+  .pp-img{
+    display: inline-block;
+    width: 176px;
+    height: 176px;
+    margin-right: 10px;
+    border: 1px solid #eee;
+  }
+  .pp-img img{
+    width: 176px;
+    height: 176px;
+  }
+  .imageDiv{
+    display: inline-block;
+    width: 176px;
+    height: 176px;
+    margin-right: 10px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    position: relative;
+  }
+  .imageDiv img{
+    width: 176px;
+    height: 176px;
+  }
+  .imageSpan{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    font-size: 20px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
+  }
+  .imageSpan:hover{
+    opacity: 1;
+  }
+  .image-icon-delete{
+    margin-left: 10px;
   }
 </style>
