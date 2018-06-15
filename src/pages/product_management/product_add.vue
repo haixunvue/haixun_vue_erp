@@ -38,26 +38,33 @@
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="产品图片">
-              <el-upload
-                class="upload-demo prouduct-upload"
-                action="http://39.106.9.139/upload"
-                :on-preview="handlePreview"
-                :on-remove="handleImagesRemove"
-                :limit="9"
-                accept="image/gif,image/jpeg,image/tiff"
-                :auto-upload="true"
-                drag
-                multiple
-                :file-list="images_fileList"
-                list-type="picture-card"
-                :on-success="uploadSuccess">
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或
-                  <br/><em>点击上传</em></div>
-                <div slot="tip" class="el-upload__tip">
-                  只支持 jpg/tif/gif 格式图片，图片尺寸必须500x1000px以上,最长边不得超过10,000px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
-                </div>
-              </el-upload>
+
+              <div class="uploaderImgBtn" @click="uploaderImgDialog = true">
+                <i class="el-icon-plus"></i>
+              </div>
+
+
+
+              <!--<el-upload-->
+                <!--class="upload-demo prouduct-upload"-->
+                <!--action="http://39.106.9.139/upload"-->
+                <!--:on-preview="handlePreview"-->
+                <!--:on-remove="handleImagesRemove"-->
+                <!--:limit="9"-->
+                <!--accept="image/gif,image/jpeg,image/tiff"-->
+                <!--:auto-upload="false"-->
+                <!--drag-->
+                <!--multiple-->
+                <!--:file-list="images_fileList"-->
+                <!--list-type="picture-card"-->
+                <!--:on-success="uploadSuccess">-->
+                <!--<i class="el-icon-upload"></i>-->
+                <!--<div class="el-upload__text">将图片拖到此处，或-->
+                  <!--<br/><em>点击上传</em></div>-->
+                <!--<div slot="tip" class="el-upload__tip">-->
+                  <!--图片可批量上传，只支持 jpg/tif/gif 格式图片，图片尺寸必须500x1000px以上,最长边不得超过10,000px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求-->
+                <!--</div>-->
+              <!--</el-upload>-->
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="标题">
@@ -509,6 +516,37 @@
       <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="">
      </el-dialog>
+    <el-dialog
+      title="选择图片"
+      :close-on-click-modal="false"
+      :visible.sync="uploaderImgDialog"
+      class="uploaderImg"
+    >
+      <div class="line"></div>
+      <div class="sub-tips">
+        图片可批量上传，只支持 jpg/tif/gif 格式图片，图片尺寸必须500x1000px以上,最长边不得超过10,000px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
+      </div>
+      <el-upload
+        class="upload-demo prouduct-upload dialog-upload-img"
+        action="http://39.106.9.139/upload"
+        :on-preview="handlePreview"
+        :on-remove="handleImagesRemove"
+        accept="image/gif,image/jpeg,image/tiff"
+        :auto-upload="false"
+        drag
+        multiple
+        :file-list="images_fileList"
+        list-type="picture-card"
+        :on-success="uploadSuccess">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将图片拖到此处，或
+          <br/><em>点击上传</em></div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="saveSelectImg(uploaderImgDialog = false)">确定</el-button>
+        <el-button @click="uploaderImgDialog = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -534,6 +572,7 @@
         product_status_selected:'',
         dialogImageUrl: '',
         dialogVisible: false,
+        uploaderImgDialog: false,
         title:'',
         brief_introduction:'',
         blue_point:[''],
@@ -1266,5 +1305,35 @@
   .el-upload--text .el-upload-dragger{
     width: 178px;
   }
-
+  .dialog-upload-img{
+    width: 980px;
+    height: 500px;
+    overflow: auto;
+  }
+  .uploaderImg .el-dialog .el-dialog__body{
+    padding-top: 0;
+  }
+  .sub-tips{
+    font-size: 16px;
+    padding-bottom: 10px;
+  }
+  .el-dialog{
+    width: 1000px;
+  }
+  .uploaderImgBtn{
+    width: 178px;
+    height: 178px;
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    box-sizing: border-box;
+    cursor: pointer;
+    line-height: 176px;
+    vertical-align: top;
+    text-align: center;
+  }
+  .uploaderImgBtn i {
+    font-size: 40px;
+    color: #8c939d;
+  }
 </style>
