@@ -24,7 +24,7 @@
                 :on-preview="handlePreview"
                 drag
                 :on-success="uploadImageMainSuccess"
-                :on-remove="handleRemove">
+                :on-remove="handleImageMainRemove">
                 <img v-if="image_main" :src="image_main" class="avatar">
                 <div v-else class="avatar-uploader-icon">
                 <i class="el-icon-upload"></i>
@@ -39,10 +39,18 @@
             <div class="line"></div>
             <el-form-item label="产品图片">
 
-              <div class="uploaderImgBtn" @click="uploaderImgDialog = true">
+              
+            <draggable v-model="productPicUrl"  @update="datadragEnd" :options="{draggable:'.imageDiv'}">
+              <transition-group>
+
+              <div v-for="(element,i) in productPicUrl" :key="i" class='imageDiv'>
+                  {{productPicUrl[i]}}
+              </div>
+              <div class="uploaderImgBtn" key="100000" @click="uploaderImgDialog = true">
                 <i class="el-icon-plus"></i>
               </div>
-
+            </transition-group>
+        </draggable>
 
 
               <!--<el-upload-->
@@ -532,18 +540,17 @@
         :on-preview="handlePreview"
         :on-remove="handleImagesRemove"
         accept="image/gif,image/jpeg,image/tiff"
-        :auto-upload="false"
+        :auto-upload="true"
         drag
         multiple
-        :file-list="images_fileList"
         list-type="picture-card"
-        :on-success="uploadSuccess">
+        :on-success="uploadImagesSuccess">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将图片拖到此处，或
           <br/><em>点击上传</em></div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveSelectImg(uploaderImgDialog = false)">确定</el-button>
+        <el-button type="primary" @click="confirmUploadImages(uploaderImgDialog = false)">确定</el-button>
         <el-button @click="uploaderImgDialog = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -551,12 +558,16 @@
 </template>
 <script>
   // import router from "../router";
-      import product_status_list from '../../json/product_status';
+    import draggable from 'vuedraggable'
+    import product_status_list from '../../json/product_status';
     import status_audit_list from '../../json/product_status_audit';
     import status_shelf_list from '../../json/product_status_shelf';
     import product_type_list from '../../json/product_type';
     const ean_upc_list=[{name:'EAN',value:'code_ean'},{name:'UPC',value:'code_upc'}];
   export default {
+        components: {
+　　draggable
+},
     data() {
       return {
         id:'--',
@@ -974,21 +985,35 @@
       onSubmit() {
         console.log('submit!');
       },
-      handleRemove(file, fileList) {
-         this.images_fileList=fileList;
-        console.log('2',this.images_fileList)
-        console.log(file, fileList);
+      handleImageMainRemove(file, fileList) {
+         //this.images_fileList=fileList;
+      },
+      uploadImageMainSuccess(response){
+            this.image_main = response;
+      },
+      uploadImagesSuccess(response, file, fileList){
+        this.images_fileList=fileList;
       },
       handleImagesRemove(file, fileList) {
-        this.productPicUrl= this.productPicUrl.filter((url)=>{
-            return url!=file.response;
-        })
+         this.images_fileList=fileList;
+      },
+      confirmUploadImages(){
 
-        console.log(file, fileList);
+          console.log(this.images_fileList)
+          this.images_fileList.length>0&&this.images_fileList.map((item)=>{
+              if(item.response){
+                this.productPicUrl.push(item.response)
+              }
+          })
+           console.log(this.productPicUrl)
+      },
+
+      datadragEnd (evt) {
+        console.log('拖动前的索引 :' + evt.oldIndex)
+        console.log('拖动后的索引 :' + evt.newIndex)
+        console.log(this.productPicUrl)
       },
       handlePreview(file) {
-        console.log('handlePreview',file);
-        console.log('handlePreview2',this.images_fileList);
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
@@ -1162,16 +1187,7 @@
       handleSelectionChange(val){
         this.form.variant = val;
       },
-      //上传成功钩子函数
-      uploadSuccess(response, file, fileList){
-        this.productPicUrl.push(response);
-        this.images_fileList=fileList;
-        console.log("1",file,fileList)
-        console.log('2',this.images_fileList)
-      },
-      uploadImageMainSuccess(response){
-            this.image_main = response;
-      },
+ 
        product_classification_list(){
             this.$http.post(this.api.product_classification_list,{
               user_token:this.user_token,
@@ -1257,6 +1273,7 @@
     width: 148px;
     height: 148px;
     background-color: transparent;
+    border:0;
   }
   .el-upload__text{
     position: absolute;
@@ -1307,7 +1324,7 @@
   }
   .dialog-upload-img{
     width: 980px;
-    height: 500px;
+    height: 400px;
     overflow: auto;
   }
   .uploaderImg .el-dialog .el-dialog__body{
@@ -1328,7 +1345,7 @@
     border-radius: 6px;
     box-sizing: border-box;
     cursor: pointer;
-    line-height: 176px;
+    line-height: 196px;
     vertical-align: top;
     text-align: center;
   }
