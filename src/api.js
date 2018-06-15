@@ -24,6 +24,7 @@ const api={
     'login':'/apis/v1807g/account/login',
     'account_role':'/apis/v1807g/account_role/list',
     'amazon_auth':'/apis/v1807g/company_shop/add',	//公司店铺添加，亚马逊授权
+    'amazon_auth_check_add':'/apis/v1807g/company_shop/check_add',	//公司店铺添加，亚马逊授权
     'amazon_re_authorize':'/apis/v1807g/company_shop/re_authorize',	//公司店铺添加，亚马逊授权
     'company_shop_set_infos':'/apis/v1807g/company_shop/set_infos',	
     'company_shop_list':'/apis/v1807g/company_shop/list',	//公司
