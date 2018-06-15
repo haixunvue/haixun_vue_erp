@@ -111,7 +111,6 @@
           user_id:this.user_id,
           page:this.currentPage-1,  //页码
           pageSize:this.pagesize,
-          permission_backstage:false,
           search_text:this.schfilter||''
         }
         this.$http.post(this.api.account_staff_list,params).then((res)=>{

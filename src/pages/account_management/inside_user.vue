@@ -118,10 +118,9 @@
               user_id:this.user_id,
               page:this.currentPage-1,  //页码
               pageSize:this.pagesize,
-              permission_backstage:true,
               search_text:this.schfilter||''
             }
-            this.$http.post(this.api.account_staff_list,params).then((res)=>{
+            this.$http.post(this.api.account_staff_list_inside,params).then((res)=>{
               if(res.is_success){
                 this.data = res.value.list;
                 this.totalCount = res.value.totalCount;
