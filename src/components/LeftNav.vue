@@ -69,12 +69,12 @@
           update_menu(){
               console.log('total_menu',this.total_menu)
               let show_menu =this.total_menu.filter((item)=>{
-                // if(!item.permission){
-                //   return item;//权限为空说明可以显示该菜单
-                // }
-                // return this.user_info[item.permission]=="true";
+                if(!item.permission){
+                  return item;//权限为空说明可以显示该菜单
+                }
+                return this.user_info[item.permission]=="true";
 
-                return true;
+               // return true;
               })
               this.menuList = show_menu;
               console.log('show_menu', show_menu)
