@@ -12,7 +12,7 @@ const menu = [
         "list2": [
           {
             "routerName": "product_sum",
-            "name": "商品总汇",
+            "name": "商品汇总",
           },
           {
             "routerName": "product_sync",

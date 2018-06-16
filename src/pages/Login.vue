@@ -4,7 +4,7 @@
 *   作用：展示如何把页面嵌入框架
 *   作者：
 **************************************
---> 
+-->
 <template>
     <div class="content">
         <el-form ref="form" :model="form" label-width="80px">
@@ -12,7 +12,7 @@
             <el-input v-model="form.username"></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input v-model="form.password"></el-input>
+            <el-input type="password" v-model="form.password"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">登录</el-button>
@@ -25,7 +25,7 @@
 
 <script>
     import router from "../router";
- 
+
     export default {
         data() {
             return {
@@ -56,23 +56,23 @@
                 localStorage.setItem('user_id',res.value.id)
                 localStorage.setItem('login_type','front')//前台登录
                 localStorage.setItem('user_info',JSON.stringify(res.value))
-      
+
                 this.setCookie("token",res.token,1/24);
                 this.setCookie("user_id ",res.value.id,1/24);
 
                 this.$message.success('登录成功,正在为您跳转');
                         router.push({
                         path:'/main/'
-                 }) 
-              
-              
+                 })
+
+
             })
           },
           zhuce(){
             router.push({
               path:'/registered'
             })
-          
+
           },
           login_back(){
             router.push({
