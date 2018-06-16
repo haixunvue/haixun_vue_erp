@@ -4,7 +4,7 @@
       <el-tabs v-model="country" type="card" @tab-click="handleClick">
         <el-tab-pane label="中国" name="1">
 
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form ref="form" :model="form" rules="form" label-width="80px">
             <div class="oh">
               <el-button type="primary" class="right ml10">下一个</el-button>
               <el-button type="success" class="right" @click="product_sync">保存至待同步</el-button>
@@ -16,7 +16,7 @@
               {{id}}
             </el-form-item>
             <div class="line" v-if="false"></div>
-             <el-form-item  v-if="false" label="产品主图">
+            <el-form-item v-if="false" label="产品主图">
               <el-upload
                 class="avatar-uploader"
                 action="http://39.106.9.139/upload"
@@ -27,9 +27,9 @@
                 :on-remove="handleImageMainRemove">
                 <img v-if="image_main" :src="image_main" class="avatar">
                 <div v-else class="avatar-uploader-icon">
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或
-                  <br/><em>点击上传</em></div>
+                  <i class="el-icon-upload"></i>
+                  <div class="el-upload__text">将文件拖到此处，或
+                    <br/><em>点击上传</em></div>
                 </div>
                 <div slot="tip" class="el-upload__tip">
                   支持 jpg/tif 等格式图片，最长边大于500px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求
@@ -40,100 +40,105 @@
             <el-form-item label="产品图片">
 
 
-            <draggable v-model="productPicUrl"  @update="datadragEnd" :options="{draggable:'.imageDiv'}">
-              <transition-group>
+              <draggable v-model="productPicUrl" @update="datadragEnd" :options="{draggable:'.imageDiv'}">
+                <transition-group>
 
-              <div v-for="(element,i) in productPicUrl" :key="i" class='imageDiv'>
-                  <img :src="productPicUrl[i]"/>
-                <span class="imageSpan">
+                  <div v-for="(element,i) in productPicUrl" :key="i" class='imageDiv'>
+                    <img :src="productPicUrl[i]"/>
+                    <span class="imageSpan">
                   <i class="el-icon-zoom-in"></i>
                   <i class="el-icon-delete image-icon-delete"></i>
                 </span>
-              </div>
-              <div class="uploaderImgBtn" key="100000" @click="uploaderImgDialog = true">
-                <i class="el-icon-plus"></i>
-              </div>
-            </transition-group>
-        </draggable>
+                  </div>
+                  <div class="uploaderImgBtn" key="100000" @click="uploaderImgDialog = true">
+                    <i class="el-icon-plus"></i>
+                  </div>
+                </transition-group>
+              </draggable>
 
 
               <!--<el-upload-->
-                <!--class="upload-demo prouduct-upload"-->
-                <!--action="http://39.106.9.139/upload"-->
-                <!--:on-preview="handlePreview"-->
-                <!--:on-remove="handleImagesRemove"-->
-                <!--:limit="9"-->
-                <!--accept="image/gif,image/jpeg,image/tiff"-->
-                <!--:auto-upload="false"-->
-                <!--drag-->
-                <!--multiple-->
-                <!--:file-list="images_fileList"-->
-                <!--list-type="picture-card"-->
-                <!--:on-success="uploadSuccess">-->
-                <!--<i class="el-icon-upload"></i>-->
-                <!--<div class="el-upload__text">将图片拖到此处，或-->
-                  <!--<br/><em>点击上传</em></div>-->
-                <!--<div slot="tip" class="el-upload__tip">-->
-                  <!--图片可批量上传，只支持 jpg/tif/gif 格式图片，图片尺寸必须500x1000px以上,最长边不得超过10,000px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求-->
-                <!--</div>-->
+              <!--class="upload-demo prouduct-upload"-->
+              <!--action="http://39.106.9.139/upload"-->
+              <!--:on-preview="handlePreview"-->
+              <!--:on-remove="handleImagesRemove"-->
+              <!--:limit="9"-->
+              <!--accept="image/gif,image/jpeg,image/tiff"-->
+              <!--:auto-upload="false"-->
+              <!--drag-->
+              <!--multiple-->
+              <!--:file-list="images_fileList"-->
+              <!--list-type="picture-card"-->
+              <!--:on-success="uploadSuccess">-->
+              <!--<i class="el-icon-upload"></i>-->
+              <!--<div class="el-upload__text">将图片拖到此处，或-->
+              <!--<br/><em>点击上传</em></div>-->
+              <!--<div slot="tip" class="el-upload__tip">-->
+              <!--图片可批量上传，只支持 jpg/tif/gif 格式图片，图片尺寸必须500x1000px以上,最长边不得超过10,000px,不能包含徽标或水印.推荐1000px以上白色背景,图片详细标准请参阅Amazon平台要求-->
+              <!--</div>-->
               <!--</el-upload>-->
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="标题">
-              <el-input  placeholder="标题长度不超过200个字符" maxlength="200" v-model="title">
+              <el-input placeholder="标题长度不超过200个字符" maxlength="200" v-model="title">
               </el-input>
             </el-form-item>
             <el-form-item label="分类">
               <el-select v-model="product_classify_selected" placeholder="请选择">
                 <el-option
-                v-for="(item,index) in product_classify"
-                :key="index"
-                :label="item"
-                :value="item">
+                  v-for="(item,index) in product_classify"
+                  :key="index"
+                  :label="item"
+                  :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
-                <el-form-item label="五大亮点">
-                  <el-row  v-for="(item,index) in blue_point"  :key="index">
-                    <el-col :span="20">
-                    <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="500" v-model="blue_point[index]" class="mt10"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                      <el-button  v-if="(index+1)==blue_point.length&&blue_point.length!=5" type="primary" @click="edit_blue_point(index,false)">添加亮点</el-button>
-                      <el-button v-else  @click="edit_blue_point(index,true)" type="info">删除</el-button>
-                    </el-col>
-                  </el-row>
-                    <span style="color:#F56C6C">5个亮点不需要全部填写,可根据需求填写</span>
-                </el-form-item>
-                <el-form-item label="关键词">
-                  <el-row  v-for="(item,index) in keyword"  :key="index">
-                    <el-col :span="20">
-                    <el-input placeholder="" maxlength="50" v-model="keyword[index]" class="mt10"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                      <el-button  v-if="(index+1)==keyword.length&&keyword.length!=5" type="primary" @click="edit_keyword(index,false)">添加</el-button>
-                      <el-button v-else  @click="edit_keyword(index,true)" type="info">删除</el-button>
-                    </el-col>
-                  </el-row>
+            <el-form-item label="五大亮点">
+              <el-row v-for="(item,index) in blue_point" :key="index">
+                <el-col :span="20">
+                  <el-input placeholder="五大亮点长度现已支持500个字符" maxlength="250" v-model="blue_point[index]"
+                            class="mt10"></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-button v-if="(index+1)==blue_point.length&&blue_point.length!=5" type="primary"
+                             @click="edit_blue_point(index,false)">添加亮点
+                  </el-button>
+                  <el-button v-else @click="edit_blue_point(index,true)" type="info">删除</el-button>
+                </el-col>
+              </el-row>
+              <span style="color:#F56C6C">5个亮点不需要全部填写,可根据需求填写</span>
+            </el-form-item>
+            <el-form-item label="关键词">
+              <el-row v-for="(item,index) in keyword" :key="index">
+                <el-col :span="20">
+                  <el-input placeholder="" maxlength="50" v-model="keyword[index]" class="mt10"></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-button v-if="(index+1)==keyword.length&&keyword.length!=5" type="primary"
+                             @click="edit_keyword(index,false)">添加
+                  </el-button>
+                  <el-button v-else @click="edit_keyword(index,true)" type="info">删除</el-button>
+                </el-col>
+              </el-row>
 
-                </el-form-item>
+            </el-form-item>
             <el-form-item label="描述">
               <el-input type="textarea" placeholder="请输入描述" v-model="brief_introduction">
               </el-input>
             </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="product_status_selected" placeholder="请选择">
-                   <el-option
-            v-for ="(item,index) in product_status_list"
-            :key="index"
-            :label="item.name"
-            :value="item.value">
+                <el-option
+                  v-for="(item,index) in product_status_list"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             <div class="line"></div>
-            <el-form-item label="产品信息">
-              <el-row  class="mt10">
+            <el-form-item label="产品信息" prop="brand">
+              <el-row class="mt10">
                 <el-col :span="11">
                   <el-input placeholder="品牌名称" v-model="brand">
                     <template slot="prepend">品牌名称</template>
@@ -146,17 +151,17 @@
                 </el-col>
               </el-row>
 
-              <el-row  class="mt10">
+              <el-row class="mt10">
                 <el-col :span="11">
-                  <el-input placeholder="内部SKU" v-model="fatherSku">
+                  <el-input placeholder="内部SKU" maxlength="40"  v-model="fatherSku">
                     <template slot="prepend">父SKU</template>
                   </el-input>
                 </el-col>
                 <el-col :span="11" :offset="2">
-                  <el-input placeholder="请输入内容" v-model="ean_upc_value" class="input-with-select" >
+                  <el-input placeholder="请输入内容" v-model="ean_upc_value" class="input-with-select">
                     <el-select v-model="ean_upc_selected" slot="prepend" placeholder="请选择" style="width:120px">
                       <el-option
-                        v-for ="(item,index) in ean_upc_list"
+                        v-for="(item,index) in ean_upc_list"
                         :key="index"
                         :label="item.name"
                         :value="item.value"/>
@@ -165,34 +170,34 @@
                 </el-col>
               </el-row>
 
-              <el-row  class="mt10">
+              <el-row class="mt10">
                 <el-col :span="20">
                   <el-input placeholder="来源网址" v-model="sourceWebsite">
                     <template slot="prepend">来源网址</template>
                   </el-input>
                 </el-col>
-                <el-col :span="4" >
+                <el-col :span="4">
                   <!-- <el-input placeholder="产品来源" v-model="form.infor.input6">
                     <template slot="prepend">产品来源</template>
                   </el-input> -->
-                  <el-button type="primary" v-if="sourceWebsite"  @click="goSite()">访问连接</el-button>
+                  <el-button type="primary" v-if="sourceWebsite" @click="goSite()">访问连接</el-button>
                 </el-col>
               </el-row>
 
-              <el-row  class="mt10">
+              <el-row class="mt10">
                 <el-input placeholder="备注" v-model="remarks">
                   <template slot="prepend">备注</template>
                 </el-input>
               </el-row>
 
               <el-row class="">
-                <el-col :span="11" >
-                  <el-input placeholder="0"  v-model="stock">
+                <el-col :span="11">
+                  <el-input placeholder="0" v-model="stock">
                     <template slot="prepend">库存数量</template>
                   </el-input>
                 </el-col>
                 <el-col :span="11" :offset="2">
-                  <el-input placeholder="1"  v-model="preprocessing">
+                  <el-input placeholder="1" v-model="preprocessing">
                     <template slot="prepend">预处理时间</template>
                     <template slot="append">天(现货填1)</template>
                   </el-input>
@@ -204,19 +209,25 @@
               <el-button type="primary" size="small" @click="open">一键定价</el-button>
             </el-form-item>
             <el-form-item label="审核状态">
-             <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()" >
-        <el-radio v-for="(item,index) in status_audit_list" :key="index" v-if="item.value!='all'" :label="item.value" border>{{item.name}}</el-radio>
-      </el-radio-group>
+              <el-radio-group v-model="status_audit_selected" @change="changeRadioValue()">
+                <el-radio v-for="(item,index) in status_audit_list" :key="index" v-if="item.value!='all'"
+                          :label="item.value" border>{{item.name}}
+                </el-radio>
+              </el-radio-group>
             </el-form-item>
-            <el-form-item label="上下架">
-                <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()" >
-        <el-radio v-for="(item,index) in status_shelf_list" :key="index"  v-if="item.value!='all'" :label="item.value" border>{{item.name}}</el-radio>
-      </el-radio-group>
+            <el-form-item label="上下架" v-if="false">
+              <el-radio-group v-model="status_shelf_selected" @change="changeRadioValue()">
+                <el-radio v-for="(item,index) in status_shelf_list" :key="index" v-if="item.value!='all'"
+                          :label="item.value" border>{{item.name}}
+                </el-radio>
+              </el-radio-group>
             </el-form-item>
-            <el-form-item label="产品类型">
-                 <el-radio-group v-model="product_type_selected" @change="changeRadioValue()" >
-        <el-radio v-for="(item,index) in product_type_list" :key="index" v-if="item.value!='all'" :label="item.value" border>{{item.name}}</el-radio>
-      </el-radio-group>
+            <el-form-item label="产品类型" v-if="false">
+              <el-radio-group v-model="product_type_selected" @change="changeRadioValue()">
+                <el-radio v-for="(item,index) in product_type_list" :key="index" v-if="item.value!='all'"
+                          :label="item.value" border>{{item.name}}
+                </el-radio>
+              </el-radio-group>
             </el-form-item>
             <div class="line"></div>
             <el-form-item label="参考价格">
@@ -252,7 +263,7 @@
                   <el-tag
                     closable
                     :key="tag"
-                    @close = "closeTag(index)"
+                    @close="closeTag(index)"
                     class="mr10"
                   >
                     {{tag}}
@@ -362,25 +373,24 @@
     </template>
 
 
-
     <!--弹窗区域-->
-    <el-dialog title="" :visible.sync="dialogTableVisible" width="70%" >
+    <el-dialog title="" :visible.sync="dialogTableVisible" width="70%">
       <!--内部弹窗区域-->
       <div style="overflow-x:scroll">
-        <el-row  class="mt10">
-          <el-col :span="8" >
+        <el-row class="mt10">
+          <el-col :span="8">
             <el-input placeholder="采购单价" v-model="form.price.input1">
               <template slot="prepend">采购单价</template>
               <template slot="append">¥</template>
             </el-input>
           </el-col>
-          <el-col :span="8" >
+          <el-col :span="8">
             <el-input placeholder="产品重量" v-model="form.price.input2">
               <template slot="prepend">产品重量</template>
               <template slot="append">Kg</template>
             </el-input>
           </el-col>
-          <el-col :span="8" >
+          <el-col :span="8">
             <el-input placeholder="0.00" v-model="form.price.input3">
               <template slot="prepend">国内运费</template>
               <template slot="append">¥</template>
@@ -388,19 +398,19 @@
           </el-col>
         </el-row>
         <el-row class="mt10">
-          <el-col :span="8" >
+          <el-col :span="8">
             <el-input placeholder="0.00" v-model="form.price.input4">
               <template slot="prepend">长</template>
               <template slot="append">cm</template>
             </el-input>
           </el-col>
-          <el-col :span="8" >
+          <el-col :span="8">
             <el-input placeholder="0.00" v-model="form.price.input5">
               <template slot="prepend">宽</template>
               <template slot="append">cm</template>
             </el-input>
           </el-col>
-          <el-col :span="8" >
+          <el-col :span="8">
             <el-input placeholder="0.00" v-model="form.price.input6">
               <template slot="prepend">高</template>
               <template slot="append">cm</template>
@@ -408,53 +418,54 @@
           </el-col>
         </el-row>
 
-        <table class="el-table__header" border="0" cellpadding="3" cellspacing="0"  >
-              <thead class="has-gutter">
-              <tr>
-                <th></th>
-                <th class="is-leaf" v-for="(item,index) in tableData.city">{{item}}</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td>运费/¥</td>
-                <td v-for="(item,index) in tableData.freight">{{item}}</td>
-              </tr>
-              <tr>
-                <td>成本价/¥</td>
-                <td v-for="(item,index) in tableData.price">{{item}}</td>
-              </tr>
-              <tr>
-                <td>利润百分比设定/%</td>
-                <td v-for="(item,index) in tableData.Final">
-                  <el-input-number v-model="num8" controls-position="right" @change="handleChange" :min="0" :max="100"></el-input-number>
-                </td>
-              </tr>
-              <tr>
-                <td>结果价格/¥</td>
-                <td v-for="(item,index) in tableData.currency1">{{item}}{{tableData.x[index]}}</td>
-              </tr>
-              <tr>
-                <td>价格优化(当地价)</td>
-                <td v-for="(item,index) in tableData.currency1">{{item}}{{tableData.x[index]}}</td>
-              </tr>
-              <tr>
-                <td>最终定价(当地价)</td>
-                <td v-for="(item,index) in tableData.Final">
-                  <el-input placeholder="" v-model="tableData.Final[index]">
-                  </el-input>
-                </td>
-              </tr>
-              <tr>
-                <td>最终利润/¥</td>
-                <td v-for="(item,index) in tableData.profit">{{item}}</td>
-              </tr>
-              <tr>
-                <td>利润百分比/%</td>
-                <td v-for="(item,index) in tableData.profit">{{item}}</td>
-              </tr>
-              </tbody>
-            </table>
+        <table class="el-table__header" border="0" cellpadding="3" cellspacing="0">
+          <thead class="has-gutter">
+          <tr>
+            <th></th>
+            <th class="is-leaf" v-for="(item,index) in tableData.city">{{item}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>运费/¥</td>
+            <td v-for="(item,index) in tableData.freight">{{item}}</td>
+          </tr>
+          <tr>
+            <td>成本价/¥</td>
+            <td v-for="(item,index) in tableData.price">{{item}}</td>
+          </tr>
+          <tr>
+            <td>利润百分比设定/%</td>
+            <td v-for="(item,index) in tableData.Final">
+              <el-input-number v-model="num8" controls-position="right" @change="handleChange" :min="0"
+                               :max="100"></el-input-number>
+            </td>
+          </tr>
+          <tr>
+            <td>结果价格/¥</td>
+            <td v-for="(item,index) in tableData.currency1">{{item}}{{tableData.x[index]}}</td>
+          </tr>
+          <tr>
+            <td>价格优化(当地价)</td>
+            <td v-for="(item,index) in tableData.currency1">{{item}}{{tableData.x[index]}}</td>
+          </tr>
+          <tr>
+            <td>最终定价(当地价)</td>
+            <td v-for="(item,index) in tableData.Final">
+              <el-input placeholder="" v-model="tableData.Final[index]">
+              </el-input>
+            </td>
+          </tr>
+          <tr>
+            <td>最终利润/¥</td>
+            <td v-for="(item,index) in tableData.profit">{{item}}</td>
+          </tr>
+          <tr>
+            <td>利润百分比/%</td>
+            <td v-for="(item,index) in tableData.profit">{{item}}</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </el-dialog>
     <el-dialog title="选择图片" :visible.sync="dialogFormVisible">
@@ -474,7 +485,8 @@
       <div>
         <el-select v-model="variantSelectOption" placeholder="请选择活动区域" @change="getVariantSelect()">
 
-          <el-option :label="item.label+(item.name)" :key="item.name" :value="item.value" v-for="(item,index) in variantOptionList">
+          <el-option :label="item.label+(item.name)" :key="item.name" :value="item.value"
+                     v-for="(item,index) in variantOptionList">
 
           </el-option>
         </el-select>
@@ -501,7 +513,7 @@
     <el-dialog title="标题/关键词/五大亮点" :visible.sync="dialogTableVisible4" width="60%">
       <el-form>
         <el-form-item label="标题">
-          <el-input  placeholder="标题长度不超过200个字符" v-model="form.variantTitle">
+          <el-input placeholder="标题长度不超过200个字符" v-model="form.variantTitle">
           </el-input>
         </el-form-item>
         <el-form-item label="五大亮点">
@@ -525,9 +537,9 @@
         <el-button type="primary" @click="saveSelectVariant(dialogTableVisible4 = false)">确 定</el-button>
       </div>
     </el-dialog>
-      <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt="">
-     </el-dialog>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
     <el-dialog
       title="选择图片"
       :close-on-click-modal="false"
@@ -562,76 +574,77 @@
 </template>
 <script>
   // import router from "../router";
-    import draggable from 'vuedraggable'
-    import product_status_list from '../../json/product_status';
-    import status_audit_list from '../../json/product_status_audit';
-    import status_shelf_list from '../../json/product_status_shelf';
-    import product_type_list from '../../json/product_type';
-    const ean_upc_list=[{name:'EAN',value:'code_ean'},{name:'UPC',value:'code_upc'}];
+  import draggable from 'vuedraggable'
+  import product_status_list from '../../json/product_status';
+  import status_audit_list from '../../json/product_status_audit';
+  import status_shelf_list from '../../json/product_status_shelf';
+  import product_type_list from '../../json/product_type';
+
+  const ean_upc_list = [{name: 'EAN', value: 'code_ean'}, {name: 'UPC', value: 'code_upc'}];
   export default {
-        components: {
-　　draggable
-},
+    components: {
+      draggable
+    },
     data() {
       return {
-        id:'--',
-        product_classify:[],
-        product_classify_selected:'',
-        status_audit_list:status_audit_list,
-        status_shelf_list:status_shelf_list,
-        product_type_list:product_type_list,
-        status_audit_selected:'pass',
-        status_shelf_selected:'on_shelf',
-        product_type_selected:'stress',
-        product_status_list:product_status_list,
-        product_status_selected:'',
+        id: '--',
+        product_classify: [],
+        product_classify_selected: '',
+        status_audit_list: status_audit_list,
+        status_shelf_list: status_shelf_list,
+        product_type_list: product_type_list,
+        status_audit_selected: 'pass',
+        status_shelf_selected: 'on_shelf',
+        product_type_selected: 'stress',
+        product_status_list: product_status_list,
+        product_status_selected: '',
         dialogImageUrl: '',
         dialogVisible: false,
         uploaderImgDialog: false,
-        title:'',
-        brief_introduction:'',
-        blue_point:[''],
-        keyword:[''],
-        productPicUrl:[], //商品图片路径
-        brand:'',
-        weight:'',
-        volume:'',
-        manufacturer:'',
-        fatherSku:'',//父SKU:'',
-        sku:'',
-        ean_upc_list:ean_upc_list,
-        ean_upc_selected:'code_ean',
-        ean_upc_value:'',
-        sourceWebsite:'',
-        remarks:'',
-        stock:'',
-        preprocessing:'',
-        image_main:'',
-        images_fileList:[],
+        title: '',
+        brief_introduction: '',
+        blue_point: [''],
+        keyword: [''],
+        productPicUrl: [], //商品图片路径
+        brand: '',
+        weight: '',
+        volume: '',
+        manufacturer: '',
+        fatherSku: '',//父SKU:'',
+        sku: '',
+        ean_upc_list: ean_upc_list,
+        ean_upc_selected: 'code_ean',
+        ean_upc_value: '',
+        sourceWebsite: '',
+        remarks: '',
+        stock: '',
+        preprocessing: '',
+        image_main: '',
+        images_fileList: [],
 
 
-        country:'1',
-        num8:'1',
+        country: '1',
+        num8: '1',
         variantOptionList: [
           {
-            label:'Color',
-            name:'颜色',
-            value:'0',
+            label: 'Color',
+            name: '颜色',
+            value: '0',
           },
           {
-            label:'SizeName',
-            value:'1',
-            name:'尺寸'
+            label: 'SizeName',
+            value: '1',
+            name: '尺寸'
           },
           {
-            label:'ItemPackageQuantity',
-            value:'2',
-            name:'容量'
+            label: 'ItemPackageQuantity',
+            value: '2',
+            name: '容量'
           },
           {
-            label:'Material',
-            value:'3',
-            name:'材质'
+            label: 'Material',
+            value: '3',
+            name: '材质'
           }
         ],
         variantText: '',
@@ -790,20 +803,20 @@
           }
         ],
         variantId: '0',
-        variantTagId:'0',
+        variantTagId: '0',
         activeName: '1',
         activeLabel: '',
         dialogFormVisible: false,
         dialogVariantVisible: false,
         tableData: {
-          x: ['[CNY]', '[USD]', '[CAD]', '[MXN]', '[GBP]', '[EUR]', '[EUR]', '[EUR]', '[EUR]','[JPY]','[AUD]'],
-          city: ['中国', '美国', '加拿大', '墨西哥', '英国', '法国', '德国', '意大利', '西班牙','日本','澳洲'],
-          freight: ['48 小包', '40\t小包', '132\t小包', '46\t小包', '70.6\t小包', '56\t小包', '69\t小包', '52\t小包', '0','69\t小包', '52\t小包'],
-          price: ['643.15', '625.59', '827.54', '638.76', '692.76', '660.71', '689.25', '651.93', '537.79','651.93', '537.79'],
-          currency: ['101.11', '126.12', '2546.92', '74.1', '91.86', '87.62', '91.4', '86.45', '9266.13','86.45', '9266.13'],
-          currency1: ['101.11', '126.12', '2546.92', '74.1', '91.86', '87.62', '91.4', '86.45', '9266.13','86.45', '9266.13'],
-          Final: ['101.11', '126.12', '2546.92', '74.1', '91.86', '87.62', '91.4', '86.45', '9266.13','86.45', '9266.13'],
-          profit: ['349.45(54.4%)', '344.93(54.76%)', '448.63(54.34%)', '346.86(54.38%)', '378.16(54.52%)', '362.59(54.65%)', '379.76(54.75%)', '359.05(54.74%)', '289.61(54.18%)','359.05(54.74%)', '289.61(54.18%)']
+          x: ['[CNY]', '[USD]', '[CAD]', '[MXN]', '[GBP]', '[EUR]', '[EUR]', '[EUR]', '[EUR]', '[JPY]', '[AUD]'],
+          city: ['中国', '美国', '加拿大', '墨西哥', '英国', '法国', '德国', '意大利', '西班牙', '日本', '澳洲'],
+          freight: ['48 小包', '40\t小包', '132\t小包', '46\t小包', '70.6\t小包', '56\t小包', '69\t小包', '52\t小包', '0', '69\t小包', '52\t小包'],
+          price: ['643.15', '625.59', '827.54', '638.76', '692.76', '660.71', '689.25', '651.93', '537.79', '651.93', '537.79'],
+          currency: ['101.11', '126.12', '2546.92', '74.1', '91.86', '87.62', '91.4', '86.45', '9266.13', '86.45', '9266.13'],
+          currency1: ['101.11', '126.12', '2546.92', '74.1', '91.86', '87.62', '91.4', '86.45', '9266.13', '86.45', '9266.13'],
+          Final: ['101.11', '126.12', '2546.92', '74.1', '91.86', '87.62', '91.4', '86.45', '9266.13', '86.45', '9266.13'],
+          profit: ['349.45(54.4%)', '344.93(54.76%)', '448.63(54.34%)', '346.86(54.38%)', '378.16(54.52%)', '362.59(54.65%)', '379.76(54.75%)', '359.05(54.74%)', '289.61(54.18%)', '359.05(54.74%)', '289.61(54.18%)']
         },
         goodsImgList: [
           {
@@ -823,13 +836,12 @@
             status: false,
           },
         ],
-        variantArr: [
-        ],
-        tableData1:[],
+        variantArr: [],
+        tableData1: [],
         form: {
-          id:'0000001',
-          title:'', //标题
-          classification:'', //分类
+          id: '0000001',
+          title: '', //标题
+          classification: '', //分类
           options: [{
             value: '1',
             label: '鞋子'
@@ -843,19 +855,19 @@
             value: '4',
             label: '裤子'
           }],
-          brightSpot:[], //五大亮点
-          keyWord:[],  //关键词
-          describe:'', //描述
-          status:'',  //状态
-          examine:'', //审核状态
-          shelf:'', //上下架
-          projectType:'', //产品类型
-          size:'', //产品尺码
-          colour:'', //颜色
-          variant:[], //变体数据
-          variantTitle:'', //变体title
-          variantBrightSpot:[], //变体亮点
-          variantKeyWord:[], //变体关键词
+          brightSpot: [], //五大亮点
+          keyWord: [],  //关键词
+          describe: '', //描述
+          status: '',  //状态
+          examine: '', //审核状态
+          shelf: '', //上下架
+          projectType: '', //产品类型
+          size: '', //产品尺码
+          colour: '', //颜色
+          variant: [], //变体数据
+          variantTitle: '', //变体title
+          variantBrightSpot: [], //变体亮点
+          variantKeyWord: [], //变体关键词
           options2: [{
             value: '1',
             label: 'New'
@@ -890,7 +902,7 @@
             value: '11',
             label: 'Club'
           }],
-          select1:'1',
+          select1: '1',
           radio: '1',
           radio1: '1',
           radio2: '1',
@@ -924,54 +936,55 @@
             input7: '',
           }
         },
-        dialogTableVisible:false,
-        dialogTableVisible2:false,
-        dialogTableVisible3:false,
-        dialogTableVisible4:false
+        dialogTableVisible: false,
+        dialogTableVisible2: false,
+        dialogTableVisible3: false,
+        dialogTableVisible4: false
       }
     },
     methods: {
-      goSite(){
-        if(this.sourceWebsite.indexOf('http')!=0){
-          this.sourceWebsite= 'http://'+this.sourceWebsite
+      goSite() {
+        if (this.sourceWebsite.indexOf('http') != 0) {
+          this.sourceWebsite = 'http://' + this.sourceWebsite
         }
-              window.open(this.sourceWebsite)
+        window.open(this.sourceWebsite)
       },
-      edit_blue_point(index,method){
-        if(method){
-          this.blue_point =  this.blue_point.filter((item,i)=>{
-              return i!=index
+      edit_blue_point(index, method) {
+        if (method) {
+          this.blue_point = this.blue_point.filter((item, i) => {
+            return i != index
           })
-        }else{
-          if(this.blue_point.length<5){
+        } else {
+          if (this.blue_point.length < 5) {
             this.blue_point.push('')
           }
         }
 
       },
-      edit_keyword(index,method){
-        if(method){
-          this.keyword =  this.keyword.filter((item,i)=>{
-              return i!=index
+      edit_keyword(index, method) {
+        if (method) {
+          this.keyword = this.keyword.filter((item, i) => {
+            return i != index
           })
-        }else{
-          if(this.keyword.length<5){
+        } else {
+          if (this.keyword.length < 5) {
             this.keyword.push('')
           }
         }
 
       },
-      changeRadioValue(){},
-      open:function(){
+      changeRadioValue() {
+      },
+      open: function () {
         this.dialogTableVisible = true;
       },
-      open2:function(){
+      open2: function () {
         this.dialogTableVisible2 = true;
       },
-      open3:function(){
+      open3: function () {
         this.dialogTableVisible3 = true;
       },
-      variantEdit:function(row,index){
+      variantEdit: function (row, index) {
         this.form.variantTitle = "";
         this.form.variantBrightSpot = [];
         this.form.variantKeyWord = [];
@@ -990,29 +1003,29 @@
         console.log('submit!');
       },
       handleImageMainRemove(file, fileList) {
-         //this.images_fileList=fileList;
+        //this.images_fileList=fileList;
       },
-      uploadImageMainSuccess(response){
-            this.image_main = response;
+      uploadImageMainSuccess(response) {
+        this.image_main = response;
       },
-      uploadImagesSuccess(response, file, fileList){
-        this.images_fileList=fileList;
+      uploadImagesSuccess(response, file, fileList) {
+        this.images_fileList = fileList;
       },
       handleImagesRemove(file, fileList) {
-         this.images_fileList=fileList;
+        this.images_fileList = fileList;
       },
-      confirmUploadImages(){
+      confirmUploadImages() {
 
-          console.log(this.images_fileList)
-          this.images_fileList.length>0&&this.images_fileList.map((item)=>{
-              if(item.response){
-                this.productPicUrl.push(item.response)
-              }
-          })
-           console.log(this.productPicUrl)
+        console.log(this.images_fileList)
+        this.images_fileList.length > 0 && this.images_fileList.map((item) => {
+          if (item.response) {
+            this.productPicUrl.push(item.response)
+          }
+        })
+        console.log(this.productPicUrl)
       },
 
-      datadragEnd (evt) {
+      datadragEnd(evt) {
         console.log('拖动前的索引 :' + evt.oldIndex)
         console.log('拖动后的索引 :' + evt.newIndex)
         console.log(this.productPicUrl)
@@ -1051,10 +1064,9 @@
       },
       saveSelectVariant() {
         this.variantTagId = this.variantId;
-        if(this.variantBtnList.indexOf(this.variantOptionList[this.variantSelectOption].name)>-1)
-        {
+        if (this.variantBtnList.indexOf(this.variantOptionList[this.variantSelectOption].name) > -1) {
           return false;
-        }else{
+        } else {
           this.variantBtnList.push(this.variantOptionList[this.variantSelectOption].name);
           let arr = this.variantText.split(',');
           let newArr = arr.slice(0, arr.length - 1);
@@ -1071,167 +1083,170 @@
             });
             return item;
           });
-          this.variantArr.push({data:dataArr});
-          this.tableData1 = this.variantArr[this.variantBtnList.length-1].data;
+          this.variantArr.push({data: dataArr});
+          this.tableData1 = this.variantArr[this.variantBtnList.length - 1].data;
         }
       },
-      closeTag(index){
+      closeTag(index) {
         alert(index);
         console.log(this.variantArr);
-        this.variantArr.splice(index,1);
-        this.variantBtnList.splice(index,1);
-        if(this.variantArr<=0)
-        {
+        this.variantArr.splice(index, 1);
+        this.variantBtnList.splice(index, 1);
+        if (this.variantArr <= 0) {
           this.tableData1 = [];
-        }else{
-          this.tableData1 = this.variantArr[this.variantBtnList.length-1].data;
+        } else {
+          this.tableData1 = this.variantArr[this.variantBtnList.length - 1].data;
         }
       },
-      changeDataList(index){
+      changeDataList(index) {
         this.dialogVariantVisible = true;
         this.variantSelectOption = index;
         this.variantTagId = index;
         this.tableData1 = this.variantArr[index].data
       },
-      getParams(){
-          let params = {
-           user_token:this.user_token,
-           user_id:this.user_id,
-           owner_company_id:this.owner_company_id,
-           owner_staff_id:this.user_id,
-           title:this.title,
-           brief_introduction:this.brief_introduction,
-           brand:this.brand,
-           weight:this.weight,
-           volume:this.volume,
-           manufacturer:this.manufacturer,
-           fatherSku:this.fatherSku,
-           sourceWebsite:this.sourceWebsite,
-           remarks:this.remarks,
-           stock:this.stock,
-           preprocessing:this.preprocessing,
+      getParams() {
+        let params = {
+          user_token: this.user_token,
+          user_id: this.user_id,
+          owner_company_id: this.owner_company_id,
+          owner_staff_id: this.user_id,
+          title: this.title,
+          brief_introduction: this.brief_introduction,
+          brand: this.brand,
+          weight: this.weight,
+          volume: this.volume,
+          manufacturer: this.manufacturer,
+          fatherSku: this.fatherSku,
+          sourceWebsite: this.sourceWebsite,
+          remarks: this.remarks,
+          stock: this.stock,
+          preprocessing: this.preprocessing,
         }
-        if(this.image_main){
-          params.image_main= this.image_main
+        if (this.image_main) {
+          params.image_main = this.image_main
         }
 
-        if(this.ean_upc_value){
-          params[this.ean_upc_selected]= this.ean_upc_value
+        if (this.ean_upc_value) {
+          params[this.ean_upc_selected] = this.ean_upc_value
         }
-        if(this.product_classify_selected){
+        if (this.product_classify_selected) {
           params.classification = this.product_classify_selected
         }
-        if(this.productPicUrl&&this.productPicUrl.length>0){
-          params.images = JSON.stringify(this.productPicUrl.filter((item)=>{
-              return item;
+        if (this.productPicUrl && this.productPicUrl.length > 0) {
+          params.images = JSON.stringify(this.productPicUrl.filter((item) => {
+            return item;
           }))
         }
-        if(this.blue_point&&this.blue_point.length>0){
-          params.blue_point = JSON.stringify(this.blue_point.filter((item)=>{
-              return item;
+        if (this.blue_point && this.blue_point.length > 0) {
+          params.blue_point = JSON.stringify(this.blue_point.filter((item) => {
+            return item;
           }))
         }
-        if(this.keyword&&this.keyword.length>0){
-          params.keyword = JSON.stringify(this.keyword.filter((item)=>{
-              return item;
+        if (this.keyword && this.keyword.length > 0) {
+          params.keyword = JSON.stringify(this.keyword.filter((item) => {
+            return item;
           }))
         }
 
-        if(this.product_status_selected){
+        if (this.product_status_selected) {
           params.status = this.product_status_selected
         }
 
-        if(this.product_status_selected){
+        if (this.product_status_selected) {
           params.status = this.product_status_selected
         }
-        if(this.status_audit_selected ){
+        if (this.status_audit_selected) {
           params.status_audit = this.status_audit_selected
         }
-        if(this.status_shelf_selected ){
+        if (this.status_shelf_selected) {
           params.status_shelf = this.status_shelf_selected
         }
-        if(this.product_type_selected ){
+        if (this.product_type_selected) {
           params.product_type = this.product_type_selected
         }
         return params;
       },
 
-      product_sync(){
-          if(!this.productInfo){
-            this.addProducts(this.getParams());
-          }else{
-            let params=this.getParams();
-            params.target_id = this.productInfo.id;
-            this.editProducts(params)
-          }
+      product_sync() {
+        if (!this.productInfo) {
+          this.addProducts(this.getParams());
+        } else {
+          let params = this.getParams();
+          params.target_id = this.productInfo.id;
+          this.editProducts(params)
+        }
       },
-      editProducts(params){
-        this.$http.post(this.api.product_set_infos,params).then(res => {
-            if(res.is_success){
-              this.productInfo=res.value;
-              this.id=res.value.id;
-            }
-            console.log(res);
+      editProducts(params) {
+        this.$http.post(this.api.product_set_infos, params).then(res => {
+          if (res.is_success) {
+            this.productInfo = res.value;
+            this.id = res.value.id;
+          }
+          console.log(res);
         });
       },
       //添加方法
-      addProducts(params){
+      addProducts(params) {
 
 
-        this.$http.post(this.api.product_add,params).then(res => {
-            if(res.is_success){
-              this.productInfo=res.value;
-              this.id=res.value.id;
-            }
-            console.log(res);
+        this.$http.post(this.api.product_add, params).then(res => {
+          if (res.is_success) {
+            this.productInfo = res.value;
+            this.id = res.value.id;
+          }
+          console.log(res);
         });
 
       },
       //切换变体表格
-      handleSelectionChange(val){
+      handleSelectionChange(val) {
         this.form.variant = val;
       },
 
-       product_classification_list(){
-            this.$http.post(this.api.product_classification_list,{
-              user_token:this.user_token,
-              user_id:this.user_id,
-            }).then((res)=>{
-              //console.log(res);
-              if(res.is_success){
-                this.product_classify = res.value;
-              }
-            })
-          },
+      product_classification_list() {
+        this.$http.post(this.api.product_classification_list, {
+          user_token: this.user_token,
+          user_id: this.user_id,
+        }).then((res) => {
+          //console.log(res);
+          if (res.is_success) {
+            this.product_classify = res.value;
+          }
+        })
+      },
     },
-    mounted(){
-            this.owner_company_id = localStorage.getItem("owner_company_id")
-            this.owner_user_id = localStorage.getItem("owner_user_id")
-            this.user_token = localStorage.getItem("user_token");
-            this.user_id = localStorage.getItem("user_id");
-            this.product_classification_list()
+    mounted() {
+      this.owner_company_id = localStorage.getItem("owner_company_id")
+      this.owner_user_id = localStorage.getItem("owner_user_id")
+      this.user_token = localStorage.getItem("user_token");
+      this.user_id = localStorage.getItem("user_id");
+      this.product_classification_list()
     }
   }
 </script>
-<style scoped >
-  table{
+<style scoped>
+  table {
     margin-bottom: 20px;
   }
-  td,th{
+
+  td, th {
     text-align: center;
-    width:100px;
-    border:1px solid #ebeef5;
+    width: 100px;
+    border: 1px solid #ebeef5;
   }
+
   .select-img {
     overflow: hidden;
   }
+
   .select-img li {
     float: left;
     height: 200px;
     position: relative;
     margin: 3px;
   }
-  .select-img li  .img-mask {
+
+  .select-img li .img-mask {
     position: absolute;
     left: 0;
     right: 0;
@@ -1241,31 +1256,36 @@
     z-index: 100;
     background: rgba(0, 0, 0, 0.3);
   }
+
   .select-img li img {
-      height: 100%;
-    }
+    height: 100%;
+  }
 
   .img-list {
     overflow: hidden;
   }
 
   .img-list li {
-      float: left;
-      height: 50px;
-      position: relative;
-      margin: 3px;
-    }
+    float: left;
+    height: 50px;
+    position: relative;
+    margin: 3px;
+  }
+
   .img-list li img {
     height: 100%;
   }
+
   .el-select .el-input {
     width: 130px;
   }
-  .el-input-number{
+
+  .el-input-number {
     width: 100px;
     height: 28px;
   }
-  .el-input__inner{
+
+  .el-input__inner {
     height: 28px;
   }
 </style>
@@ -1273,29 +1293,35 @@
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
   }
-  .el-upload--picture-card .el-upload-dragger{
+
+  .el-upload--picture-card .el-upload-dragger {
     width: 148px;
     height: 148px;
     background-color: transparent;
-    border:0;
+    border: 0;
   }
-  .el-upload__text{
+
+  .el-upload__text {
     position: absolute;
     top: 24px;
     left: 9px;
     height: 28px;
   }
+
   .el-upload-dragger .el-icon-upload {
     margin: 17px 0 16px;
   }
+
   .el-upload-dragger .el-upload__text em {
     position: absolute;
     top: 21px;
     left: 35px;
   }
-  .prouduct-upload >div >div{
+
+  .prouduct-upload > div > div {
     width: 180px;
   }
+
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -1303,9 +1329,11 @@
     position: relative;
     overflow: hidden;
   }
+
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
+
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -1314,34 +1342,42 @@
     line-height: 178px;
     text-align: center;
   }
-  .avatar-uploader-icon .el-upload__text{
-    top:26px;
+
+  .avatar-uploader-icon .el-upload__text {
+    top: 26px;
     left: 25px;
   }
+
   .avatar {
     width: 178px;
     height: 178px;
     display: block;
   }
-  .el-upload--text .el-upload-dragger{
+
+  .el-upload--text .el-upload-dragger {
     width: 178px;
   }
-  .dialog-upload-img{
+
+  .dialog-upload-img {
     width: 980px;
     height: 400px;
     overflow: auto;
   }
-  .uploaderImg .el-dialog .el-dialog__body{
+
+  .uploaderImg .el-dialog .el-dialog__body {
     padding-top: 0;
   }
-  .sub-tips{
+
+  .sub-tips {
     font-size: 16px;
     padding-bottom: 10px;
   }
-  .el-dialog{
+
+  .el-dialog {
     width: 1000px;
   }
-  .uploaderImgBtn{
+
+  .uploaderImgBtn {
     width: 178px;
     height: 178px;
     display: inline-block;
@@ -1354,23 +1390,27 @@
     vertical-align: top;
     text-align: center;
   }
+
   .uploaderImgBtn i {
     font-size: 40px;
     color: #8c939d;
   }
+
   .
-  .pp-img{
+  .pp-img {
     display: inline-block;
     width: 176px;
     height: 176px;
     margin-right: 10px;
     border: 1px solid #eee;
   }
-  .pp-img img{
+
+  .pp-img img {
     width: 176px;
     height: 176px;
   }
-  .imageDiv{
+
+  .imageDiv {
     display: inline-block;
     width: 176px;
     height: 176px;
@@ -1379,11 +1419,13 @@
     border-radius: 6px;
     position: relative;
   }
-  .imageDiv img{
+
+  .imageDiv img {
     width: 176px;
     height: 176px;
   }
-  .imageSpan{
+
+  .imageSpan {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -1394,14 +1436,16 @@
     color: #fff;
     opacity: 0;
     font-size: 20px;
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0, 0, 0, .5);
     -webkit-transition: opacity .3s;
     transition: opacity .3s;
   }
-  .imageSpan:hover{
+
+  .imageSpan:hover {
     opacity: 1;
   }
-  .image-icon-delete{
+
+  .image-icon-delete {
     margin-left: 10px;
   }
 </style>
